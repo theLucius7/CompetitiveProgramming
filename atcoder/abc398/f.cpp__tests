@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"ABCBA"
+		],
+		"test": "ABC\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Z"
+		],
+		"test": "Z\n"
+	},
+	{
+		"correct_answers":
+		[
+			"TREERT"
+		],
+		"test": "TREE\n"
+	}
+]

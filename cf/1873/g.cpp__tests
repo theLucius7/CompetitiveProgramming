@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"2\n1\n3\n1\n6\n2\n0\n0"
+		],
+		"test": "8\nABBA\nABA\nBAABA\nABB\nAAAAAAB\nBABA\nB\nAAA\n"
+	},
+	{
+		"correct_answers":
+		[
+			"4"
+		],
+		"test": "1\nBAAABA\n"
+	}
+]

@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"Takahashi\nAoki\nUnknown\nTakahashi\nUnknown"
+		],
+		"test": "6 5\nahikst\naikot\n5\nasahi\nokita\nkiai\nhash\nit\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Aoki\nAoki\nTakahashi\nTakahashi\nUnknown"
+		],
+		"test": "7 6\nahiknst\nahikos\n5\nkioki\nohiki\ntashi\nnishi\nkashi\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Takahashi\nAoki\nUnknown\nUnknown\nAoki\nAoki\nTakahashi\nUnknown\nUnknown\nUnknown\nUnknown\nUnknown\nAoki\nUnknown\nTakahashi"
+		],
+		"test": "13 11\ndefghiqsvwxyz\nacejmoqrtwx\n15\nqhsqzhd\njcareec\nwwqxqew\nwxqxwex\njxxrtwa\ntrtqjxe\nsqyggse\nxxqwxew\nxewwxxw\nwwqxwex\nxqqxqwq\nqxxexxe\nteqeroc\neeeqqee\nvxdevyy\n"
+	}
+]

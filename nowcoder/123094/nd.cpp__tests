@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"0\n0\n2\n0\n1\n2"
+		],
+		"test": "6\nA 10 15\nA 17 19\nA 12 17\nA 90 99\nA 11 12\nB"
+	}
+]

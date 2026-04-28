@@ -1,0 +1,24 @@
+[
+	{
+		"correct_answers":
+		[
+			"b",
+			"d"
+		],
+		"test": "a\n"
+	},
+	{
+		"correct_answers":
+		[
+			"e"
+		],
+		"test": "abcdfhijklmnopqrstuvwxyz\n"
+	},
+	{
+		"correct_answers":
+		[
+			"y"
+		],
+		"test": "qazplwsxokmedcijnrfvuhbgt\n"
+	}
+]

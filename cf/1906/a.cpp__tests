@@ -1,0 +1,37 @@
+[
+	{
+		"correct_answers":
+		[
+			"ABC"
+		],
+		"test": "BCB\nCAC\nBCB\n"
+	},
+	{
+		"correct_answers":
+		[
+			"ACB"
+		],
+		"test": "BCB\nCCC\nCCA\n"
+	},
+	{
+		"correct_answers":
+		[
+			"ABA"
+		],
+		"test": "ACA\nCBC\nACA\n"
+	},
+	{
+		"correct_answers":
+		[
+			"AAA"
+		],
+		"test": "ACA\nCAC\nACA\n"
+	},
+	{
+		"correct_answers":
+		[
+			"BCC"
+		],
+		"test": "CCC\nCBC\nCCC\n"
+	}
+]

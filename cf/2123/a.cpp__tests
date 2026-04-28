@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"Alice\nBob\nAlice\nAlice\nBob"
+		],
+		"test": "5\n2\n4\n5\n7\n100\n"
+	}
+]

@@ -1,0 +1,30 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes\nNo\nYes"
+		],
+		"test": "3\n5\n1 8 2 4 16\n5\n-16 24 54 81 -36\n7\n90000 8100 -27000 729 -300000 -2430 1000000\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "1\n5\n8 -4 2 -1 -16\n\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "1\n5\n1 -1 1 -1 1\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "1\n5\n1 1 1 -1 -1\n"
+	}
+]

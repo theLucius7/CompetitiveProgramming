@@ -1,0 +1,19 @@
+[
+	{
+		"correct_answers":
+		[
+			"ACBC"
+		],
+		"test": "AtCoderBeginnerContest\n"
+	},
+	{
+		"correct_answers":
+		[
+			"PR"
+		],
+		"test": "PaymentRequired\n"
+	},
+	{
+		"test": "program\n"
+	}
+]

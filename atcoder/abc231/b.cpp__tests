@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"takahashi"
+		],
+		"test": "5\nsnuke\nsnuke\ntakahashi\ntakahashi\ntakahashi\n"
+	},
+	{
+		"correct_answers":
+		[
+			"takahashi"
+		],
+		"test": "5\ntakahashi\ntakahashi\naoki\ntakahashi\nsnuke\n"
+	},
+	{
+		"correct_answers":
+		[
+			"a"
+		],
+		"test": "1\na\n"
+	}
+]

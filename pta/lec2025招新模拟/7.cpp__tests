@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"cost = 5.30"
+		],
+		"test": "10\n"
+	},
+	{
+		"correct_answers":
+		[
+			"cost = 55.50"
+		],
+		"test": "100\n"
+	}
+]

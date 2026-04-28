@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"I lv GPLT!  It's  fn gm!"
+		],
+		"test": "I love GPLT!  It's a fun game!\naeiou\n"
+	}
+]

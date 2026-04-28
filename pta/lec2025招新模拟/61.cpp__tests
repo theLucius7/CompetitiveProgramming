@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"zhao 565.00\nqian 430.00\nzhou 630.00"
+		],
+		"test": "3\nzhao 240 400 75\nqian 360 120 50\nzhou 560 150 80\n"
+	}
+]

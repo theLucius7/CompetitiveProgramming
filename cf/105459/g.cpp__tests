@@ -1,0 +1,24 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes\n2\n1 2 2 3\n2 1 4"
+		],
+		"test": "4 5 2\n3 4\n1 2\n1 3\n2 3\n3 4\n2 4\n"
+	},
+	{
+		"correct_answers":
+		[
+			"No"
+		],
+		"test": "4 5 3\n2 4 3\n1 2\n1 3\n2 3\n3 4\n2 4\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes\n1\n1 3 2 3 4",
+			"No"
+		],
+		"test": "4 5 2\n2 3\n1 2\n1 3\n2 4\n3 4\n1 4\n"
+	}
+]

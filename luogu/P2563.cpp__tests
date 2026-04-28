@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"1\n9845164"
+		],
+		"test": "2\n200\nEOF\n"
+	}
+]

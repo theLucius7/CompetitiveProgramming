@@ -1,0 +1,10 @@
+[
+	{
+		"correct_answers":
+		[
+			"1\n3\n5\nEmpty",
+			"3\n1\n5\nEmpty"
+		],
+		"test": "7\n1 1\n1 5\n1 3\n2 3\n2 3\n2 3\n2 3\n"
+	}
+]

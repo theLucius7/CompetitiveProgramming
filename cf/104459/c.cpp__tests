@@ -1,0 +1,13 @@
+[
+	{
+		"correct_answers":
+		[
+			"4\n1000000000"
+		],
+		"test": "2\n3 3\nRUL\n1 1000000000\nD\n",
+		"uncorrect_answers":
+		[
+			"1\n1000000000"
+		]
+	}
+]

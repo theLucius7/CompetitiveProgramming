@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes\nNo\nYes"
+		],
+		"test": "8 3\n1 5\n2 7\n3 4\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes\nNo\nYes\nNo"
+		],
+		"test": "999999 4\n123456 987654\n888888 999999\n1 3\n2 777777\n"
+	}
+]

@@ -1,0 +1,27 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes\nDRUURRDD"
+		],
+		"test": "3 5\n.#...\n.Sooo\n..x.G\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes\nDDLURR"
+		],
+		"test": "3 3\n#So\nxoG\n..#\n",
+		"uncorrect_answers":
+		[
+			"Yes\nRDDLURR"
+		]
+	},
+	{
+		"correct_answers":
+		[
+			"No"
+		],
+		"test": "2 2\nSo\noG\n"
+	}
+]

@@ -1,0 +1,13 @@
+[
+	{
+		"correct_answers":
+		[
+			"Kosuke\nSakurako\nKosuke\nSakurako"
+		],
+		"test": "4\n1\n6\n3\n98\n",
+		"uncorrect_answers":
+		[
+			"Sakurako\nKosuke\nSakurako\nKosuke"
+		]
+	}
+]

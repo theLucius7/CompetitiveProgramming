@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"Wednesday\nFriday\nThursday\nThursday"
+		],
+		"test": "4\n2019 5 12 Monday\n2019 5 14\n2019 5 12 Tuesday\n2019 12 30\n2019 5 12 Friday\n1000000000 1 1\n1000000000 1 1 Wednesday\n2019 5 12\n"
+	}
+]

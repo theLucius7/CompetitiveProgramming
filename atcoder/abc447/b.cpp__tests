@@ -1,0 +1,19 @@
+[
+	{
+		"correct_answers":
+		[
+			"mpp"
+		],
+		"test": "mississippi\n"
+	},
+	{
+		"test": "atcoder\n"
+	},
+	{
+		"correct_answers":
+		[
+			"bgir"
+		],
+		"test": "beginner\n"
+	}
+]

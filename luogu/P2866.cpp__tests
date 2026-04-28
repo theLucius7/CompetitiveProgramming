@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"5"
+		],
+		"test": "6\n10\n3\n7\n4\n12\n2\n"
+	}
+]

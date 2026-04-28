@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"10\n2\n6"
+		],
+		"test": "10 3\nhelloworld\nfollow 1\necho 2\nnowgold 4\n"
+	}
+]

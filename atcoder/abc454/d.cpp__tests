@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes\nNo\nYes\nNo\nYes\nYes"
+		],
+		"test": "6\n(xx)x\nx(xx)\n(x)x\n(xx)\n)x()x(\n)x()x(\nx\n(x)\n(((((xx)))))x\nx((((((((((xx))))))))))\n((xx)xx)xx\n(x((xx))x)(xx)\n"
+	}
+]

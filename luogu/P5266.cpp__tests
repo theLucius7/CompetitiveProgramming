@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"OK\n10\nDeleted successfully\nNot found\n0"
+		],
+		"test": "5\n1 lxl 10\n2 lxl\n3 lxl\n2 lxl\n4\n"
+	}
+]

@@ -1,0 +1,17 @@
+[
+	{
+		"correct_answers":
+		[
+			"wdaaaaashaaaaaolaaaaakpaaaaagtaaaaa",
+			"wdzshzolzkpzgtz"
+		],
+		"test": "first\n5\n100 200 300 400 500\n"
+	},
+	{
+		"correct_answers":
+		[
+			"5\n100 200 300 400 500"
+		],
+		"test": "second\nwdaaaaashaaaaaolaaaaakpaaaaagtaaaaa\n\n"
+	}
+]

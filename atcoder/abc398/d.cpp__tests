@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"001010"
+		],
+		"test": "6 -2 1\nNNEEWS\n"
+	},
+	{
+		"correct_answers":
+		[
+			"0001101011"
+		],
+		"test": "10 1 2\nNEESESWEES\n"
+	},
+	{
+		"correct_answers":
+		[
+			"00100111111000101111"
+		],
+		"test": "20 -1 -2\nWWNNWSWEWNSWWENSNWWN\n"
+	}
+]

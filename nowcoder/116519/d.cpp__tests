@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"B"
+		],
+		"test": "1 1\n.\n"
+	},
+	{
+		"correct_answers":
+		[
+			"BW\nWB"
+		],
+		"test": "2 2\n..\n..\n"
+	},
+	{
+		"correct_answers":
+		[
+			"B-B\n---\n--B"
+		],
+		"test": "3 3\n.-.\n---\n--.\n"
+	}
+]

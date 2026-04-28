@@ -1,0 +1,30 @@
+[
+	{
+		"correct_answers":
+		[
+			"faa"
+		],
+		"test": "fffaff\n"
+	},
+	{
+		"correct_answers":
+		[
+			"ca"
+		],
+		"test": "ac\n"
+	},
+	{
+		"correct_answers":
+		[
+			"ca"
+		],
+		"test": "cccc\n"
+	},
+	{
+		"correct_answers":
+		[
+			"bcbaaa"
+		],
+		"test": "bbbccbb\n"
+	}
+]

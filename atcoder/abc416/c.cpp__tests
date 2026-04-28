@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"abcxxx"
+		],
+		"test": "3 2 6\nabc\nxxx\nabc\n"
+	},
+	{
+		"correct_answers":
+		[
+			"aaaaaaa"
+		],
+		"test": "5 5 416\na\naa\naaa\naa\na\n"
+	}
+]

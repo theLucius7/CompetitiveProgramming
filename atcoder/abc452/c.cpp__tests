@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes\nYes\nNo\nNo\nNo\nNo\nNo\nNo"
+		],
+		"test": "5\n5 3\n5 2\n4 1\n5 1\n3 2\n8\nretro\nchris\nitchy\ntuna\ncrab\nrock\ncod\nash\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes\nYes\nYes\nNo\nNo\nNo\nNo\nNo"
+		],
+		"test": "5\n5 1\n5 2\n5 3\n5 4\n5 5\n8\nretro\nchris\nitchy\ntuna\ncrab\nrock\ncod\nash\n"
+	}
+]

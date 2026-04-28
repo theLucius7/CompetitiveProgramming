@@ -1,0 +1,23 @@
+[
+	{
+		"test": "9 3\n",
+		"uncorrect_answers":
+		[
+			"0.555555555556"
+		]
+	},
+	{
+		"test": "13 6\n",
+		"uncorrect_answers":
+		[
+			"0.000000000000"
+		]
+	},
+	{
+		"test": "10 3\n",
+		"uncorrect_answers":
+		[
+			"0.500000000000"
+		]
+	}
+]

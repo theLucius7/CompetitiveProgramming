@@ -1,0 +1,28 @@
+[
+	{
+		"correct_answers":
+		[
+			"2\n0\n0"
+		],
+		"test": "3\nabccbbbbd\nabcde\nx\n"
+	},
+	{
+		"correct_answers":
+		[
+			"3\n5"
+		],
+		"test": "2\naaaaaaa\nffbbccccaaaaa\n"
+	},
+	{
+		"test": "3\nabccbbbbd\nabcjqak\nx\n"
+	},
+	{
+		"test": "2\nffbbccccaaaaa\nasdasd\n"
+	},
+	{
+		"test": "1\naaadddfffggg\n"
+	},
+	{
+		"test": "1\naaaasssdddfff\n"
+	}
+]

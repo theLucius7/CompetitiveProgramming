@@ -1,0 +1,10 @@
+[
+	{
+		"correct_answers":
+		[
+			"ac\nqzxcq\ncodeforces",
+			"ac\nq\ncodeforces"
+		],
+		"test": "3\n8\nabacabac\n5\nqzxcq\n20\nccooddeeffoorrcceess\n"
+	}
+]

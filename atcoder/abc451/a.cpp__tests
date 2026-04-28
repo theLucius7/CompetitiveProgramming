@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "legal\n"
+	},
+	{
+		"correct_answers":
+		[
+			"No"
+		],
+		"test": "atcoder\n"
+	}
+]

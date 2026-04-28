@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"2\n0\n2\n6\n0\n2"
+		],
+		"test": "6\n9\nmmapnapie\n9\nazabazapi\n8\nmappppie\n18\nmapmapmapmapmapmap\n1\np\n11\npppiepieeee\n"
+	}
+]

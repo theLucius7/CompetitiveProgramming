@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"1\naabd\n0\n2\nabbcd\nabbcc\n-1\n3\nvvzvylxxms\nvvvzvllxxm\nvvvvvllxxx\n2\naacb\naaac\n2\naacab\naaaca"
+		],
+		"test": "7\n4 1\nabcd\naabd\n2 2\nab\nab\n5 3\nabcde\nabbcc\n9 1\negcnyeluw\neegccyelw\n10 3\nvzvylxxmsy\nvvvvvllxxx\n4 6\nacba\naaac\n5 7\nacabb\naaaca\n"
+	}
+]

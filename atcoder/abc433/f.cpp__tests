@@ -1,0 +1,40 @@
+[
+	{
+		"correct_answers":
+		[
+			"5"
+		],
+		"test": "1122\n"
+	},
+	{
+		"correct_answers":
+		[
+			"0"
+		],
+		"test": "2025\n"
+	},
+	{
+		"correct_answers":
+		[
+			"30"
+		],
+		"test": "0777468889971\n"
+	},
+	{
+		"correct_answers":
+		[
+			"3"
+		],
+		"test": "0101\n"
+	},
+	{
+		"correct_answers":
+		[
+			"1"
+		],
+		"test": "1010\n"
+	},
+	{
+		"test": "00101\n"
+	}
+]

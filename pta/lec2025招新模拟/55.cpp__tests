@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"red blue green yellow purple"
+		],
+		"test": "blue\nred\nyellow\ngreen\npurple\n#\n"
+	}
+]

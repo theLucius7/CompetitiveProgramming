@@ -1,0 +1,30 @@
+[
+	{
+		"correct_answers":
+		[
+			"5"
+		],
+		"test": "3 4\n..a.\n####\nba#b\n"
+	},
+	{
+		"correct_answers":
+		[
+			"-1"
+		],
+		"test": "3 4\n..a.\n####\nb.#b\n"
+	},
+	{
+		"correct_answers":
+		[
+			"1"
+		],
+		"test": "4 4\nxxxx\nxxxx\nxxxx\nxxxx\n"
+	},
+	{
+		"correct_answers":
+		[
+			"12"
+		],
+		"test": "7 11\nu..#y..#...\nk..#.z.#.k.\niju#...#x..\n###########\n..x#.t.#..n\nabc#y..#...\n..z#..t#.y.\n"
+	}
+]

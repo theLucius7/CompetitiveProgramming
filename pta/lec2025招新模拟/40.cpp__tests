@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"DangDangDangDangDangDangDangDang"
+		],
+		"test": "19:05\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Only 07:05.  Too early to Dang."
+		],
+		"test": "07:05\n"
+	}
+]

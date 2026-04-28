@@ -1,0 +1,30 @@
+[
+	{
+		"correct_answers":
+		[
+			"#o.#o"
+		],
+		"test": "#..#.\n"
+	},
+	{
+		"correct_answers":
+		[
+			"#"
+		],
+		"test": "#\n"
+	},
+	{
+		"correct_answers":
+		[
+			"o...."
+		],
+		"test": ".....\n"
+	},
+	{
+		"correct_answers":
+		[
+			"o..#o.#o##o#o"
+		],
+		"test": "...#..#.##.#.\n"
+	}
+]

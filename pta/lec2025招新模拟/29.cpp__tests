@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"YES"
+		],
+		"test": "688446\n"
+	},
+	{
+		"correct_answers":
+		[
+			"NO"
+		],
+		"test": "658\n"
+	}
+]

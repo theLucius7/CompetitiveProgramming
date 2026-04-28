@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"5200"
+		],
+		"test": "3 2\nred green blue\nblue red\n800 1600 2800\n"
+	},
+	{
+		"correct_answers":
+		[
+			"21"
+		],
+		"test": "3 2\ncode queen atcoder\nking queen\n10 1 1\n"
+	}
+]

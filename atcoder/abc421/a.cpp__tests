@@ -1,0 +1,11 @@
+[
+	{
+		"test": "3\nsato\nsuzuki\ntakahashi\n1 aoki\n"
+	},
+	{
+		"test": "3\nsato\nsuzuki\ntakahashi\n3 takahashi\n"
+	},
+	{
+		"test": "2\nsmith\nsmith\n1 smith\n"
+	}
+]

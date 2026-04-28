@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"area = 7.15; perimeter = 13.00"
+		],
+		"test": "5 5 3\n"
+	},
+	{
+		"correct_answers":
+		[
+			"These sides do not correspond to a valid triangle"
+		],
+		"test": "1 4 1\n"
+	}
+]

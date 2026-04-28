@@ -1,0 +1,18 @@
+[
+	{
+		"correct_answers":
+		[
+			"4\n0\n16",
+			"cnt 3 2\nmax 2 1\n4\ncnt 3 0\nmax 3 0\n0\ncnt 6 9\nmax 2 4\n16"
+		],
+		"test": "3\n5\n01001\n3\n000\n15\n110010111100101\n"
+	},
+	{
+		"correct_answers":
+		[
+			"cnt 1 0\nmax 1 0\n0",
+			"0"
+		],
+		"test": "1\n1\n0\n"
+	}
+]

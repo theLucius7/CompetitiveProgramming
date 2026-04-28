@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"SSS"
+		],
+		"test": "red\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Unknown"
+		],
+		"test": "atcoder\n"
+	}
+]

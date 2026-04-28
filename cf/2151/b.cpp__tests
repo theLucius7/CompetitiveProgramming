@@ -1,0 +1,5 @@
+[
+	{
+		"test": "5\n3 2\nBAB\n2 5\n3 4\nABA\n1 4 9 10\n5 2\nABABB\n1 7\n3 1\nBBA\n6\n1 4\nA\n1 3 4 1000000000\n"
+	}
+]

@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "AtCoder\nTotal\n"
+	},
+	{
+		"correct_answers":
+		[
+			"No"
+		],
+		"test": "aBCdE\nabcdcba\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "abcde\nXYZ\n"
+	}
+]

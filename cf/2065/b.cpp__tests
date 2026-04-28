@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"1\n8\n1\n4"
+		],
+		"test": "4\nbaa\nskibidus\ncc\nohio\n"
+	}
+]

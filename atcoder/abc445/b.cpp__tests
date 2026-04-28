@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"...apple...\n.blueberry.\n..coconut..\ndragonfruit"
+		],
+		"test": "4\napple\nblueberry\ncoconut\ndragonfruit\n"
+	},
+	{
+		"correct_answers":
+		[
+			".abc.\n..d..\nefghi\n.jkl.\nmnopq\n..r.."
+		],
+		"test": "6\nabc\nd\nefghi\njkl\nmnopq\nr\n"
+	}
+]

@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"parts"
+		],
+		"test": "7\nooparts\n"
+	},
+	{
+		"correct_answers":
+		[
+			"abcooo"
+		],
+		"test": "6\nabcooo\n"
+	}
+]

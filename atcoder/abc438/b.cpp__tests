@@ -1,0 +1,30 @@
+[
+	{
+		"correct_answers":
+		[
+			"2"
+		],
+		"test": "4 2\n2025\n91\n"
+	},
+	{
+		"correct_answers":
+		[
+			"0"
+		],
+		"test": "3 2\n438\n38\n"
+	},
+	{
+		"correct_answers":
+		[
+			"45"
+		],
+		"test": "5 5\n00000\n11111\n"
+	},
+	{
+		"correct_answers":
+		[
+			"13"
+		],
+		"test": "8 3\n20251227\n438\n"
+	}
+]

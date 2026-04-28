@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"0.50000000000000000"
+		],
+		"test": "attitude\n"
+	},
+	{
+		"correct_answers":
+		[
+			"0.66666666666666667"
+		],
+		"test": "ottottott\n"
+	},
+	{
+		"correct_answers":
+		[
+			"0.00000000000000000"
+		],
+		"test": "coffeecup\n"
+	}
+]

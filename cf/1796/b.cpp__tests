@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"YES\n*b\nYES\n*co*\nNO\nYES\na*\nYES\na*\nNO"
+		],
+		"test": "6\naaab\nzzzb\ncodeforces\natcoder\ncodeforces\ntokitlx\naaaa\naaaaaa\nabcd\nabcd\nc\nf\n"
+	}
+]

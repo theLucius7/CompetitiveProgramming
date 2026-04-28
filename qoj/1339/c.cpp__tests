@@ -1,0 +1,5 @@
+[
+	{
+		"test": "4\n2\nadd 1\nblt 5 1\n3\nadd 252\nadd 1\nbgt 252 2\n2\nadd 2\nbne 7 1\n3\nadd 1\nbne 252 1\nbeq 252 1\n"
+	}
+]

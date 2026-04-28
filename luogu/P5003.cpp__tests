@@ -1,0 +1,21 @@
+[
+	{
+		"correct_answers":
+		[
+			"7 1",
+			"7 2"
+		],
+		"test": "5 5\noooo#\nooooo\n#oo#o\no#ooo\noo#oo\n\n",
+		"uncorrect_answers":
+		[
+			"8 2"
+		]
+	},
+	{
+		"correct_answers":
+		[
+			"-1"
+		],
+		"test": "5 5\noooo#\nooooo\n#oo##\no#o#o\noo#oo\n"
+	}
+]

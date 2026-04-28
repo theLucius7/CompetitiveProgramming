@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"bbeeggiinnnneerr"
+		],
+		"test": "8\nbeginner\n"
+	},
+	{
+		"correct_answers":
+		[
+			"aaaaaa"
+		],
+		"test": "3\naaa\n"
+	}
+]

@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"yyy\nabsi\nhansbug\nlzn\nkkk"
+		],
+		"test": "5 5\nabsi\nhansbug\nlzn\nkkk\nyyy\n1 5\n1 1\n1 2\n2 3\n4 4\n"
+	}
+]
