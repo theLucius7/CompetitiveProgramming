@@ -1,7 +1,8 @@
 *
 !*/
-!*.*
-*.exe
-*.DS_Store
+!*.cpp
+!*.c
+!*.cpp__tests
+!*.md
 !.gitignore
 !LICENSE
