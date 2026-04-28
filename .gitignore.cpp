@@ -1,6 +1,0 @@
-*
-!*/
-!*.*
-*.exe
-!.gitignore
-!LICENSE

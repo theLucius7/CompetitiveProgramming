@@ -2,5 +2,6 @@
 !*/
 !*.*
 *.exe
+*.DS_Store
 !.gitignore
 !LICENSE
