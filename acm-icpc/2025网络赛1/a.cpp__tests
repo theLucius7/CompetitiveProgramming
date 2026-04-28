@@ -1,9 +1,0 @@
-[
-	{
-		"correct_answers":
-		[
-			"3NhYHv8w ASYYPIbf7\nT1 T3\nAlpha Beta"
-		],
-		"test": "3\n4\nASYYPIbf7 D 268 Unknown\n3NhYHv8w B 13 Accepted\nASYYPIbf7 B 173 Accepted\ndnrkAsPqrA A 107 Accepted\n6\nT1 A 10 Rejected\nT1 A 241 Unknown\nT1 B 200 Accepted\nT2 A 100 Accepted\nT3 C 50 Accepted\nT4 D 250 Unknown\n4\nAlpha A 100 Accepted\nBeta B 100 Accepted\nGamma C 240 Unknown\nDelta D 299 Unknown\n"
-	}
-]
