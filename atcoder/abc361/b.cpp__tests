@@ -1,0 +1,23 @@
+[
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "0 0 0 4 5 6\n2 3 4 5 6 7\n\n"
+	},
+	{
+		"correct_answers":
+		[
+			"No"
+		],
+		"test": "0 0 0 2 2 2\n0 0 2 2 2 4\n"
+	},
+	{
+		"correct_answers":
+		[
+			"Yes"
+		],
+		"test": "0 0 0 1000 1000 1000\n10 10 10 100 100 100\n"
+	}
+]
