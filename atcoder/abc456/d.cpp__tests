@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"11"
+		],
+		"test": "abbc\n"
+	},
+	{
+		"correct_answers":
+		[
+			"378217423"
+		],
+		"test": "cabcabcbcaccacbcbcaabacbacaabccacbccbcacbacbacabcacabcaccaaaaabababcbabacaccabbcacbcbcbcababcbcbabca\n"
+	}
+]
