@@ -29,7 +29,7 @@ int main() {
 			}
 		}
 	}
-	std::cout << *max_element(dp[n - 1].begin(), dp[n - 1].end) << "\n";
+	std::cout << *max_element(dp[n - 1].begin(), dp[n - 1].end()) << "\n";
 
 	return 0;
 }
