@@ -1,0 +1,20 @@
+[2026-05-30T01:46:05.987Z] competitive companion relay listening port=4243
+[2026-05-30T01:46:05.997Z] repo root /Users/l7/Desktop/CompetitiveProgramming
+[2026-05-30T01:47:47.936Z] created fallback problem luogu/P1967.cpp
+[2026-05-30T01:48:10.632Z] relay error Error: ENOENT: no such file or directory, rename '/Users/l7/Desktop/CompetitiveProgramming/P_1967_NOIP_2013_提高组_货车运输.cpp' -> '/Users/l7/Desktop/CompetitiveProgramming/luogu/P1967.cpp'
+    at async Object.rename (node:internal/fs/promises:781:10)
+    at async moveOrDropTempSource (file:///Users/l7/Desktop/CompetitiveProgramming/scripts/competitive-companion-relay.mjs:287:3)
+    at async syncProblem (file:///Users/l7/Desktop/CompetitiveProgramming/scripts/competitive-companion-relay.mjs:339:3)
+    at async handleProblems (file:///Users/l7/Desktop/CompetitiveProgramming/scripts/competitive-companion-relay.mjs:364:3)
+[2026-05-30T01:48:31.334Z] created fallback problem luogu/P1967.cpp
+[2026-05-30T01:50:12.874Z] created fallback problem luogu/P1967.cpp
+[2026-05-30T01:54:48.118Z] competitive companion relay listening port=4243
+[2026-05-30T01:54:48.119Z] repo root /Users/l7/Desktop/CompetitiveProgramming
+[2026-05-30T01:56:02.206Z] updated cph problem luogu/P1967.cpp
+[2026-05-30T02:01:01.487Z] competitive companion relay listening port=4243
+[2026-05-30T02:01:01.488Z] repo root /Users/l7/Desktop/CompetitiveProgramming
+[2026-05-30T02:03:07.400Z] updated cph problem luogu/P1967.cpp
+[2026-05-30T02:13:52.111Z] competitive companion relay listening port=4243
+[2026-05-30T02:13:52.112Z] repo root /Users/l7/Desktop/CompetitiveProgramming
+[2026-05-30T02:15:08.235Z] generated problem luogu/P1967.cpp
+[2026-05-30T02:15:35.453Z] generated problem luogu/P1967.cpp

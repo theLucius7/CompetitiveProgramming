@@ -1,0 +1,500 @@
+#!/opt/homebrew/bin/node
+
+import crypto from "node:crypto";
+import { spawn } from "node:child_process";
+import { promises as fs } from "node:fs";
+import http from "node:http";
+import os from "node:os";
+import path from "node:path";
+
+const homeDir = os.homedir();
+const repoRoot = process.env.CC_RELAY_REPO_ROOT || path.join(homeDir, "Desktop", "CompetitiveProgramming");
+const cphDir = path.join(repoRoot, ".cph");
+const codeCli =
+	process.env.CC_RELAY_CODE_CLI ||
+	"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code";
+const templateFilePath =
+	process.env.CC_RELAY_TEMPLATE_FILE ||
+	path.join(repoRoot, "templates", "cph.cpp");
+const listenPort = Number(process.env.CC_RELAY_PORT || 4243);
+const pollTimeoutMs = Number(process.env.CC_RELAY_POLL_TIMEOUT_MS || 2500);
+const disableOpen = process.env.CC_RELAY_DISABLE_OPEN === "1";
+const freshWindowMs = 15_000;
+
+const fallbackCppTemplate = `#include <bits/stdc++.h>
+
+using i64 = long long;
+
+int main() {
+\tstd::ios::sync_with_stdio(false);
+\tstd::cin.tie(nullptr);
+
+\treturn 0;
+}
+`;
+
+let workQueue = Promise.resolve();
+
+function log(message, extra = "") {
+	const stamp = new Date().toISOString();
+	console.log(`[${stamp}] ${message}${extra ? ` ${extra}` : ""}`);
+}
+
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function sanitizePathComponent(value) {
+	return value
+		.normalize("NFKC")
+		.replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_")
+		.replace(/\s+/g, " ")
+		.trim()
+		.replace(/[. ]+$/g, "") || "untitled";
+}
+
+function safeLower(value) {
+	return value.toLowerCase();
+}
+
+function hashSuffix(value) {
+	return crypto.createHash("sha1").update(value).digest("hex").slice(0, 16);
+}
+
+function insideRepo(filePath) {
+	const normalizedRoot = path.resolve(repoRoot) + path.sep;
+	const normalizedFile = path.resolve(filePath);
+	return normalizedFile === path.resolve(repoRoot) || normalizedFile.startsWith(normalizedRoot);
+}
+
+function parseProblemPayload(rawBody) {
+	const text = rawBody.toString("utf8").trim();
+	if (!text) {
+		throw new Error("empty request body");
+	}
+
+	const jsonText = text.startsWith("json\n") ? text.slice(5) : text;
+	const payload = JSON.parse(jsonText);
+	return Array.isArray(payload) ? payload : [payload];
+}
+
+function fallbackFileName(problem) {
+	const base =
+		problem?.name ||
+		problem?.url ||
+		`problem-${Date.now()}`;
+	return `${sanitizePathComponent(base).replace(/\s+/g, "_")}.cpp`;
+}
+
+function resolveCodeforcesTarget(url) {
+	const match = url.pathname.match(/^\/(?:contest|gym|problemset\/problem)\/(\d+)\/problem\/([A-Za-z0-9]+)$/);
+	if (!match) {
+		return null;
+	}
+
+	const [, contestId, index] = match;
+	return path.join(repoRoot, "codeforces", contestId, `${safeLower(index)}.cpp`);
+}
+
+function resolveAtCoderTarget(url) {
+	const match = url.pathname.match(/^\/contests\/([a-z0-9]+)\/tasks\/([a-z0-9_]+)$/i);
+	if (!match) {
+		return null;
+	}
+
+	const [, contestId, taskId] = match;
+	const suffix = taskId.startsWith(`${contestId}_`)
+		? taskId.slice(contestId.length + 1)
+		: taskId.split("_").pop();
+	return path.join(repoRoot, "atcoder", contestId.toLowerCase(), `${safeLower(suffix)}.cpp`);
+}
+
+function resolveLuoguTarget(url) {
+	const match = url.pathname.match(/^\/problem\/([A-Za-z0-9]+)$/);
+	if (!match) {
+		return null;
+	}
+
+	const [, problemId] = match;
+	return path.join(repoRoot, "luogu", `${problemId}.cpp`);
+}
+
+function resolveNowcoderTarget(url) {
+	const contestMatch = url.pathname.match(/^\/acm\/contest\/(\d+)\/([A-Za-z0-9]+)$/);
+	if (contestMatch) {
+		const [, contestId, index] = contestMatch;
+		return path.join(repoRoot, "nowcoder", contestId, `${safeLower(index)}.cpp`);
+	}
+
+	return null;
+}
+
+function resolveCsesTarget(url) {
+	const match = url.pathname.match(/^\/problemset\/task\/(\d+)\/?$/);
+	if (!match) {
+		return null;
+	}
+
+	return path.join(repoRoot, "cses", `${match[1]}.cpp`);
+}
+
+function resolveLibreOjTarget(url) {
+	const match = url.pathname.match(/^\/problem\/(\d+)\/?$/);
+	if (!match) {
+		return null;
+	}
+
+	return path.join(repoRoot, "loj", `${match[1]}.cpp`);
+}
+
+function resolveTargetPath(problem) {
+	const rawUrl = problem?.url;
+	if (!rawUrl) {
+		return path.join(repoRoot, fallbackFileName(problem));
+	}
+
+	const url = new URL(rawUrl);
+	const host = url.hostname.toLowerCase();
+
+	if (host.endsWith("luogu.com.cn")) {
+		return resolveLuoguTarget(url) || path.join(repoRoot, "luogu", fallbackFileName(problem));
+	}
+
+	if (host.endsWith("codeforces.com")) {
+		return resolveCodeforcesTarget(url) || path.join(repoRoot, "codeforces", fallbackFileName(problem));
+	}
+
+	if (host.endsWith("atcoder.jp")) {
+		return resolveAtCoderTarget(url) || path.join(repoRoot, "atcoder", fallbackFileName(problem));
+	}
+
+	if (host.endsWith("nowcoder.com")) {
+		return resolveNowcoderTarget(url) || path.join(repoRoot, "nowcoder", fallbackFileName(problem));
+	}
+
+	if (host.endsWith("cses.fi")) {
+		return resolveCsesTarget(url) || path.join(repoRoot, "cses", fallbackFileName(problem));
+	}
+
+	if (host.endsWith("loj.ac")) {
+		return resolveLibreOjTarget(url) || path.join(repoRoot, "loj", fallbackFileName(problem));
+	}
+
+	return path.join(repoRoot, fallbackFileName(problem));
+}
+
+async function readJson(filePath) {
+	const text = await fs.readFile(filePath, "utf8");
+	return JSON.parse(text);
+}
+
+async function listProbFiles() {
+	try {
+		const entries = await fs.readdir(cphDir, { withFileTypes: true });
+		return entries
+			.filter((entry) => entry.isFile() && entry.name.endsWith(".prob"))
+			.map((entry) => path.join(cphDir, entry.name));
+	} catch (error) {
+		if (error && error.code === "ENOENT") {
+			return [];
+		}
+
+		throw error;
+	}
+}
+
+async function findRecentProb(problem, requestStartedAt) {
+	const files = await listProbFiles();
+	const candidates = [];
+
+	for (const filePath of files) {
+		const stat = await fs.stat(filePath);
+		if (stat.mtimeMs < requestStartedAt - freshWindowMs) {
+			continue;
+		}
+
+		let data;
+		try {
+			data = await readJson(filePath);
+		} catch {
+			continue;
+		}
+
+		if (data?.url === problem.url) {
+			candidates.push({ filePath, data, mtimeMs: stat.mtimeMs });
+		}
+	}
+
+	candidates.sort((left, right) => right.mtimeMs - left.mtimeMs);
+	return candidates[0] || null;
+}
+
+async function pollForProb(problem, requestStartedAt) {
+	const deadline = Date.now() + pollTimeoutMs;
+
+	while (Date.now() <= deadline) {
+		const probEntry = await findRecentProb(problem, requestStartedAt);
+		if (probEntry) {
+			return probEntry;
+		}
+
+		await sleep(150);
+	}
+
+	return null;
+}
+
+async function ensureParentDir(filePath) {
+	await fs.mkdir(path.dirname(filePath), { recursive: true });
+}
+
+async function loadCppTemplate() {
+	try {
+		const content = await fs.readFile(templateFilePath, "utf8");
+		return content.endsWith("\n") ? content : `${content}\n`;
+	} catch {
+		return fallbackCppTemplate;
+	}
+}
+
+async function ensureCppFile(filePath) {
+	try {
+		await fs.access(filePath);
+	} catch {
+		await ensureParentDir(filePath);
+		await fs.writeFile(filePath, await loadCppTemplate(), "utf8");
+	}
+}
+
+async function removeFileIfPresent(filePath) {
+	try {
+		await fs.unlink(filePath);
+	} catch (error) {
+		if (!error || error.code !== "ENOENT") {
+			throw error;
+		}
+	}
+}
+
+async function moveOrDropTempSource(sourcePath, targetPath) {
+	if (!sourcePath || sourcePath === targetPath) {
+		return;
+	}
+
+	if (!insideRepo(sourcePath)) {
+		return;
+	}
+
+	await ensureParentDir(targetPath);
+
+	try {
+		await fs.access(targetPath);
+		await removeFileIfPresent(sourcePath);
+		return;
+	} catch {
+		// Target does not exist, continue.
+	}
+
+	try {
+		await fs.rename(sourcePath, targetPath);
+	} catch (error) {
+		if (error && error.code === "ENOENT") {
+			return;
+		}
+
+		if (error && error.code === "EXDEV") {
+			let content;
+			try {
+				content = await fs.readFile(sourcePath);
+			} catch (readError) {
+				if (readError && readError.code === "ENOENT") {
+					return;
+				}
+
+				throw readError;
+			}
+
+			await fs.writeFile(targetPath, content);
+			await removeFileIfPresent(sourcePath);
+			return;
+		}
+
+		throw error;
+	}
+}
+
+async function writeProbFile(probFilePath, problem, targetPath) {
+	const probData = {
+		...problem,
+		srcPath: targetPath,
+		interactive: Boolean(problem?.interactive),
+		tests: Array.isArray(problem?.tests) ? problem.tests : [],
+		testType: problem?.testType || "single",
+		input: problem?.input || { type: "stdin" },
+		output: problem?.output || { type: "stdout" },
+	};
+
+	await fs.mkdir(cphDir, { recursive: true });
+	await fs.writeFile(probFilePath, JSON.stringify(probData), "utf8");
+}
+
+function canonicalProbFilePath(problem, targetPath) {
+	const baseName = sanitizePathComponent(path.basename(targetPath));
+	const urlKey = problem?.url || `${problem?.name || "problem"}-${Date.now()}`;
+	return path.join(cphDir, `.${baseName}_${hashSuffix(urlKey)}.prob`);
+}
+
+async function findAnyProb(problem) {
+	const files = await listProbFiles();
+	const candidates = [];
+
+	for (const filePath of files) {
+		let data;
+		try {
+			data = await readJson(filePath);
+		} catch {
+			continue;
+		}
+
+		if (data?.url !== problem.url) {
+			continue;
+		}
+
+		const stat = await fs.stat(filePath);
+		candidates.push({ filePath, data, mtimeMs: stat.mtimeMs });
+	}
+
+	candidates.sort((left, right) => right.mtimeMs - left.mtimeMs);
+	return candidates[0] || null;
+}
+
+function isLocalPlaceholderForTarget(data, targetPath) {
+	return (
+		Boolean(data?.local) &&
+		(data?.srcPath === targetPath || data?.url === targetPath)
+	);
+}
+
+async function pruneDuplicateProbFiles(problem, keepFilePath, targetPath) {
+	const files = await listProbFiles();
+
+	for (const filePath of files) {
+		if (filePath === keepFilePath) {
+			continue;
+		}
+
+		let data;
+		try {
+			data = await readJson(filePath);
+		} catch {
+			continue;
+		}
+
+		if (
+			data?.url !== problem.url &&
+			data?.srcPath !== targetPath &&
+			!isLocalPlaceholderForTarget(data, targetPath)
+		) {
+			continue;
+		}
+
+		await removeFileIfPresent(filePath);
+	}
+}
+
+async function createOrUpdateCanonicalProb(problem, targetPath) {
+	const probFilePath = canonicalProbFilePath(problem, targetPath);
+	await writeProbFile(probFilePath, problem, targetPath);
+	await pruneDuplicateProbFiles(problem, probFilePath, targetPath);
+	return probFilePath;
+}
+
+function openInVsCode(targetPath) {
+	if (disableOpen) {
+		return;
+	}
+
+	spawn(codeCli, ["-r", repoRoot, targetPath], {
+		detached: true,
+		stdio: "ignore",
+	});
+}
+
+async function syncProblem(problem) {
+	const targetPath = resolveTargetPath(problem);
+	await ensureCppFile(targetPath);
+	await createOrUpdateCanonicalProb(problem, targetPath);
+	log("generated problem", path.relative(repoRoot, targetPath));
+	openInVsCode(targetPath);
+}
+
+async function handleProblems(problems) {
+	for (const problem of problems) {
+		if (!problem || typeof problem !== "object") {
+			continue;
+		}
+
+		if (!problem.url) {
+			log("skipped problem without url");
+			continue;
+		}
+
+		await syncProblem(problem);
+	}
+}
+
+function enqueueWork(problems) {
+	workQueue = workQueue
+		.then(() => handleProblems(problems))
+		.catch((error) => {
+			log("relay error", error instanceof Error ? error.stack || error.message : String(error));
+		});
+}
+
+async function readRequestBody(request) {
+	const chunks = [];
+
+	for await (const chunk of request) {
+		chunks.push(chunk);
+	}
+
+	return Buffer.concat(chunks);
+}
+
+const server = http.createServer(async (request, response) => {
+	if (request.method === "GET") {
+		response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+		response.end(
+			JSON.stringify({
+				ok: true,
+				port: listenPort,
+				repoRoot,
+			}),
+		);
+		return;
+	}
+
+	if (request.method !== "POST") {
+		response.writeHead(405);
+		response.end();
+		return;
+	}
+
+	try {
+		const rawBody = await readRequestBody(request);
+		const problems = parseProblemPayload(rawBody);
+		enqueueWork(problems);
+		response.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+		response.end("ok\n");
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		log("bad request", message);
+		response.writeHead(400, { "Content-Type": "text/plain; charset=utf-8" });
+		response.end(`${message}\n`);
+	}
+});
+
+server.listen(listenPort, () => {
+	log("competitive companion relay listening", `port=${listenPort}`);
+	log("repo root", repoRoot);
+});
