@@ -1,0 +1,64 @@
+# Track only source files, notes, VS Code settings, and CPH helper scripts.
+*
+!*/
+!.gitignore
+
+# Source code and notes.
+!*.cpp
+!*.c
+!*.py
+!*.md
+
+# VS Code workspace configuration.
+!.vscode/
+!.vscode/**
+
+# CPH automation/configuration kept in this repository.
+!.cph/
+!.cph/scripts/
+!.cph/scripts/**
+
+# CPH samples, local problem metadata, binaries, and logs.
+**/.cph/*.prob
+**/.cph/*.bin
+**/.cph/*.log
+
+# Common local sample/data files.
+*.in
+*.ans
+*.res
+input.txt
+output.txt
+expected.txt
+
+# C/C++ build products.
+*.o
+*.obj
+*.lo
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+a.out
+*.dSYM/
+
+# Build system outputs.
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+
+# Python caches and local environments.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS/editor noise.
+.DS_Store
+*.swp
+*.swo

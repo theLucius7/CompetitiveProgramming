@@ -7,7 +7,7 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/opt/homebrew/bin/node</string>
-		<string>/Users/l7/Desktop/CompetitiveProgramming/scripts/competitive-companion-relay.mjs</string>
+		<string>/Users/l7/Desktop/CompetitiveProgramming/.cph/scripts/competitive-companion-relay.mjs</string>
 	</array>
 	<key>WorkingDirectory</key>
 	<string>/Users/l7/Desktop/CompetitiveProgramming</string>

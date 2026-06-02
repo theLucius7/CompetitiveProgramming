@@ -2,7 +2,7 @@
 
 import crypto from "node:crypto";
 import { spawn } from "node:child_process";
-import { promises as fs } from "node:fs";
+import { promises as fs, readdirSync, statSync } from "node:fs";
 import http from "node:http";
 import os from "node:os";
 import path from "node:path";
@@ -15,11 +15,27 @@ const codeCli =
 	"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code";
 const templateFilePath =
 	process.env.CC_RELAY_TEMPLATE_FILE ||
-	path.join(repoRoot, "templates", "cph.cpp");
+	path.join(repoRoot, "+oOo0oO0+", "templates", "cph.cpp");
 const listenPort = Number(process.env.CC_RELAY_PORT || 4243);
 const pollTimeoutMs = Number(process.env.CC_RELAY_POLL_TIMEOUT_MS || 2500);
 const disableOpen = process.env.CC_RELAY_DISABLE_OPEN === "1";
 const freshWindowMs = 15_000;
+
+const defaultOjCategories = new Map([
+	["atcoder", "=qwqwqwq="],
+	["codeforces", "=qwqwqwq="],
+	["luogu", "=qwqwqwq="],
+	["qoj", "=qwqwqwq="],
+	["cses", "=ovovovo="],
+	["hdu", "=ovovovo="],
+	["l7oj", "=ovovovo="],
+	["lanqiao", "=ovovovo="],
+	["loj", "=ovovovo="],
+	["mati", "=ovovovo="],
+	["nowcoder", "=ovovovo="],
+	["smqyoj", "=ovovovo="],
+	["vjudge", "=ovovovo="],
+]);
 
 const fallbackCppTemplate = `#include <bits/stdc++.h>
 
@@ -57,8 +73,46 @@ function safeLower(value) {
 	return value.toLowerCase();
 }
 
-function hashSuffix(value) {
-	return crypto.createHash("sha1").update(value).digest("hex").slice(0, 16);
+function md5Hex(value) {
+	return crypto.createHash("md5").update(value).digest("hex");
+}
+
+function isDirectory(filePath) {
+	try {
+		return statSync(filePath).isDirectory();
+	} catch {
+		return false;
+	}
+}
+
+function ojRoot(ojName) {
+	const defaultCategory = defaultOjCategories.get(ojName) || "";
+	const defaultPath = defaultCategory ? path.join(repoRoot, defaultCategory, ojName) : "";
+	if (defaultPath && isDirectory(defaultPath)) {
+		return defaultPath;
+	}
+
+	try {
+		for (const entry of readdirSync(repoRoot, { withFileTypes: true })) {
+			if (!entry.isDirectory()) {
+				continue;
+			}
+
+			const candidate = path.join(repoRoot, entry.name, ojName);
+			if (isDirectory(candidate)) {
+				return candidate;
+			}
+		}
+	} catch {
+		// Fall through to the default category below.
+	}
+
+	const directPath = path.join(repoRoot, ojName);
+	if (isDirectory(directPath)) {
+		return directPath;
+	}
+
+	return defaultPath || directPath;
 }
 
 function insideRepo(filePath) {
@@ -87,13 +141,15 @@ function fallbackFileName(problem) {
 }
 
 function resolveCodeforcesTarget(url) {
-	const match = url.pathname.match(/^\/(?:contest|gym|problemset\/problem)\/(\d+)\/problem\/([A-Za-z0-9]+)$/);
+	const match =
+		url.pathname.match(/^\/(?:contest|gym)\/(\d+)\/problem\/([A-Za-z0-9]+)$/) ||
+		url.pathname.match(/^\/problemset\/problem\/(\d+)\/([A-Za-z0-9]+)$/);
 	if (!match) {
 		return null;
 	}
 
 	const [, contestId, index] = match;
-	return path.join(repoRoot, "codeforces", contestId, `${safeLower(index)}.cpp`);
+	return path.join(ojRoot("codeforces"), contestId, `${safeLower(index)}.cpp`);
 }
 
 function resolveAtCoderTarget(url) {
@@ -106,7 +162,7 @@ function resolveAtCoderTarget(url) {
 	const suffix = taskId.startsWith(`${contestId}_`)
 		? taskId.slice(contestId.length + 1)
 		: taskId.split("_").pop();
-	return path.join(repoRoot, "atcoder", contestId.toLowerCase(), `${safeLower(suffix)}.cpp`);
+	return path.join(ojRoot("atcoder"), contestId.toLowerCase(), `${safeLower(suffix)}.cpp`);
 }
 
 function resolveLuoguTarget(url) {
@@ -116,14 +172,14 @@ function resolveLuoguTarget(url) {
 	}
 
 	const [, problemId] = match;
-	return path.join(repoRoot, "luogu", `${problemId}.cpp`);
+	return path.join(ojRoot("luogu"), `${problemId}.cpp`);
 }
 
 function resolveNowcoderTarget(url) {
 	const contestMatch = url.pathname.match(/^\/acm\/contest\/(\d+)\/([A-Za-z0-9]+)$/);
 	if (contestMatch) {
 		const [, contestId, index] = contestMatch;
-		return path.join(repoRoot, "nowcoder", contestId, `${safeLower(index)}.cpp`);
+		return path.join(ojRoot("nowcoder"), contestId, `${safeLower(index)}.cpp`);
 	}
 
 	return null;
@@ -135,7 +191,7 @@ function resolveCsesTarget(url) {
 		return null;
 	}
 
-	return path.join(repoRoot, "cses", `${match[1]}.cpp`);
+	return path.join(ojRoot("cses"), `${match[1]}.cpp`);
 }
 
 function resolveLibreOjTarget(url) {
@@ -144,7 +200,60 @@ function resolveLibreOjTarget(url) {
 		return null;
 	}
 
-	return path.join(repoRoot, "loj", `${match[1]}.cpp`);
+	return path.join(ojRoot("loj"), `${match[1]}.cpp`);
+}
+
+function resolveQojTarget(url, problem) {
+	const contestMatch = url.pathname.match(/^\/contest\/(\d+)\/problem\/([A-Za-z0-9_+-]+)\/?$/);
+	if (contestMatch) {
+		const [, contestId, index] = contestMatch;
+		return path.join(ojRoot("qoj"), contestId, `${safeLower(index)}.cpp`);
+	}
+
+	const problemMatch = url.pathname.match(/^\/problem\/(\d+)\/?$/);
+	if (!problemMatch) {
+		return null;
+	}
+
+	const groupId = String(problem?.group || "").match(/\b(?:contest|qoj)\s*#?\s*(\d+)\b/i)?.[1];
+	if (groupId) {
+		return path.join(ojRoot("qoj"), groupId, `${problemMatch[1]}.cpp`);
+	}
+
+	return path.join(ojRoot("qoj"), `${problemMatch[1]}.cpp`);
+}
+
+function resolveVjudgeTarget(url) {
+	const contestMatch = url.pathname.match(/^\/contest\/(\d+)(?:\/#problem\/([A-Za-z0-9_+-]+))?\/?$/);
+	const hashMatch = url.hash.match(/^#problem\/([A-Za-z0-9_+-]+)$/);
+	if (contestMatch) {
+		const [, contestId, pathIndex] = contestMatch;
+		const index = pathIndex || hashMatch?.[1];
+		if (index) {
+			return path.join(ojRoot("vjudge"), contestId, `${safeLower(index)}.cpp`);
+		}
+	}
+
+	const problemMatch = url.pathname.match(/^\/problem\/([A-Za-z0-9_-]+)\/?$/);
+	if (problemMatch) {
+		return path.join(ojRoot("vjudge"), `${sanitizePathComponent(problemMatch[1])}.cpp`);
+	}
+
+	return null;
+}
+
+function resolveHduTarget(url) {
+	const problemId = url.searchParams.get("pid") || url.pathname.match(/^\/showproblem\.php\/(\d+)\/?$/)?.[1];
+	if (!problemId) {
+		return null;
+	}
+
+	const contestId = url.searchParams.get("cid");
+	if (contestId) {
+		return path.join(ojRoot("hdu"), contestId, `${safeLower(problemId)}.cpp`);
+	}
+
+	return path.join(ojRoot("hdu"), `${safeLower(problemId)}.cpp`);
 }
 
 function resolveTargetPath(problem) {
@@ -157,27 +266,39 @@ function resolveTargetPath(problem) {
 	const host = url.hostname.toLowerCase();
 
 	if (host.endsWith("luogu.com.cn")) {
-		return resolveLuoguTarget(url) || path.join(repoRoot, "luogu", fallbackFileName(problem));
+		return resolveLuoguTarget(url) || path.join(ojRoot("luogu"), fallbackFileName(problem));
 	}
 
 	if (host.endsWith("codeforces.com")) {
-		return resolveCodeforcesTarget(url) || path.join(repoRoot, "codeforces", fallbackFileName(problem));
+		return resolveCodeforcesTarget(url) || path.join(ojRoot("codeforces"), fallbackFileName(problem));
 	}
 
 	if (host.endsWith("atcoder.jp")) {
-		return resolveAtCoderTarget(url) || path.join(repoRoot, "atcoder", fallbackFileName(problem));
+		return resolveAtCoderTarget(url) || path.join(ojRoot("atcoder"), fallbackFileName(problem));
 	}
 
 	if (host.endsWith("nowcoder.com")) {
-		return resolveNowcoderTarget(url) || path.join(repoRoot, "nowcoder", fallbackFileName(problem));
+		return resolveNowcoderTarget(url) || path.join(ojRoot("nowcoder"), fallbackFileName(problem));
 	}
 
 	if (host.endsWith("cses.fi")) {
-		return resolveCsesTarget(url) || path.join(repoRoot, "cses", fallbackFileName(problem));
+		return resolveCsesTarget(url) || path.join(ojRoot("cses"), fallbackFileName(problem));
 	}
 
 	if (host.endsWith("loj.ac")) {
-		return resolveLibreOjTarget(url) || path.join(repoRoot, "loj", fallbackFileName(problem));
+		return resolveLibreOjTarget(url) || path.join(ojRoot("loj"), fallbackFileName(problem));
+	}
+
+	if (host.endsWith("qoj.ac")) {
+		return resolveQojTarget(url, problem) || path.join(ojRoot("qoj"), fallbackFileName(problem));
+	}
+
+	if (host.endsWith("vjudge.net")) {
+		return resolveVjudgeTarget(url) || path.join(ojRoot("vjudge"), fallbackFileName(problem));
+	}
+
+	if (host.endsWith("hdu.edu.cn")) {
+		return resolveHduTarget(url) || path.join(ojRoot("hdu"), fallbackFileName(problem));
 	}
 
 	return path.join(repoRoot, fallbackFileName(problem));
@@ -338,10 +459,9 @@ async function writeProbFile(probFilePath, problem, targetPath) {
 	await fs.writeFile(probFilePath, JSON.stringify(probData), "utf8");
 }
 
-function canonicalProbFilePath(problem, targetPath) {
-	const baseName = sanitizePathComponent(path.basename(targetPath));
-	const urlKey = problem?.url || `${problem?.name || "problem"}-${Date.now()}`;
-	return path.join(cphDir, `.${baseName}_${hashSuffix(urlKey)}.prob`);
+function canonicalProbFilePath(_problem, targetPath) {
+	const baseName = path.basename(targetPath);
+	return path.join(cphDir, `.${baseName}_${md5Hex(targetPath)}.prob`);
 }
 
 async function findAnyProb(problem) {
@@ -421,9 +541,17 @@ function openInVsCode(targetPath) {
 }
 
 async function syncProblem(problem) {
+	const requestStartedAt = Date.now();
 	const targetPath = resolveTargetPath(problem);
+	const recentProb = await pollForProb(problem, requestStartedAt);
+	const probSource = recentProb?.data ? { ...problem, ...recentProb.data } : problem;
+
+	if (recentProb?.data?.srcPath) {
+		await moveOrDropTempSource(recentProb.data.srcPath, targetPath);
+	}
+
 	await ensureCppFile(targetPath);
-	await createOrUpdateCanonicalProb(problem, targetPath);
+	await createOrUpdateCanonicalProb(probSource, targetPath);
 	log("generated problem", path.relative(repoRoot, targetPath));
 	openInVsCode(targetPath);
 }
