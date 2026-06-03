@@ -444,12 +444,38 @@ async function moveOrDropTempSource(sourcePath, targetPath) {
 	}
 }
 
+function stableTestCaseId(problem, testCase, index) {
+	const key = JSON.stringify({
+		url: problem?.url || "",
+		index,
+		input: testCase?.input || "",
+		output: testCase?.output || "",
+	});
+	return Number.parseInt(md5Hex(key).slice(0, 12), 16);
+}
+
+function normalizeTests(problem) {
+	if (!Array.isArray(problem?.tests)) {
+		return [];
+	}
+
+	return problem.tests.map((testCase, index) => {
+		const data = testCase && typeof testCase === "object" ? testCase : {};
+		return {
+			...data,
+			id: Number.isFinite(data.id) ? data.id : stableTestCaseId(problem, data, index),
+			input: typeof data.input === "string" ? data.input : "",
+			output: typeof data.output === "string" ? data.output : "",
+		};
+	});
+}
+
 async function writeProbFile(probFilePath, problem, targetPath) {
 	const probData = {
 		...problem,
 		srcPath: targetPath,
 		interactive: Boolean(problem?.interactive),
-		tests: Array.isArray(problem?.tests) ? problem.tests : [],
+		tests: normalizeTests(problem),
 		testType: problem?.testType || "single",
 		input: problem?.input || { type: "stdin" },
 		output: problem?.output || { type: "stdout" },
