@@ -4,7 +4,7 @@ using i64 = long long;
 using u64 = unsigned long long;
 
 void solve() {
-        
+    
 }
 
 int main() {
@@ -12,7 +12,7 @@ int main() {
     std::cin.tie(nullptr);
 
     int t = 1;
-    // std::cin >> t;
+    std::cin >> t;
     while (t--) {
         solve();
     }
