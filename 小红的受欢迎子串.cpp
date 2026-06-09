@@ -6,7 +6,9 @@ using i64 = long long;
 using u64 = unsigned long long;
 
 void solve() {
-    
+    int a, b;
+    std::cin >> a >> b;
+    std::cout << a + b;
 }
 
 signed main() {
