@@ -6,7 +6,10 @@ using i64 = long long;
 using u64 = unsigned long long;
 
 void solve() {
-    
+    int n, x, y, z;
+    std::cin >> n >> x >> y >> z;
+
+    std::cout << std::min((n + (x + y - 1)) / (x + y), (n + 10 * y * z + x + 10 * y - 1) / (x + 10 * y)) << "\n";
 }
 
 signed main() {
