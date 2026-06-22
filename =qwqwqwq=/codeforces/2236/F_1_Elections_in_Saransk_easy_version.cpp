@@ -61,6 +61,11 @@ void solve() {
             if (a[i] == 1) {
                 break;
             }
+
+            if (isprime(a[i])) {
+                cnt[std::lower_bound(primes.begin(), primes.end(), a[i]) - primes.begin()]++;
+                break;
+            }
         }
     }
 

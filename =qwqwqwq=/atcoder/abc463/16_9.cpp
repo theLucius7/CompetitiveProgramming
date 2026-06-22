@@ -6,7 +6,12 @@ using i64 = long long;
 using u64 = unsigned long long;
 
 void solve() {
-    
+    int a, b;
+    std::cin >> a >> b;
+
+    int g = std::gcd(a, b);
+    a /= g, b /= g;
+    std::cout << (a == 16 && b == 9 ? "Yes" : "No");
 }
 
 signed main() {
