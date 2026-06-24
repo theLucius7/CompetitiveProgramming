@@ -6,7 +6,14 @@ using i64 = long long;
 using u64 = unsigned long long;
 
 void solve() {
-    
+    int n, k;
+    std::cin >> n >> k;
+
+    for (int i = 0; i < n - 2; i++) {
+        std::cout << 1 << " ";
+    }
+    std::cout << 2 << " ";
+    std::cout << n + k << "\n";
 }
 
 signed main() {

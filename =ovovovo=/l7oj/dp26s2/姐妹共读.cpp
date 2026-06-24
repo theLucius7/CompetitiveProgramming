@@ -6,7 +6,21 @@ using i64 = long long;
 using u64 = unsigned long long;
 
 void solve() {
-    
+    int n;
+    std::cin >> n;
+
+    std::vector<bool> vis(n);
+    int cnt = 0;
+    for (int i = 0; i < n; i++) {
+        int a;
+        std::cin >> a;
+        a--;
+        if (a < n && !vis[a]) {
+            vis[a] = true;
+            cnt++;
+        }
+    }
+    std::cout << cnt << "\n";
 }
 
 signed main() {
