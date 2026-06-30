@@ -18,6 +18,8 @@ void solve() {
         }
 
         if (s[l] == '0') {
+
+        } else {
             
         }
     }
