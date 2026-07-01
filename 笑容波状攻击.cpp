@@ -10,19 +10,22 @@ void solve() {
     std::cin >> s;
 
     int cnt0 = 0, cnt1 = 0;
-    for (int l = 0, r = 0; l < s.size(); ) {
-        while (r < s.size()) {
-            if (s[r] == s[l]) {
-                r++;
-            }
+    for (int l = 0, r = 0; l < s.size(); l = r) {
+        while (r < s.size() && s[r] == s[l]) {
+            r++;
         }
 
+        int len = r - l;
+        // std::cout << s[l] << " " << len << "\n";
         if (s[l] == '0') {
-
+            cnt0 += len * (len + 1) / 2;
         } else {
-            
+            cnt1 += len * (len + 1) / 2;
         }
     }
+    // std::cout << cnt0 << " " << cnt1 << "!\n";
+
+    std::cout << 1LL * s.size() * (s.size() + 1) - cnt0 - 2 * cnt1 << "\n";
 }
 
 signed main() {
