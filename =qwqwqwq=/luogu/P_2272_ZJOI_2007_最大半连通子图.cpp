@@ -66,7 +66,54 @@ struct SCC {
 };
 
 void solve() {
-    
+    int N, M, X;
+    std::cin >> N >> M >> X;
+
+    SCC g(N);
+    for (int i = 0; i < M; i++) {
+        int x, y;
+        std::cin >> x >> y;
+        x--, y--;
+        g.addEdge(x, y);
+    }
+
+    auto bel = g.work();
+    std::vector<std::vector<int>> adj(g.cnt);
+    std::vector<int> sz(N);
+    for (int x = 0; x < N; x++) {
+        sz[bel[x]]++;
+        for (auto y : g.adj[x]) {
+            if (bel[x] != bel[y]) {
+                adj[bel[y]].push_back(bel[x]);
+            }
+        }
+    }
+
+    for (int i = 0; i < g.cnt; i++) {
+        std::sort(adj[i].begin(), adj[i].end());
+        adj[i].erase(std::unique(adj[i].begin(), adj[i].end()), adj[i].end());
+    }
+
+    std::vector<int> dp(g.cnt), ways(g.cnt);
+    for (int i = 0; i < g.cnt; i++) {
+        dp[i] = sz[i];
+        ways[i] = 1;
+    }
+    for (int x = 0; x < g.cnt; x++) {
+        for (auto y : adj[x]) {
+            if (dp[x] + sz[y] > dp[y]) {
+                dp[y] = dp[x] + sz[y];
+                ways[y] = ways[x];
+            } else if (dp[y] == dp[x] + sz[y]) {
+                ways[y] += ways[x];
+                ways[y] %= X;
+            }
+        }
+    }
+
+    int mx = *max_element(dp.begin(), dp.end());
+    int sum = std::transform_reduce(dp.begin(), dp.end(), ways.begin(), 0, std::plus<>(), [&](int d, int w) {return d == mx ? w : 0;}) % X;
+    std::cout << mx << "\n" << sum << "\n";
 }
 
 signed main() {
@@ -74,7 +121,7 @@ signed main() {
     std::cin.tie(nullptr);
 
     int t = 1;
-    std::cin >> t;
+    // std::cin >> t;
     while (t--) {
         solve();
     }
