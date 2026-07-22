@@ -66,7 +66,35 @@ struct SCC {
 };
 
 void solve() {
-    
+    int N, M;
+    std::cin >> N >> M;
+
+    SCC g(N);
+    for (int i = 0; i < M; i++) {
+        int x, y;
+        std::cin >> x >> y;
+        x--, y--;
+        g.addEdge(y, x);
+    }
+
+    auto bel = g.work();
+
+    std::vector<int> sz(g.cnt), in(g.cnt);
+    for (int i = 0; i < N; i++) {
+        sz[bel[i]]++;
+        for (auto j : g.adj[i]) {
+            if (bel[i] != bel[j]) {
+                in[bel[j]]++;
+            }
+        }
+    }
+
+    if (std::count(in.begin(), in.end(), 0) == 1) {
+        std::cout << sz[std::distance(in.begin(), std::find(in.begin(), in.end(), 0))] << "\n";
+    } else {
+        std::cout << 0 << "\n";
+    }
+
 }
 
 signed main() {
@@ -74,7 +102,7 @@ signed main() {
     std::cin.tie(nullptr);
 
     int t = 1;
-    std::cin >> t;
+    // std::cin >> t;
     while (t--) {
         solve();
     }

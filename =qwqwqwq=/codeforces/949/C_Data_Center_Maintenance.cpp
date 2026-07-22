@@ -66,7 +66,52 @@ struct SCC {
 };
 
 void solve() {
-    
+    int n, m, h;
+    std::cin >> n >> m >> h;
+
+    std::vector<int> u(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> u[i];
+    }
+
+    SCC g(n);
+    for (int i = 0; i < m; i++) {
+        int x, y;
+        std::cin >> x >> y;
+        x--, y--;
+        
+        if ((u[x] + 1) % h == u[y]) {
+            g.addEdge(x, y);
+        }
+        if ((u[y] + 1) % h == u[x]) {
+            g.addEdge(y, x);
+        }
+    }
+
+    auto bel = g.work();
+    std::vector<int> out(n);
+    std::vector<std::vector<int>> np(g.cnt);
+    for (int i = 0; i < n; i++) {
+        np[bel[i]].push_back(i);
+        for (auto j : g.adj[i]) {
+            if (bel[i] != bel[j]) {
+                out[bel[i]]++;
+            }
+        }
+    }
+
+    std::vector<int> ans(n);
+    std::iota(ans.begin(), ans.end(), 0);
+    for (int i = 0; i < g.cnt; i++) {
+        if (out[i] == 0 && np[i].size() < ans.size()) {
+            ans = np[i];
+        }
+    }
+
+    std::cout << ans.size() << "\n";
+    for (int i = 0; i < ans.size(); i++) {
+        std::cout << ans[i] + 1 << " \n"[i == ans.size() - 1];
+    }
 }
 
 signed main() {
@@ -74,7 +119,7 @@ signed main() {
     std::cin.tie(nullptr);
 
     int t = 1;
-    std::cin >> t;
+    // std::cin >> t;
     while (t--) {
         solve();
     }
