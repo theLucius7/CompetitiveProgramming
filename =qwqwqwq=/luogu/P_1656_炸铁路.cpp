@@ -1,4 +1,12 @@
+#include <bits/stdc++.h>
+
+#define int long long
+
+using i64 = long long;
+using u64 = unsigned long long;
+
 // std::set<std::pair<int, int>> E;
+std::set<std::pair<int, int>> ans;
 struct EBCC {
     int n;
     std::vector<std::vector<int>> adj;
@@ -75,6 +83,13 @@ struct EBCC {
             g.siz[bel[i]]++;
             for (auto j : adj[i]) {
                 if (bel[i] < bel[j]) {
+
+                    if (i > j) {
+                        ans.insert({j, i});
+                    } else {
+                        ans.insert({i, j});
+                    }
+                    
                     g.edges.emplace_back(bel[i], bel[j]);
                 } else if (i < j) {
                     g.cnte[bel[i]]++;
@@ -84,3 +99,35 @@ struct EBCC {
         return g;
     }
 };
+
+void solve() {
+    int n, m;
+    std::cin >> n >> m;
+
+    EBCC g(n);
+    for (int i = 0; i < m; i++) {
+        int a, b;
+        std::cin >> a >> b;
+        a--, b--;
+        g.addEdge(a, b);
+    }
+    g.work();
+    g.compress();
+
+    for (auto [x, y] : ans) {
+        std::cout << x + 1 << " " << y + 1 << "\n";
+    }
+}
+
+signed main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int t = 1;
+    // std::cin >> t;
+    while (t--) {
+        solve();
+    }
+
+    return 0;
+}
