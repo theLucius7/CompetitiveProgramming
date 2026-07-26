@@ -14,7 +14,7 @@ void solve() {
         std::cin >> P[i];
     }
 
-    std::vector<int> 
+    std::vector<
 }
 
 signed main() {
