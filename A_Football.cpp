@@ -6,17 +6,21 @@ using i64 = long long;
 using u64 = unsigned long long;
 
 void solve() {
-    int n, k;
-    std::cin >> n >> k;
+    std::string s;
+    std::cin >> s;
+    
+    for (int l = 0, r = 0; l < s.size(); l = r) {
+        while (r < s.size() && s[l] == s[r]) {
+            r++;
+        }
 
-    for (int i = 0; i < k; i++) {
-        if (n % 10 == 0) {
-            n /= 10;
-        } else {
-            n -= 1;
+        if (r - l >= 7) {
+            std::cout << "YES\n";
+            return;
         }
     }
-    std::cout << n << "\n";
+
+    std::cout << "NO\n";
 }
 
 signed main() {

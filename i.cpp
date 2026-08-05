@@ -100,7 +100,7 @@ signed main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
 
-    sieve(1E5 + 10);
+    sieve(44000);
 
     int t = 1;
     std::cin >> t;
