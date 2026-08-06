@@ -34,7 +34,7 @@ struct EBCC {
         stk.push_back(x);
         
         for (auto [y, yid] : adj[x]) {
-            if (yid == (xid ^ 1)) {
+            if (yid == (xid ^ 1)) { 
                 continue;
             }
             if (dfn[y] == -1) {
