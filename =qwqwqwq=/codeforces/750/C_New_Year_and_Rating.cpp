@@ -21,13 +21,13 @@ void solve() {
         }
         sum += c;
     }
-    L += sum, R += sum;
+    
     if (L > R) {
         std::cout << "Impossible\n";
     } else if (R == 1E18) {
         std::cout << "Infinity\n";
     } else {
-        std::cout << R << "\n";
+        std::cout << R + sum<< "\n";
     }
 }
 
