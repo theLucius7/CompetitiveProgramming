@@ -1,5 +1,3 @@
-using i64 = long long;
-
 i64 mul(i64 a, i64 b, i64 p) {
     i64 c = a * b - i64(1.0L * a * b / p) * p;
     c %= p;
