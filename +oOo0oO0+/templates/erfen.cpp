@@ -32,7 +32,7 @@ auto check = [&](double t) {
 double lo = 0;
 double hi = 1E12;
 while (hi - lo > std::max(1.0, lo) * eps) {
-    double x = (lo + hi) / 2;
+    double x = (lo + hi) >> 1;
     if (check(x)) {
         hi = x;
     } else {
