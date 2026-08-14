@@ -47,7 +47,7 @@ while (hi - lo > std::max(1.0, lo) * eps) {
 **/
 int lo = 1, hi = 1E9;
 while (lo < hi) {
-    int m = (lo + hi + 1) / 2;
+    int m = (lo + hi + 1) >> 1;
     if (check(m)) {
         lo = m;
     } else {
@@ -61,7 +61,7 @@ std::cout << lo << "\n";
 **/
 int lo = 1, hi = n;
 while (lo < hi) {
-    int m = (lo + hi) / 2;
+    int m = (lo + hi) >> 1;
     if (check(m)) {
         hi = m;
     } else {
