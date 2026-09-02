@@ -8,33 +8,34 @@ import os from "node:os";
 import path from "node:path";
 
 const homeDir = os.homedir();
-const repoRoot = process.env.CC_RELAY_REPO_ROOT || path.join(homeDir, "Desktop", "CompetitiveProgramming");
+const repoRoot = process.env.CC_RELAY_REPO_ROOT || path.join(homeDir, "Developer", "CompetitiveProgramming");
 const cphDir = path.join(repoRoot, ".cph");
 const codeCli =
 	process.env.CC_RELAY_CODE_CLI ||
-	"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code";
+	"/Applications/ShortestPath IDE.app/Contents/Resources/app/bin/code";
 const templateFilePath =
 	process.env.CC_RELAY_TEMPLATE_FILE ||
-	path.join(repoRoot, "+oOo0oO0+", "templates", "cph.cpp");
+	path.join(repoRoot, "Templates", "templates", "cph.cpp");
 const listenPort = Number(process.env.CC_RELAY_PORT || 4243);
 const pollTimeoutMs = Number(process.env.CC_RELAY_POLL_TIMEOUT_MS || 2500);
 const disableOpen = process.env.CC_RELAY_DISABLE_OPEN === "1";
 const freshWindowMs = 15_000;
 
-const defaultOjCategories = new Map([
-	["atcoder", "=qwqwqwq="],
-	["codeforces", "=qwqwqwq="],
-	["luogu", "=qwqwqwq="],
-	["qoj", "=qwqwqwq="],
-	["cses", "=ovovovo="],
-	["hdu", "=ovovovo="],
-	["l7oj", "=ovovovo="],
-	["lanqiao", "=ovovovo="],
-	["loj", "=ovovovo="],
-	["mati", "=ovovovo="],
-	["nowcoder", "=ovovovo="],
-	["smqyoj", "=ovovovo="],
-	["vjudge", "=ovovovo="],
+const defaultOjDirectories = new Map([
+	["atcoder", "AtCoder"],
+	["codeforces", "Codeforces"],
+	["luogu", "Luogu"],
+	["qoj", "QOJ"],
+	["spoj", "SPOJ"],
+	["cses", "CSES"],
+	["hdu", "HDU"],
+	["l7oj", "L7OJ"],
+	["lanqiao", "Lanqiao"],
+	["loj", "LOJ"],
+	["mati", "Mati"],
+	["nowcoder", "NowCoder"],
+	["smqyoj", "SMQYOJ"],
+	["vjudge", "VJudge"],
 ]);
 
 const fallbackCppTemplate = `#include <bits/stdc++.h>
@@ -86,9 +87,9 @@ function isDirectory(filePath) {
 }
 
 function ojRoot(ojName) {
-	const defaultCategory = defaultOjCategories.get(ojName) || "";
-	const defaultPath = defaultCategory ? path.join(repoRoot, defaultCategory, ojName) : "";
-	if (defaultPath && isDirectory(defaultPath)) {
+	const defaultDirectory = defaultOjDirectories.get(ojName) || ojName;
+	const defaultPath = path.join(repoRoot, defaultDirectory);
+	if (isDirectory(defaultPath)) {
 		return defaultPath;
 	}
 
@@ -112,7 +113,7 @@ function ojRoot(ojName) {
 		return directPath;
 	}
 
-	return defaultPath || directPath;
+	return defaultPath;
 }
 
 function insideRepo(filePath) {
@@ -149,7 +150,7 @@ function resolveCodeforcesTarget(url) {
 	}
 
 	const [, contestId, index] = match;
-	return path.join(ojRoot("codeforces"), contestId, `${safeLower(index)}.cpp`);
+	return path.join(ojRoot("codeforces"), contestId, `${index.toUpperCase()}.cpp`);
 }
 
 function resolveAtCoderTarget(url) {
@@ -175,6 +176,15 @@ function resolveLuoguTarget(url) {
 	return path.join(ojRoot("luogu"), `${problemId}.cpp`);
 }
 
+function resolveSpojTarget(url) {
+	const match = url.pathname.match(/^\/problems\/([^/]+)\/?$/i);
+	if (!match) {
+		return null;
+	}
+
+	return path.join(ojRoot("spoj"), `${sanitizePathComponent(match[1]).toUpperCase()}.cpp`);
+}
+
 function resolveNowcoderTarget(url) {
 	const contestMatch = url.pathname.match(/^\/acm\/contest\/(\d+)\/([A-Za-z0-9]+)$/);
 	if (contestMatch) {
@@ -185,13 +195,15 @@ function resolveNowcoderTarget(url) {
 	return null;
 }
 
-function resolveCsesTarget(url) {
+function resolveCsesTarget(url, problem) {
 	const match = url.pathname.match(/^\/problemset\/task\/(\d+)\/?$/);
 	if (!match) {
 		return null;
 	}
 
-	return path.join(ojRoot("cses"), `${match[1]}.cpp`);
+	const slug = sanitizePathComponent(problem?.name || "").replace(/\s+/g, "_");
+	const fileName = slug ? `${match[1]}_${slug}.cpp` : `${match[1]}.cpp`;
+	return path.join(ojRoot("cses"), fileName);
 }
 
 function resolveLibreOjTarget(url) {
@@ -269,6 +281,10 @@ function resolveTargetPath(problem) {
 		return resolveLuoguTarget(url) || path.join(ojRoot("luogu"), fallbackFileName(problem));
 	}
 
+	if (host.endsWith("spoj.com")) {
+		return resolveSpojTarget(url) || path.join(ojRoot("spoj"), fallbackFileName(problem));
+	}
+
 	if (host.endsWith("codeforces.com")) {
 		return resolveCodeforcesTarget(url) || path.join(ojRoot("codeforces"), fallbackFileName(problem));
 	}
@@ -282,7 +298,7 @@ function resolveTargetPath(problem) {
 	}
 
 	if (host.endsWith("cses.fi")) {
-		return resolveCsesTarget(url) || path.join(ojRoot("cses"), fallbackFileName(problem));
+		return resolveCsesTarget(url, problem) || path.join(ojRoot("cses"), fallbackFileName(problem));
 	}
 
 	if (host.endsWith("loj.ac")) {

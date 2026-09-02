@@ -7,17 +7,17 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/opt/homebrew/bin/node</string>
-		<string>/Users/l7/Desktop/CompetitiveProgramming/.cph/scripts/competitive-companion-relay.mjs</string>
+		<string>/Users/l7/Developer/CompetitiveProgramming/.cph/scripts/competitive-companion-relay.mjs</string>
 	</array>
 	<key>WorkingDirectory</key>
-	<string>/Users/l7/Desktop/CompetitiveProgramming</string>
+	<string>/Users/l7/Developer/CompetitiveProgramming</string>
 	<key>RunAtLoad</key>
 	<true/>
 	<key>KeepAlive</key>
 	<true/>
 	<key>StandardOutPath</key>
-	<string>/Users/l7/Desktop/CompetitiveProgramming/.cph/relay.stdout.log</string>
+	<string>/Users/l7/Developer/CompetitiveProgramming/.cph/relay.stdout.log</string>
 	<key>StandardErrorPath</key>
-	<string>/Users/l7/Desktop/CompetitiveProgramming/.cph/relay.stderr.log</string>
+	<string>/Users/l7/Developer/CompetitiveProgramming/.cph/relay.stderr.log</string>
 </dict>
 </plist>
