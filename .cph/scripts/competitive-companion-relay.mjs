@@ -12,7 +12,7 @@ const repoRoot = process.env.CC_RELAY_REPO_ROOT || path.join(homeDir, "Developer
 const cphDir = path.join(repoRoot, ".cph");
 const codeCli =
 	process.env.CC_RELAY_CODE_CLI ||
-	"/Applications/ShortestPath IDE.app/Contents/Resources/app/bin/code";
+	"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code";
 const templateFilePath =
 	process.env.CC_RELAY_TEMPLATE_FILE ||
 	path.join(repoRoot, "Templates", "templates", "cph.cpp");

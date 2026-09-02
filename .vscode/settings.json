@@ -2,5 +2,103 @@
     "cph.general.defaultLanguage": "cpp",
     "cph.general.defaultLanguageTemplateFileLocation": "/Users/l7/Developer/CompetitiveProgramming/Templates/templates/cph.cpp",
     "cph.general.doTemplateFileVariableReplacement": false,
-    "cph.general.saveLocation": "/Users/l7/Developer/CompetitiveProgramming/.cph"
+    "cph.general.saveLocation": "/Users/l7/Developer/CompetitiveProgramming/.cph",
+    "cph.general.collectProblemsInRoot": true,
+    "cph.general.fileNameTemplate": "{ojName}/{contestId}/{problemId}.{ext}",
+    "cph.general.fileNameTemplateOverrides": {
+        "CSES": "{ojName}/{problemId}_{slug}.{ext}",
+        "AT": "{ojName}/{contestId}/{problemId}.{ext}",
+        "CF": "{ojName}/{contestId}/{problemId}.{ext}",
+        "LG": "{ojName}/{problemId}.{ext}",
+        "ShortestPath": "{ojName}/{contestId}/{problemId}.{ext}",
+        "VJ": "{ojName}/{problemId}{slug}.{ext}",
+        "牛客": "NowCoder/{problemId}.{ext}",
+        "SPOJ": "SPOJ/{problemId}.{ext}"
+    },
+    "cph.general.ojMapping": {
+        "codeforces.com": {
+            "oj": "CF",
+            "ojName": "Codeforces",
+            "contestIdRegex": "(?:contest|gym|problemset\\/problem)\\/(\\d+)",
+            "problemIdRegex": "(?:contest|gym|problemset\\/problem)\\/\\d+\\/(\\w+)"
+        },
+        "atcoder.jp": {
+            "oj": "AT",
+            "ojName": "AtCoder",
+            "contestIdRegex": "contests\\/(\\w+)\\/tasks\\/\\w+_\\w+",
+            "problemIdRegex": "contests\\/\\w+\\/tasks\\/\\w+_(\\w+)"
+        },
+        "luogu.com.cn": {
+            "oj": "LG",
+            "ojName": "Luogu",
+            "problemIdRegex": "problem\\/(\\w+)"
+        },
+        "shortestpath.cn": {
+            "oj": "ShortestPath",
+            "ojName": "ShortestPath",
+            "contestIdRegex": "problem\\/([^\\/]+)\\/[^\\/]+\\/[^\\/]+",
+            "problemIdRegex": "problem\\/[^\\/]+\\/(.+)$",
+            "problemSource": "none"
+        },
+        "open.kattis.com": {
+            "oj": "Kattis",
+            "ojName": "Kattis"
+        },
+        "codechef.com": {
+            "oj": "CC",
+            "ojName": "CodeChef"
+        },
+        "spoj.com": {
+            "oj": "SPOJ",
+            "ojName": "SPOJ",
+            "problemIdRegex": "problems\\/([^\\/]+)"
+        },
+        "hackerrank.com": {
+            "oj": "HR",
+            "ojName": "HackerRank"
+        },
+        "hackerearth.com": {
+            "oj": "HE",
+            "ojName": "HackerEarth"
+        },
+        "leetcode.com": {
+            "oj": "LC",
+            "ojName": "LeetCode"
+        },
+        "acm.timus.ru": {
+            "oj": "Timus",
+            "ojName": "Timus"
+        },
+        "dmoj.ca": {
+            "oj": "DMOJ",
+            "ojName": "DMOJ"
+        },
+        "cses.fi": {
+            "oj": "CSES",
+            "ojName": "CSES",
+            "problemIdRegex": "task\\/(\\d+)"
+        },
+        "usaco.org": {
+            "oj": "USACO",
+            "ojName": "USACO"
+        },
+        "lightoj.com": {
+            "oj": "LOJ",
+            "ojName": "LightOJ"
+        },
+        "eolymp.com": {
+            "oj": "EOlymp",
+            "ojName": "EOlymp"
+        },
+        "acm.hdu.edu.cn": {
+            "oj": "HDU",
+            "ojName": "HDU",
+            "problemIdRegex": "[?&]pid=(\\d+)"
+        },
+        "ac.nowcoder.com": {
+            "oj": "牛客",
+            "ojName": "牛客",
+            "problemIdRegex": "problem\\/(\\d+)"
+        }
+    }
 }
