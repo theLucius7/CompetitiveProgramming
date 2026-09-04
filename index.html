@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="theLucius7 的算法竞赛题解归档：浏览各大 Online Judge 题目、源码与 Git 提交记录。"
+    />
+    <meta name="theme-color" content="#f4f7f2" />
+    <title>Competitive Programming · theLucius7</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#problem-library">跳到题库</a>
+
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Competitive Programming 首页">
+        <span class="brand-mark" aria-hidden="true">L7</span>
+        <span>Competitive Programming</span>
+      </a>
+      <a
+        class="repo-link"
+        href="https://github.com/theLucius7/CompetitiveProgramming"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.5 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .7Z" />
+        </svg>
+        <span>GitHub</span>
+      </a>
+    </header>
+
+    <main>
+      <section class="overview" aria-labelledby="page-title">
+        <div class="intro">
+          <p class="eyebrow"><span class="live-dot"></span> PUBLIC SOLUTION ARCHIVE</p>
+          <h1 id="page-title">把每一次提交，<br />变成可检索的成长轨迹。</h1>
+          <p class="intro-copy">
+            theLucius7 的算法竞赛题解集。按 OJ、题号或路径查找，并直接阅读每一份提交代码。
+          </p>
+          <div class="sync-line" aria-live="polite">
+            <span id="sync-indicator" class="sync-indicator"></span>
+            <span id="sync-status">正在载入仓库快照…</span>
+          </div>
+        </div>
+
+        <dl class="stats" aria-label="仓库统计">
+          <div class="stat stat-primary">
+            <dt>题解代码</dt>
+            <dd id="stat-solutions">—</dd>
+            <span>solution files</span>
+          </div>
+          <div class="stat">
+            <dt>OJ 平台</dt>
+            <dd id="stat-platforms">—</dd>
+            <span>online judges</span>
+          </div>
+          <div class="stat">
+            <dt>Git 提交</dt>
+            <dd id="stat-commits">—</dd>
+            <span>commits in archive</span>
+          </div>
+          <div class="stat">
+            <dt>活跃天数</dt>
+            <dd id="stat-active-days">—</dd>
+            <span>days with commits</span>
+          </div>
+        </dl>
+      </section>
+
+      <section class="activity-card" aria-labelledby="activity-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">COMMIT ACTIVITY</p>
+            <h2 id="activity-title">贡献日历</h2>
+          </div>
+          <p id="activity-range" class="section-meta">最近 53 周</p>
+        </div>
+
+        <div class="calendar-scroll" tabindex="0" aria-label="贡献日历，可横向滚动">
+          <div class="calendar-layout">
+            <div aria-hidden="true" class="calendar-spacer"></div>
+            <div id="calendar-months" class="calendar-months"></div>
+            <div class="weekday-labels" aria-hidden="true">
+              <span></span><span>一</span><span></span><span>三</span><span></span><span>五</span><span></span>
+            </div>
+            <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="每日提交次数"></div>
+          </div>
+        </div>
+
+        <div class="calendar-footer">
+          <p id="activity-summary">正在统计提交记录…</p>
+          <div class="legend" aria-label="颜色图例">
+            <span>少</span>
+            <i class="level-0"></i><i class="level-1"></i><i class="level-2"></i><i class="level-3"></i><i class="level-4"></i>
+            <span>多</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="problem-library" class="library" aria-labelledby="library-title">
+        <div class="section-heading library-heading">
+          <div>
+            <p class="section-kicker">SOLUTION LIBRARY</p>
+            <h2 id="library-title">题目与代码</h2>
+          </div>
+          <p id="result-count" class="section-meta">载入中…</p>
+        </div>
+
+        <div class="toolbar">
+          <label class="search-box" for="problem-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
+            <input id="problem-search" type="search" placeholder="搜索题号、比赛或文件路径" autocomplete="off" />
+            <kbd>/</kbd>
+          </label>
+          <label class="sort-control" for="problem-sort">
+            <span>排序</span>
+            <select id="problem-sort">
+              <option value="platform">按 OJ</option>
+              <option value="title">按题目</option>
+              <option value="path">按路径</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="platform-filters" class="platform-filters" aria-label="按 OJ 平台筛选"></div>
+
+        <div class="table-shell">
+          <div class="table-header" aria-hidden="true">
+            <span>题目</span><span>OJ</span><span>语言</span><span></span>
+          </div>
+          <div id="problem-list" class="problem-list" aria-live="polite"></div>
+          <div id="empty-state" class="empty-state" hidden>
+            <span aria-hidden="true">∅</span>
+            <h3>没有找到匹配的题解</h3>
+            <p>换一个题号、平台名称或文件路径试试。</p>
+          </div>
+        </div>
+        <button id="load-more" class="load-more" type="button" hidden>显示更多</button>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built from commits, one problem at a time.</p>
+      <a href="https://github.com/theLucius7" target="_blank" rel="noreferrer">@theLucius7</a>
+    </footer>
+
+    <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+    <aside id="code-drawer" class="code-drawer" aria-labelledby="drawer-title" aria-hidden="true">
+      <header class="drawer-header">
+        <div>
+          <p id="drawer-platform" class="section-kicker"></p>
+          <h2 id="drawer-title">代码预览</h2>
+          <p id="drawer-path" class="drawer-path"></p>
+        </div>
+        <button id="drawer-close" class="icon-button" type="button" aria-label="关闭代码预览">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </header>
+      <div class="drawer-actions">
+        <a id="drawer-problem-link" class="action-button action-primary" target="_blank" rel="noreferrer">打开题目 ↗</a>
+        <a id="drawer-github-link" class="action-button" target="_blank" rel="noreferrer">在 GitHub 查看 ↗</a>
+        <button id="copy-code" class="action-button" type="button">复制代码</button>
+      </div>
+      <div id="code-state" class="code-state">选择一道题目以载入代码。</div>
+      <div id="code-shell" class="code-shell" hidden>
+        <div id="line-numbers" class="line-numbers" aria-hidden="true"></div>
+        <pre><code id="code-content"></code></pre>
+      </div>
+    </aside>
+
+    <noscript>
+      <div class="noscript">需要启用 JavaScript 才能载入题库与贡献记录。</div>
+    </noscript>
+  </body>
+</html>
