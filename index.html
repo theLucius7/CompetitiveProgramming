@@ -144,6 +144,7 @@
           <label class="sort-control" for="problem-sort">
             <span>排序</span>
             <select id="problem-sort">
+              <option value="submittedAt">按提交时间</option>
               <option value="platform">按 OJ</option>
               <option value="title">按题目</option>
               <option value="path">按路径</option>
@@ -155,7 +156,7 @@
 
         <div class="table-shell">
           <div class="table-header" aria-hidden="true">
-            <span>题目</span><span>OJ</span><span>语言</span><span></span>
+            <span>题目</span><span>OJ</span><span>提交时间</span><span>语言</span><span></span>
           </div>
           <div id="problem-list" class="problem-list" aria-live="polite"></div>
           <div id="empty-state" class="empty-state" hidden>
@@ -180,6 +181,7 @@
           <p id="drawer-platform" class="section-kicker"></p>
           <h2 id="drawer-title">代码预览</h2>
           <p id="drawer-path" class="drawer-path"></p>
+          <p id="drawer-submission-time" class="drawer-submission-time"></p>
         </div>
         <button id="drawer-close" class="icon-button" type="button" aria-label="关闭代码预览">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>

@@ -616,7 +616,7 @@ footer {
 .table-header,
 .problem-row {
   display: grid;
-  grid-template-columns: minmax(300px, 1.7fr) minmax(130px, 0.55fr) 100px 38px;
+  grid-template-columns: minmax(280px, 1.6fr) minmax(110px, 0.48fr) 150px 90px 38px;
   gap: 20px;
   align-items: center;
   padding-inline: 30px;
@@ -652,6 +652,14 @@ footer {
   min-width: 0;
 }
 
+.problem-meta {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
 .problem-title {
   display: block;
   overflow: hidden;
@@ -665,13 +673,26 @@ footer {
 
 .problem-path {
   display: block;
+  min-width: 0;
   overflow: hidden;
-  margin-top: 5px;
   color: #8a948d;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.67rem;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.submission-time,
+.problem-date-mobile {
+  color: #68736c;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.problem-date-mobile {
+  display: none;
 }
 
 .platform-badge,
@@ -827,6 +848,14 @@ footer a {
   white-space: nowrap;
 }
 
+.drawer-submission-time {
+  margin: 5px 0 0;
+  color: #a2b0a7;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .icon-button {
   display: grid;
   flex: 0 0 auto;
@@ -969,7 +998,8 @@ body.drawer-open {
 
   .table-header,
   .problem-row {
-    grid-template-columns: minmax(260px, 1.7fr) minmax(120px, 0.55fr) 80px 30px;
+    grid-template-columns: minmax(240px, 1.45fr) 100px 138px 72px 30px;
+    gap: 16px;
   }
 }
 
@@ -1064,8 +1094,20 @@ body.drawer-open {
   }
 
   .problem-row .platform-badge,
-  .problem-row .language-badge {
+  .problem-row .language-badge,
+  .problem-row > .submission-time {
     display: none;
+  }
+
+  .problem-date-mobile {
+    display: inline;
+    flex: 0 0 auto;
+  }
+
+  .problem-date-mobile::before {
+    margin-right: 7px;
+    color: #b2bbb4;
+    content: "·";
   }
 
   .load-more {

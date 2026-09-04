@@ -17,9 +17,10 @@ const state = {
     atcoder: null,
     codeforces: null,
   },
+  submissionDates: new Map(),
   selectedPlatform: "全部",
   query: "",
-  sort: "platform",
+  sort: "submittedAt",
   visibleCount: PAGE_SIZE,
   currentCode: "",
   codeCache: new Map(),
@@ -55,6 +56,7 @@ const elements = {
   drawerPlatform: document.querySelector("#drawer-platform"),
   drawerTitle: document.querySelector("#drawer-title"),
   drawerPath: document.querySelector("#drawer-path"),
+  drawerSubmissionTime: document.querySelector("#drawer-submission-time"),
   drawerProblemLink: document.querySelector("#drawer-problem-link"),
   drawerGithubLink: document.querySelector("#drawer-github-link"),
   copyCode: document.querySelector("#copy-code"),
@@ -102,6 +104,7 @@ function problemFromPath(path) {
     problemUrl: platformHome(platform),
     githubUrl: `https://github.com/${REPOSITORY.owner}/${REPOSITORY.name}/blob/${REPOSITORY.branch}/${encodePath(path)}`,
     rawUrl: `https://raw.githubusercontent.com/${REPOSITORY.owner}/${REPOSITORY.name}/${REPOSITORY.branch}/${encodePath(path)}`,
+    submittedAt: state.submissionDates.get(path) || null,
   };
 
   if (platform === "AtCoder" && segments.length >= 3) {
@@ -209,6 +212,21 @@ function platformHome(platform) {
 
 function formatNumber(value) {
   return new Intl.NumberFormat("zh-CN").format(value || 0);
+}
+
+function formatSubmissionTime(value, long = false) {
+  if (!value) return "时间未知";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "时间未知";
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    ...(long ? { timeZoneName: "short" } : {}),
+  }).format(date);
 }
 
 function localDateKey(date) {
@@ -339,6 +357,10 @@ function filteredProblems() {
 
   const collator = new Intl.Collator("zh-CN", { numeric: true, sensitivity: "base" });
   problems.sort((a, b) => {
+    if (state.sort === "submittedAt") {
+      const timeDifference = (Date.parse(b.submittedAt) || 0) - (Date.parse(a.submittedAt) || 0);
+      return timeDifference || collator.compare(a.path, b.path);
+    }
     if (state.sort === "title") return collator.compare(a.title, b.title) || collator.compare(a.path, b.path);
     if (state.sort === "path") return collator.compare(a.path, b.path);
     return collator.compare(a.platform, b.platform) || collator.compare(a.title, b.title);
@@ -355,8 +377,11 @@ function renderProblems() {
     const row = document.createElement("article");
     const main = document.createElement("div");
     const title = document.createElement("span");
+    const meta = document.createElement("div");
     const path = document.createElement("span");
+    const mobileTime = document.createElement("time");
     const platform = document.createElement("span");
+    const submissionTime = document.createElement("time");
     const language = document.createElement("span");
     const arrow = document.createElement("span");
 
@@ -368,18 +393,26 @@ function renderProblems() {
     main.className = "problem-main";
     title.className = "problem-title";
     title.textContent = problem.title;
+    meta.className = "problem-meta";
     path.className = "problem-path";
     path.textContent = problem.path;
+    mobileTime.className = "problem-date-mobile";
+    mobileTime.dateTime = problem.submittedAt || "";
+    mobileTime.textContent = formatSubmissionTime(problem.submittedAt);
     platform.className = "platform-badge";
     platform.textContent = problem.platform;
+    submissionTime.className = "submission-time";
+    submissionTime.dateTime = problem.submittedAt || "";
+    submissionTime.textContent = formatSubmissionTime(problem.submittedAt);
     language.className = "language-badge";
     language.textContent = problem.language;
     arrow.className = "row-arrow";
     arrow.textContent = "→";
     arrow.setAttribute("aria-hidden", "true");
 
-    main.append(title, path);
-    row.append(main, platform, language, arrow);
+    meta.append(path, mobileTime);
+    main.append(title, meta);
+    row.append(main, platform, submissionTime, language, arrow);
     fragment.append(row);
   }
 
@@ -450,6 +483,7 @@ async function openCodeDrawer(problem) {
   elements.drawerPlatform.textContent = problem.platform;
   elements.drawerTitle.textContent = problem.title;
   elements.drawerPath.textContent = problem.path;
+  elements.drawerSubmissionTime.textContent = `最后提交 · ${formatSubmissionTime(problem.submittedAt, true)}`;
   elements.drawerProblemLink.href = problem.problemUrl;
   elements.drawerGithubLink.href = problem.githubUrl;
   elements.copyCode.textContent = "复制代码";
@@ -512,6 +546,7 @@ async function loadSnapshot() {
     ...problem,
     searchText: `${problem.title} ${problem.platform} ${problem.path}`.toLocaleLowerCase(),
   }));
+  state.submissionDates = new Map(state.problems.map((problem) => [problem.path, problem.submittedAt || null]));
   state.contributions = snapshot.contributions;
   state.commitCount = snapshot.commitCount;
   state.ratings = snapshot.ratings || state.ratings;

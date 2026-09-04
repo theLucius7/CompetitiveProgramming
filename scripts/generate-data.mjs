@@ -188,7 +188,25 @@ function problemFromPath(path) {
 }
 
 const paths = git(["ls-tree", "-r", "--name-only", sourceRef]).split("\n").filter(Boolean);
-const problems = paths.map(problemFromPath).filter(Boolean);
+const latestCommitByPath = new Map();
+let currentCommitTime = null;
+for (const line of git([
+  "-c", "core.quotepath=false", "log", sourceRef,
+  "--name-only", "--format=@@COMMIT@@%cI",
+]).split("\n")) {
+  if (line.startsWith("@@COMMIT@@")) {
+    currentCommitTime = line.slice("@@COMMIT@@".length);
+  } else if (line && currentCommitTime && !latestCommitByPath.has(line)) {
+    latestCommitByPath.set(line, currentCommitTime);
+  }
+}
+const problems = paths
+  .map((path) => {
+    const problem = problemFromPath(path);
+    if (problem) problem.submittedAt = latestCommitByPath.get(path) || null;
+    return problem;
+  })
+  .filter(Boolean);
 const commitDates = git(["log", sourceRef, "--date=format-local:%Y-%m-%d", "--format=%ad"])
   .split("\n")
   .filter(Boolean);
