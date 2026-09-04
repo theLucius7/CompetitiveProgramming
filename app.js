@@ -40,10 +40,6 @@ const state = {
 const elements = {
   syncIndicator: document.querySelector("#sync-indicator"),
   syncStatus: document.querySelector("#sync-status"),
-  statSolutions: document.querySelector("#stat-solutions"),
-  statPlatforms: document.querySelector("#stat-platforms"),
-  statCommits: document.querySelector("#stat-commits"),
-  statActiveDays: document.querySelector("#stat-active-days"),
   atcoderRating: document.querySelector("#atcoder-rating"),
   atcoderRatingMeta: document.querySelector("#atcoder-rating-meta"),
   codeforcesRating: document.querySelector("#codeforces-rating"),
@@ -261,15 +257,6 @@ function levelForCount(count, max) {
   return 4;
 }
 
-function renderStats() {
-  const platforms = new Set(state.problems.map((problem) => problem.platform));
-  const activeDays = Object.values(state.contributions).filter(Boolean).length;
-  elements.statSolutions.textContent = formatNumber(state.problems.length);
-  elements.statPlatforms.textContent = formatNumber(platforms.size);
-  elements.statCommits.textContent = formatNumber(state.commitCount);
-  elements.statActiveDays.textContent = formatNumber(activeDays);
-}
-
 function renderRatings() {
   const atcoder = state.ratings.atcoder;
   const codeforces = state.ratings.codeforces;
@@ -436,7 +423,6 @@ function renderProblems() {
 
 function updateAllViews() {
   renderRatings();
-  renderStats();
   renderCalendar();
   renderFilters();
   renderProblems();

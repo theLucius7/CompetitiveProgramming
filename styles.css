@@ -95,7 +95,7 @@ select:focus-visible,
 }
 
 .brand,
-.repo-link {
+.social-link {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
@@ -121,27 +121,40 @@ select:focus-visible,
   letter-spacing: -0.04em;
 }
 
-.repo-link {
-  gap: 8px;
+.social-links {
+  display: flex;
+  gap: 7px;
+}
+
+.social-link {
+  width: 38px;
+  height: 38px;
+  justify-content: center;
   border: 1px solid var(--line-strong);
-  border-radius: 999px;
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.7);
-  padding: 8px 13px;
   color: #344039;
-  font-size: 0.86rem;
-  font-weight: 650;
   transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
 }
 
-.repo-link:hover {
+.social-link:hover {
   transform: translateY(-1px);
   border-color: #aebbb0;
   background: white;
 }
 
-.repo-link svg {
+.social-link svg {
   width: 17px;
+  height: 17px;
   fill: currentColor;
+}
+
+.social-link .stroke-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
 }
 
 main,
@@ -222,26 +235,20 @@ footer {
 
 .profile-metrics {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 270px));
   gap: 12px;
   margin-top: 26px;
 }
 
-.stats {
-  display: contents;
-  margin: 0;
-}
-
-.stat,
 .rating-card {
-  min-height: 142px;
+  min-height: 104px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.82);
-  padding: 20px;
+  padding: 17px 18px;
 }
 
 .rating-card {
@@ -282,18 +289,21 @@ footer {
   font-weight: 700;
 }
 
-.rating-heading i {
-  display: grid;
-  width: 27px;
-  height: 27px;
-  place-items: center;
-  border-radius: 7px;
-  background: #edf2ee;
-  color: #48534c;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.6rem;
-  font-style: normal;
-  letter-spacing: -0.03em;
+.rating-image {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  border: 1px solid #e3e9e4;
+  border-radius: 13px;
+  background: white;
+  object-fit: cover;
+}
+
+.rating-content {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
 }
 
 .rating-heading b {
@@ -303,8 +313,8 @@ footer {
 }
 
 .rating-card strong {
-  margin-top: auto;
-  font-size: 2.15rem;
+  margin-top: 7px;
+  font-size: 1.75rem;
   line-height: 1;
   letter-spacing: -0.055em;
 }
@@ -317,36 +327,6 @@ footer {
   font-size: 0.66rem;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.stat-primary {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: white;
-}
-
-.stat dt {
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 650;
-}
-
-.stat-primary dt,
-.stat-primary span {
-  color: #a8b8ad;
-}
-
-.stat dd {
-  margin: auto 0 0;
-  font-size: 2.15rem;
-  font-weight: 760;
-  letter-spacing: -0.055em;
-}
-
-.stat span {
-  color: #87918a;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.66rem;
 }
 
 .activity-card,
@@ -782,16 +762,11 @@ footer {
   min-height: 130px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 20px;
   color: var(--muted);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.7rem;
-}
-
-footer a {
-  font-weight: 700;
-  text-decoration: none;
 }
 
 .drawer-backdrop {
@@ -991,16 +966,7 @@ body.drawer-open {
 
 @media (max-width: 900px) {
   .profile-metrics {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .stat {
-    min-height: 125px;
-    padding: 16px;
-  }
-
-  .stat dd {
-    font-size: 1.75rem;
+    grid-template-columns: repeat(2, minmax(0, 270px));
   }
 
   .table-header,
@@ -1026,16 +992,17 @@ body.drawer-open {
     min-height: 68px;
   }
 
-  .brand > span:last-child,
-  .repo-link > span {
+  .brand > span:last-child {
     display: none;
   }
 
-  .repo-link {
-    width: 38px;
-    height: 38px;
-    justify-content: center;
-    padding: 0;
+  .social-links {
+    gap: 5px;
+  }
+
+  .social-link {
+    width: 36px;
+    height: 36px;
   }
 
   .overview {
@@ -1053,7 +1020,7 @@ body.drawer-open {
   }
 
   .profile-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 9px;
     margin-top: 21px;
   }
