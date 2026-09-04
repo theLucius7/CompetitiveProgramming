@@ -8,6 +8,15 @@ const PAGE_SIZE = 60;
 const SUPPORTED_EXTENSIONS = new Set(["cpp", "cc", "cxx", "c", "py", "java", "rs", "go", "kt"]);
 const IGNORED_ROOTS = new Set(["Templates", ".cph", ".vscode", ".github", "assets", "data", "scripts"]);
 const MONTHS_ZH = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+const HIGHLIGHT_LANGUAGES = {
+  "C++": "cpp",
+  C: "c",
+  Python: "python",
+  Java: "java",
+  Rust: "rust",
+  Go: "go",
+  Kotlin: "kotlin",
+};
 
 const state = {
   problems: [],
@@ -476,11 +485,31 @@ async function loadProblemCode(problem) {
   return code;
 }
 
+function renderCode(code, language) {
+  const grammar = HIGHLIGHT_LANGUAGES[language];
+  const highlighter = window.hljs;
+  elements.codeContent.className = "";
+
+  if (grammar && highlighter?.getLanguage(grammar)) {
+    try {
+      const result = highlighter.highlight(code, { language: grammar, ignoreIllegals: true });
+      elements.codeContent.className = `hljs language-${grammar}`;
+      elements.codeContent.innerHTML = result.value;
+      return;
+    } catch {
+      // Fall through to safe plain-text rendering.
+    }
+  }
+
+  elements.codeContent.className = "hljs";
+  elements.codeContent.textContent = code;
+}
+
 async function openCodeDrawer(problem) {
   const requestId = ++state.codeRequestId;
   state.lastFocusedElement = document.activeElement;
   state.currentCode = "";
-  elements.drawerPlatform.textContent = problem.platform;
+  elements.drawerPlatform.textContent = `${problem.platform} · ${problem.language}`;
   elements.drawerTitle.textContent = problem.title;
   elements.drawerPath.textContent = problem.path;
   elements.drawerSubmissionTime.textContent = `最后提交 · ${formatSubmissionTime(problem.submittedAt, true)}`;
@@ -503,7 +532,7 @@ async function openCodeDrawer(problem) {
     const code = await loadProblemCode(problem);
     if (requestId !== state.codeRequestId) return;
     state.currentCode = code;
-    elements.codeContent.textContent = code;
+    renderCode(code, problem.language);
     const lineCount = Math.max(1, code.split("\n").length);
     elements.lineNumbers.textContent = Array.from({ length: lineCount }, (_, index) => index + 1).join("\n");
     elements.codeState.hidden = true;

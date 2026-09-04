@@ -967,6 +967,13 @@ footer a {
   white-space: pre;
 }
 
+.code-shell code.hljs {
+  overflow: visible;
+  background: transparent;
+  padding: 0;
+  color: #d8e5dc;
+}
+
 .noscript {
   position: fixed;
   right: 18px;
