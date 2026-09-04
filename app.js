@@ -13,6 +13,10 @@ const state = {
   problems: [],
   contributions: {},
   commitCount: 0,
+  ratings: {
+    atcoder: null,
+    codeforces: null,
+  },
   selectedPlatform: "全部",
   query: "",
   sort: "platform",
@@ -28,6 +32,10 @@ const elements = {
   statPlatforms: document.querySelector("#stat-platforms"),
   statCommits: document.querySelector("#stat-commits"),
   statActiveDays: document.querySelector("#stat-active-days"),
+  atcoderRating: document.querySelector("#atcoder-rating"),
+  atcoderRatingMeta: document.querySelector("#atcoder-rating-meta"),
+  codeforcesRating: document.querySelector("#codeforces-rating"),
+  codeforcesRatingMeta: document.querySelector("#codeforces-rating-meta"),
   calendarMonths: document.querySelector("#calendar-months"),
   calendarGrid: document.querySelector("#calendar-grid"),
   activityRange: document.querySelector("#activity-range"),
@@ -233,6 +241,19 @@ function renderStats() {
   elements.statActiveDays.textContent = formatNumber(activeDays);
 }
 
+function renderRatings() {
+  const atcoder = state.ratings.atcoder;
+  const codeforces = state.ratings.codeforces;
+  elements.atcoderRating.textContent = atcoder?.rating == null ? "—" : formatNumber(atcoder.rating);
+  elements.atcoderRatingMeta.textContent = atcoder
+    ? `MAX ${formatNumber(atcoder.maxRating)} · ${formatNumber(atcoder.contests)} CONTESTS`
+    : "RATING 暂不可用";
+  elements.codeforcesRating.textContent = codeforces?.rating == null ? "—" : formatNumber(codeforces.rating);
+  elements.codeforcesRatingMeta.textContent = codeforces
+    ? `${String(codeforces.rank || "UNRATED").toUpperCase()} · MAX ${formatNumber(codeforces.maxRating)}`
+    : "RATING 暂不可用";
+}
+
 function renderCalendar() {
   const today = new Date();
   today.setHours(12, 0, 0, 0);
@@ -370,6 +391,7 @@ function renderProblems() {
 }
 
 function updateAllViews() {
+  renderRatings();
   renderStats();
   renderCalendar();
   renderFilters();
@@ -447,6 +469,7 @@ async function loadSnapshot() {
   }));
   state.contributions = snapshot.contributions;
   state.commitCount = snapshot.commitCount;
+  state.ratings = snapshot.ratings || state.ratings;
   updateAllViews();
   const generatedDate = new Date(snapshot.generatedAt).toLocaleString("zh-CN", {
     year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
@@ -491,11 +514,50 @@ async function fetchLiveActivity() {
   throw new Error("Activity is still being generated");
 }
 
+async function fetchLiveRatings() {
+  const atcoderUrl = "https://kenkoooo.com/atcoder/proxy/users/Lucius7/history/json";
+  const codeforcesUrl = "https://codeforces.com/api/user.info?handles=Lucius7";
+  const [atcoderResult, codeforcesResult] = await Promise.allSettled([
+    fetch(atcoderUrl).then((response) => {
+      if (!response.ok) throw new Error(`AtCoder rating API ${response.status}`);
+      return response.json();
+    }),
+    fetch(codeforcesUrl).then((response) => {
+      if (!response.ok) throw new Error(`Codeforces rating API ${response.status}`);
+      return response.json();
+    }),
+  ]);
+
+  const ratings = {};
+  if (atcoderResult.status === "fulfilled" && atcoderResult.value.length) {
+    const ratedContests = atcoderResult.value.filter((contest) => contest.IsRated && Number.isFinite(contest.NewRating));
+    const latest = ratedContests.at(-1);
+    ratings.atcoder = {
+      rating: latest?.NewRating ?? null,
+      maxRating: Math.max(0, ...ratedContests.map((contest) => contest.NewRating)),
+      contests: ratedContests.length,
+    };
+  }
+  if (codeforcesResult.status === "fulfilled" && codeforcesResult.value.status === "OK") {
+    const user = codeforcesResult.value.result?.[0];
+    if (user) {
+      ratings.codeforces = {
+        rating: user.rating ?? null,
+        maxRating: user.maxRating ?? user.rating ?? null,
+        rank: user.rank ?? "unrated",
+      };
+    }
+  }
+  if (!ratings.atcoder && !ratings.codeforces) throw new Error("Rating APIs unavailable");
+  return ratings;
+}
+
 async function syncLiveData() {
   setSyncStatus("正在同步 main 分支…", "syncing");
-  const [problemResult, activityResult] = await Promise.allSettled([
+  const [problemResult, activityResult, ratingResult] = await Promise.allSettled([
     fetchLiveProblems(),
     fetchLiveActivity(),
+    fetchLiveRatings(),
   ]);
 
   let updated = false;
@@ -511,9 +573,13 @@ async function syncLiveData() {
     state.commitCount = activityResult.value.commitCount;
     updated = true;
   }
+  if (ratingResult.status === "fulfilled") {
+    state.ratings = { ...state.ratings, ...ratingResult.value };
+    updated = true;
+  }
   updateAllViews();
 
-  if (problemResult.status === "fulfilled" && activityResult.status === "fulfilled") {
+  if (problemResult.status === "fulfilled" && activityResult.status === "fulfilled" && ratingResult.status === "fulfilled") {
     setSyncStatus("已与 main 分支实时同步", "live");
   } else if (updated) {
     setSyncStatus("已同步仓库；部分统计使用部署快照", "live");

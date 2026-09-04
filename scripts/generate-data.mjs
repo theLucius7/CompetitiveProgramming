@@ -16,6 +16,41 @@ const repository = {
   branch: "main",
 };
 
+async function fetchRatings() {
+  const fallback = { atcoder: null, codeforces: null };
+  const [atcoderResult, codeforcesResult] = await Promise.allSettled([
+    fetch("https://kenkoooo.com/atcoder/proxy/users/Lucius7/history/json").then((response) => {
+      if (!response.ok) throw new Error(`AtCoder rating API ${response.status}`);
+      return response.json();
+    }),
+    fetch("https://codeforces.com/api/user.info?handles=Lucius7").then((response) => {
+      if (!response.ok) throw new Error(`Codeforces rating API ${response.status}`);
+      return response.json();
+    }),
+  ]);
+
+  if (atcoderResult.status === "fulfilled") {
+    const ratedContests = atcoderResult.value.filter((contest) => contest.IsRated && Number.isFinite(contest.NewRating));
+    const latest = ratedContests.at(-1);
+    fallback.atcoder = {
+      rating: latest?.NewRating ?? null,
+      maxRating: Math.max(0, ...ratedContests.map((contest) => contest.NewRating)),
+      contests: ratedContests.length,
+    };
+  }
+  if (codeforcesResult.status === "fulfilled" && codeforcesResult.value.status === "OK") {
+    const user = codeforcesResult.value.result?.[0];
+    if (user) {
+      fallback.codeforces = {
+        rating: user.rating ?? null,
+        maxRating: user.maxRating ?? user.rating ?? null,
+        rank: user.rank ?? "unrated",
+      };
+    }
+  }
+  return fallback;
+}
+
 function git(args) {
   return execFileSync("git", args, {
     cwd: repositoryRoot,
@@ -169,6 +204,7 @@ const payload = {
   commitCount: Number(git(["rev-list", "--count", sourceRef])),
   contributions,
   problems,
+  ratings: await fetchRatings(),
 };
 
 mkdirSync(resolve(siteRoot, "data"), { recursive: true });

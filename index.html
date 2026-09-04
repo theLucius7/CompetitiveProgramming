@@ -36,19 +36,42 @@
 
     <main>
       <section class="overview" aria-labelledby="page-title">
-        <div class="intro">
-          <p class="eyebrow"><span class="live-dot"></span> PUBLIC SOLUTION ARCHIVE</p>
-          <h1 id="page-title">把每一次提交，<br />变成可检索的成长轨迹。</h1>
-          <p class="intro-copy">
-            theLucius7 的算法竞赛题解集。按 OJ、题号或路径查找，并直接阅读每一份提交代码。
-          </p>
+        <header class="profile-header">
+          <div class="profile-identity">
+            <p class="eyebrow"><span class="live-dot"></span> COMPETITIVE PROGRAMMING</p>
+            <h1 id="page-title">theLucius7</h1>
+          </div>
           <div class="sync-line" aria-live="polite">
             <span id="sync-indicator" class="sync-indicator"></span>
             <span id="sync-status">正在载入仓库快照…</span>
           </div>
-        </div>
+        </header>
 
-        <dl class="stats" aria-label="仓库统计">
+        <div class="profile-metrics">
+          <a
+            class="rating-card rating-atcoder"
+            href="https://atcoder.jp/users/Lucius7"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="查看 Lucius7 的 AtCoder 主页"
+          >
+            <span class="rating-heading"><i>AC</i> AtCoder <b aria-hidden="true">↗</b></span>
+            <strong id="atcoder-rating">—</strong>
+            <span id="atcoder-rating-meta" class="rating-meta">Rating</span>
+          </a>
+          <a
+            class="rating-card rating-codeforces"
+            href="https://codeforces.com/profile/Lucius7"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="查看 Lucius7 的 Codeforces 主页"
+          >
+            <span class="rating-heading"><i>CF</i> Codeforces <b aria-hidden="true">↗</b></span>
+            <strong id="codeforces-rating">—</strong>
+            <span id="codeforces-rating-meta" class="rating-meta">Rating</span>
+          </a>
+
+          <dl class="stats" aria-label="仓库统计">
           <div class="stat stat-primary">
             <dt>题解代码</dt>
             <dd id="stat-solutions">—</dd>
@@ -69,7 +92,8 @@
             <dd id="stat-active-days">—</dd>
             <span>days with commits</span>
           </div>
-        </dl>
+          </dl>
+        </div>
       </section>
 
       <section class="activity-card" aria-labelledby="activity-title">
