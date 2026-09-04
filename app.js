@@ -22,6 +22,8 @@ const state = {
   sort: "platform",
   visibleCount: PAGE_SIZE,
   currentCode: "",
+  codeCache: new Map(),
+  codeRequestId: 0,
   lastFocusedElement: null,
 };
 
@@ -403,7 +405,46 @@ function setSyncStatus(message, mode = "") {
   elements.syncIndicator.className = `sync-indicator${mode ? ` ${mode}` : ""}`;
 }
 
+async function fetchTextWithTimeout(url, options = {}, timeoutMs = 6000) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.text();
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
+async function loadProblemCode(problem) {
+  if (state.codeCache.has(problem.path)) return state.codeCache.get(problem.path);
+
+  const encodedPath = encodePath(problem.path);
+  const apiUrl = `https://api.github.com/repos/${REPOSITORY.owner}/${REPOSITORY.name}/contents/${encodedPath}?ref=${encodeURIComponent(REPOSITORY.branch)}`;
+  const cdnUrl = `https://cdn.jsdelivr.net/gh/${REPOSITORY.owner}/${REPOSITORY.name}@${REPOSITORY.branch}/${encodedPath}`;
+  let code;
+
+  try {
+    code = await fetchTextWithTimeout(apiUrl, {
+      headers: {
+        Accept: "application/vnd.github.raw+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }, 5000);
+  } catch {
+    code = await Promise.any([
+      fetchTextWithTimeout(cdnUrl, {}, 7000),
+      fetchTextWithTimeout(problem.rawUrl, {}, 7000),
+    ]);
+  }
+
+  state.codeCache.set(problem.path, code);
+  return code;
+}
+
 async function openCodeDrawer(problem) {
+  const requestId = ++state.codeRequestId;
   state.lastFocusedElement = document.activeElement;
   state.currentCode = "";
   elements.drawerPlatform.textContent = problem.platform;
@@ -414,7 +455,8 @@ async function openCodeDrawer(problem) {
   elements.copyCode.textContent = "复制代码";
   elements.codeShell.hidden = true;
   elements.codeState.hidden = false;
-  elements.codeState.textContent = "正在从 main 分支载入代码…";
+  elements.codeState.setAttribute("aria-busy", "true");
+  elements.codeState.textContent = "正在载入代码…";
   elements.backdrop.hidden = false;
   elements.drawer.setAttribute("aria-hidden", "false");
   document.body.classList.add("drawer-open");
@@ -424,9 +466,8 @@ async function openCodeDrawer(problem) {
   });
 
   try {
-    const response = await fetch(problem.rawUrl);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const code = await response.text();
+    const code = await loadProblemCode(problem);
+    if (requestId !== state.codeRequestId) return;
     state.currentCode = code;
     elements.codeContent.textContent = code;
     const lineCount = Math.max(1, code.split("\n").length);
@@ -434,11 +475,15 @@ async function openCodeDrawer(problem) {
     elements.codeState.hidden = true;
     elements.codeShell.hidden = false;
   } catch {
-    elements.codeState.textContent = "代码暂时无法载入。你仍可通过上方的 GitHub 链接查看源码。";
+    if (requestId !== state.codeRequestId) return;
+    elements.codeState.textContent = "载入失败，请使用上方的 GitHub 链接查看源码。";
+  } finally {
+    if (requestId === state.codeRequestId) elements.codeState.setAttribute("aria-busy", "false");
   }
 }
 
 function closeCodeDrawer() {
+  state.codeRequestId += 1;
   elements.drawer.classList.remove("open");
   elements.drawer.setAttribute("aria-hidden", "true");
   document.body.classList.remove("drawer-open");
