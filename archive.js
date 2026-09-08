@@ -1,8 +1,8 @@
 // Shared, dependency-free repository metadata and safe path handling.
 const Archive = (() => {
 const REPOSITORY = {
-  owner: "theLucius7",
-  name: "CompetitiveProgramming",
+  owner: "xw7qwq",
+  name: "codeflare",
   branch: "main",
 };
 

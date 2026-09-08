@@ -99,7 +99,7 @@ for (const item of snapshot.problems) {
   const problem = normal.run(`Archive.problemFromPath(${JSON.stringify(item.path)})`);
   assert(problem, item.path);
   const url = normal.run(`Archive.readerUrl(${JSON.stringify(item.path)})`);
-  assert.equal(new URL(url, 'https://example.com/CompetitiveProgramming/').searchParams.get('path'), item.path);
+  assert.equal(new URL(url, 'https://codeflare.lucius7.dev/').searchParams.get('path'), item.path);
   assert.equal(problem.githubUrl, item.githubUrl);
 }
 for (const invalid of ['', '../secret.cpp', '/AtCoder/a.cpp', 'AtCoder/../a.cpp', 'AtCoder//a.cpp', 'AtCoder/./a.cpp', 'AtCoder\\a.cpp', 'AtCoder/a.html', 'AtCoder/a\u0000.cpp', 'Templates/test.cpp']) {

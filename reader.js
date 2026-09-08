@@ -123,7 +123,7 @@ function initReader() {
     return;
   }
   readerState.problem = problem;
-  document.title = `${problem.title} · ${problem.language} · Lucius7`;
+  document.title = `${problem.title} · ${problem.language} · CodeFlare`;
   reader.title.textContent = problem.title;
   reader.path.textContent = problem.path;
   reader.path.title = problem.path;

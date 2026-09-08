@@ -11,8 +11,8 @@ const sourceRef = process.argv[2] || "main";
 const supportedExtensions = new Set(["cpp", "cc", "cxx", "c", "py", "java", "rs", "go", "kt"]);
 const ignoredRoots = new Set(["Templates", ".cph", ".vscode", ".github", "assets", "data", "scripts"]);
 const repository = {
-  owner: "theLucius7",
-  name: "CompetitiveProgramming",
+  owner: "xw7qwq",
+  name: "codeflare",
   branch: "main",
 };
 
