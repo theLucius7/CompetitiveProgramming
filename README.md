@@ -26,7 +26,7 @@ API 文档描述静态 JSON 快照及网站依赖的外部接口，不是在线�
 | [`docs/project-guide`](https://github.com/xw7qwq/codeflare/tree/docs/project-guide) | 本分支：文档源、API 契约、项目规范和构建检查 |
 | [`gh-pages`](https://github.com/xw7qwq/codeflare/tree/gh-pages) | 题库网站、数据快照和生成的 `docs/` 文档网站 |
 
-文档无需合并到 `main`。推送本分支后，工作流构建文档并仅更新 `gh-pages/docs/`。源码清单记录所依据的主分支提交，刷新方法见[维护流程](docs/maintenance.md)。
+文档无需合并到 `main`。文档 PR 合入本分支后，工作流构建文档并仅更新 `gh-pages/docs/`。源码清单记录所依据的主分支提交，刷新方法见[维护流程](docs/maintenance.md)。
 
 ## 快速开始
 
@@ -62,12 +62,14 @@ npm --prefix site run dev
 | [README.md](README.md)、[CONTRIBUTING.md](CONTRIBUTING.md) | 项目入口与贡献约定 |
 | [docs/](docs/) | 指南、API 说明与源码目录清单 |
 | [scripts/docs.py](scripts/docs.py) | Markdown、相对链接、标题锚点和源码清单检查 |
+| [scripts/README.md](scripts/README.md)、[archive/submissions.json](archive/submissions.json) | 源码归档工具、离线测试与已验证提交的来源收据 |
 | [site/package.json](site/package.json) | 文档站依赖、开发与构建命令 |
 | [site/.vitepress/](site/.vitepress/) | 站点配置和主题 |
 | [site/public/api/](site/public/api/) | OpenAPI 与 JSON Schema 契约 |
 | [site/prepare.mjs](site/prepare.mjs)、[site/check-build.mjs](site/check-build.mjs) | 内容转换与构建产物检查 |
 | [site/publish.mjs](site/publish.mjs) | 文档产物发布与上线验证 |
 | [.github/workflows/docs.yml](.github/workflows/docs.yml) | 文档校验、构建与发布工作流 |
+| [.github/workflows/archive.yml](.github/workflows/archive.yml) | 离线归档测试与源码完整性审计 |
 
 `site/.content/`、`site/.vitepress/dist/` 和 `site/node_modules/` 是生成目录；修改 Markdown 源文件与配置，不提交生成目录。算法源码的分类与数量以[项目结构](docs/structure.md)和[目录清单](docs/catalog.md)为准。
 
@@ -94,7 +96,7 @@ GitHub Pages 的发布来源应为 `gh-pages` 分支根目录，自定义域名�
 
 API 集合 `2.0.0` 使用新域名与 `xw7qwq/codeflare` 仓库标识，响应字段结构保持不变。迁移和兼容范围见[错误与兼容规范](docs/api/standards.md)。源码清单仍保留原提交 SHA、时间与统计口径。
 
-工作流在 `docs/**` 分支推送或符合路径条件的 Pull Request 中运行检查；发布作业仅针对 `docs/project-guide` 的推送。以 [Actions](https://github.com/xw7qwq/codeflare/actions)、公开页面和 `docs/build-info.json` 核对发布结果，详细流程见[维护文档](docs/maintenance.md)。
+工作流在目标为 `docs/project-guide` 的每次 PR 和该分支推送中运行检查；发布作业仅针对 `docs/project-guide` 的推送。以 [Actions](https://github.com/xw7qwq/codeflare/actions)、公开页面和 `docs/build-info.json` 核对发布结果，详细流程见[维护文档](docs/maintenance.md)。
 
 ## 内容与许可
 

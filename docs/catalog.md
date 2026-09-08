@@ -1,10 +1,10 @@
 # 源码目录清单
 
-<!-- source-commit: 7cca2a682247670b87af2c8bb9755acda9e434e5 -->
+<!-- source-commit: 615fbe91bf3f90cb35e0c07c9db0b9c762768f60 -->
 
 > 自动生成：`python3 scripts/docs.py generate --ref origin/main`。不要手工修改本文件。
 
-来源：[`7cca2a6`](https://github.com/xw7qwq/codeflare/commit/7cca2a682247670b87af2c8bb9755acda9e434e5)；提交时间：`2026-09-04T10:54:39+08:00`。
+来源：[`615fbe9`](https://github.com/xw7qwq/codeflare/commit/615fbe91bf3f90cb35e0c07c9db0b9c762768f60)；提交时间：`2026-09-08T23:45:30+08:00`。
 
 这里统计该提交的 Git 跟踪文件，支持 C/C++、Python、Java、Rust、Go、Kotlin。隐藏工具目录、docs/scripts/vendor/assets/data 不计入算法源码；Templates 和根目录单列。
 源码文件数不等于独立题目数、AC 数或网站收录数；没有自动推断题目完成状态。
@@ -13,21 +13,21 @@
 
 | 范围 | 数量 |
 | --- | ---: |
-| 源提交的全部跟踪文件 | 1,333 |
-| 算法相关源码文件 | 1,324 |
-| 平台目录中的源码 | 1,291 |
+| 源提交的全部跟踪文件 | 1,817 |
+| 算法相关源码文件 | 1,797 |
+| 平台目录中的源码 | 1,764 |
 | 模板源码 | 30 |
 | 根目录独立源码 | 3 |
 
-语言分布：C 4、C++ 1,320。
+语言分布：C 5、C++ 1,791、Python 1。
 
 ## 平台目录
 
 | 目录 | 源码数 | 文件示例 |
 | --- | ---: | --- |
-| [AtCoder/](../AtCoder/) | 413 | [AtCoder/abc231/a.cpp](../AtCoder/abc231/a.cpp) |
+| [AtCoder/](../AtCoder/) | 596 | [AtCoder/abc052/b.cpp](../AtCoder/abc052/b.cpp) |
 | [CSES/](../CSES/) | 7 | [CSES/1068_Weird_Algorithm.cpp](../CSES/1068_Weird_Algorithm.cpp) |
-| [Codeforces/](../Codeforces/) | 443 | [Codeforces/1000/E.cpp](../Codeforces/1000/E.cpp) |
+| [Codeforces/](../Codeforces/) | 710 | [Codeforces/1/A.cpp](../Codeforces/1/A.cpp) |
 | [HDU/](../HDU/) | 12 | [HDU/1212/a.cpp](../HDU/1212/a.cpp) |
 | [L7OJ/](../L7OJ/) | 47 | [L7OJ/bapc2025/a.cpp](../L7OJ/bapc2025/a.cpp) |
 | [LOJ/](../LOJ/) | 5 | [LOJ/130.cpp](../LOJ/130.cpp) |
@@ -36,7 +36,7 @@
 | [Mati/](../Mati/) | 2 | [Mati/3777/36.cpp](../Mati/3777/36.cpp) |
 | [NowCoder/](../NowCoder/) | 132 | [NowCoder/111921/a.cpp](../NowCoder/111921/a.cpp) |
 | [ProjectEuler/](../ProjectEuler/) | 12 | [ProjectEuler/P1/codes/1.cpp](../ProjectEuler/P1/codes/1.cpp) |
-| [QOJ/](../QOJ/) | 30 | [QOJ/1187/c.cpp](../QOJ/1187/c.cpp) |
+| [QOJ/](../QOJ/) | 53 | [QOJ/1187/c.cpp](../QOJ/1187/c.cpp) |
 | [SMQYOJ/](../SMQYOJ/) | 1 | [SMQYOJ/cacc20252A.cpp](../SMQYOJ/cacc20252A.cpp) |
 | [SPOJ/](../SPOJ/) | 1 | [SPOJ/TEST.cpp](../SPOJ/TEST.cpp) |
 | [VJudge/](../VJudge/) | 10 | [VJudge/804625/a.cpp](../VJudge/804625/a.cpp) |
@@ -90,14 +90,25 @@
 
 | 文件 |
 | --- |
-| [.DS_Store](../.DS_Store) |
 | [.cph/scripts/com.l7.competitive-companion-relay.plist](../.cph/scripts/com.l7.competitive-companion-relay.plist) |
 | [.cph/scripts/competitive-companion-relay.mjs](../.cph/scripts/competitive-companion-relay.mjs) |
+| [.github/workflows/archive.yml](../.github/workflows/archive.yml) |
 | [.gitignore](../.gitignore) |
 | [.vscode/settings.json](../.vscode/settings.json) |
 | [.vscode/tasks.json](../.vscode/tasks.json) |
-| [ProjectEuler/.DS_Store](../ProjectEuler/.DS_Store) |
-| [Templates/.DS_Store](../Templates/.DS_Store) |
+| [CONTRIBUTING.md](../CONTRIBUTING.md) |
+| [README.md](../README.md) |
 | [Templates/templates all/whoami.md](../Templates/templates%20all/whoami.md) |
+| [archive/contest-mappings.json](../archive/contest-mappings.json) |
+| [archive/submissions.json](../archive/submissions.json) |
+| [scripts/README.md](../scripts/README.md) |
+| [scripts/archive_catalog.py](../scripts/archive_catalog.py) |
+| [scripts/archive_plan.py](../scripts/archive_plan.py) |
+| [scripts/archive_sync.py](../scripts/archive_sync.py) |
+| [scripts/archive_verify.py](../scripts/archive_verify.py) |
+| [scripts/tests/test_archive_catalog.py](../scripts/tests/test_archive_catalog.py) |
+| [scripts/tests/test_archive_plan.py](../scripts/tests/test_archive_plan.py) |
+| [scripts/tests/test_archive_sync.py](../scripts/tests/test_archive_sync.py) |
+| [scripts/tests/test_archive_verify.py](../scripts/tests/test_archive_verify.py) |
 
 [项目结构](structure.md) · [更新方法](maintenance.md) · [文档导航](README.md)

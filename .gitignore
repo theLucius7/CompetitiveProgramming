@@ -2,6 +2,7 @@
 *
 !*/
 !.gitignore
+!.github/workflows/*.yml
 
 # Source code and notes.
 !*.cpp
@@ -9,8 +10,7 @@
 !*.py
 !*.md
 
-# Documentation quality workflow (the rest of the allowlist remains narrow).
-!.github/workflows/docs.yml
+# Documentation source (the rest of the allowlist remains narrow).
 !site/**
 
 # Generated documentation website and installed dependencies.
@@ -19,6 +19,10 @@ site/.content/
 site/.vitepress/cache/
 site/.vitepress/dist/
 site/.vitepress/.temp/
+
+# Verified source-import provenance (temporary plans remain ignored).
+!archive/submissions.json
+!archive/contest-mappings.json
 
 # VS Code workspace configuration.
 !.vscode/

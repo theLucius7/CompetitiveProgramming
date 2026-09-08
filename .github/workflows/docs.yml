@@ -2,14 +2,9 @@ name: Docs Pages
 
 on:
   push:
-    branches: ['docs/**']
+    branches: [docs/project-guide]
   pull_request:
-    paths:
-      - '**/*.md'
-      - 'scripts/docs.py'
-      - '.github/workflows/docs.yml'
-      - '.gitignore'
-      - 'site/**'
+    branches: [docs/project-guide]
 
 permissions:
   contents: read
@@ -26,7 +21,7 @@ jobs:
       - name: Validate documentation and inventory
         run: python3 scripts/docs.py check
       - name: Check whitespace
-        run: git diff --check HEAD^ HEAD
+        run: git diff --check HEAD^ HEAD -- README.md CONTRIBUTING.md .gitignore .github docs scripts site
       - name: Set up Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
