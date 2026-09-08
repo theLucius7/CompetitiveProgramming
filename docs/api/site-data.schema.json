@@ -8,12 +8,12 @@
   "required": ["repository", "generatedAt", "sourceRef", "commitCount", "contributions", "problems", "ratings"],
   "properties": {
     "repository": { "$ref": "#/$defs/Repository" },
-    "generatedAt": { "type": "string", "format": "date-time", "description": "快照生成时间，包含时区。" },
+    "generatedAt": { "type": "string", "format": "date-time", "description": "快照生成时间，包含时区；不代表 legacy Rating 更新时间。" },
     "sourceRef": { "type": "string", "minLength": 1, "description": "用于读取 Git 的 ref，不要求等于 repository.branch。" },
-    "commitCount": { "type": "integer", "minimum": 0, "description": "所选 Git ref 的提交数量。" },
+    "commitCount": { "type": "integer", "minimum": 0, "description": "兼容字段：所选 Git ref 的提交数量；首页不展示。" },
     "contributions": {
       "type": "object",
-      "description": "稀疏日期字典；不存在的日期表示当天无记录。",
+      "description": "兼容字段：首页不展示。稀疏日期字典；不存在的日期表示当天无记录。",
       "propertyNames": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
       "additionalProperties": { "type": "integer", "minimum": 1 }
     },
@@ -48,8 +48,8 @@
       "type": "object", "additionalProperties": false,
       "required": ["atcoder", "codeforces"],
       "properties": {
-        "atcoder": { "anyOf": [{ "$ref": "#/$defs/AtCoderRating" }, { "type": "null" }], "description": "AtCoder 数据；整个平台不可用时为 null。" },
-        "codeforces": { "anyOf": [{ "$ref": "#/$defs/CodeforcesRating" }, { "type": "null" }], "description": "Codeforces 数据；整个平台不可用时为 null。" }
+        "atcoder": { "anyOf": [{ "$ref": "#/$defs/AtCoderRating" }, { "type": "null" }], "description": "AtCoder 数据；保留的历史兼容数据，不再主动刷新；未知或未提供时为 null。" },
+        "codeforces": { "anyOf": [{ "$ref": "#/$defs/CodeforcesRating" }, { "type": "null" }], "description": "Codeforces 数据；保留的历史兼容数据，不再主动刷新；未知或未提供时为 null。" }
       }
     },
     "AtCoderRating": {
