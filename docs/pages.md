@@ -1,14 +1,14 @@
 # GitHub Pages 维护
 
-[站点](https://thelucius7.github.io/CompetitiveProgramming/)提供题目检索、源码阅读、提交日历与 Rating。它是纯静态页面，没有 npm 构建步骤，也不在浏览器中编译或执行题解。
+[根题库](https://thelucius7.github.io/CompetitiveProgramming/)提供题目检索、源码阅读、提交日历与 Rating。根题库是无需 npm 构建的纯静态页面，不在浏览器中编译或执行题解。另有 VitePress 构建的[文档站](https://thelucius7.github.io/CompetitiveProgramming/docs/)，流程见[文档部署](maintenance.md)。
 
 ## 分支与发布边界
 
 | 分支 | 职责 | 更新后影响 |
 | --- | --- | --- |
 | `main` | OJ 源码、算法模板和练习档案 | 站点在线查询此分支的文件树和源码；不会自动重生成部署快照 |
-| `gh-pages` | 独立的网站文件、静态资源和数据快照 | GitHub Pages 的发布来源；网站改动在此分支维护 |
-| `docs/project-guide` | 本文、仓库 README 与维护规范 | 文档工作分支；不作为 Pages 发布来源 |
+| `gh-pages` | 题库网站、静态资源、数据快照和生成的 `docs/` | GitHub Pages 的发布来源；根题库手工维护，文档目录由工作流更新 |
+| `docs/project-guide` | 文档网站源文件、API 规范、README 与维护指南 | 推送后自动构建到 `gh-pages/docs/`，无需向 main 推送 |
 
 不要将 `main` 或文档分支整体合并进 `gh-pages`。网站修改应基于 `gh-pages` 开展；新增题解仍进入 `main`。
 
@@ -30,6 +30,7 @@ vendor/github-dark.min.css     代码高亮主题
 vendor/HIGHLIGHTJS-LICENSE.txt 第三方许可证
 favicon.svg                   网站图标
 .nojekyll                     直接提供静态资源
+docs/                         自动发布的文档网站，勿手工修改
 ```
 
 ## 本地预览与快照生成
@@ -116,7 +117,7 @@ curl --fail --head http://127.0.0.1:4173/data/site-data.json
 curl --fail --head http://127.0.0.1:4173/vendor/highlight.min.js
 ```
 
-按仓库协作流程审阅网站差异后，将网站工作分支合入 `gh-pages`。仅更新 `main` 不会刷新已提交的 JSON。推送后用 GitHub Pages 设置页或下列只读命令检查发布；构建成功还应核对线上功能，不能用语法检查代替页面验证。
+按仓库协作流程审阅根题库差异后，将网站工作分支合入 `gh-pages`，保留现有 `docs/` 目录。仅更新 `main` 不会刷新已提交的 JSON。推送后用 GitHub Pages 设置页或下列只读命令检查发布；构建成功还应核对线上功能，不能用语法检查代替页面验证。
 
 ```bash
 gh api repos/theLucius7/CompetitiveProgramming/pages --jq '{status,source,https_enforced,html_url}'

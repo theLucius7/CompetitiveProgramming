@@ -2,9 +2,39 @@
 
 ## 分支职责
 
-`main` 保存算法档案，`docs/project-guide` 保存这套文档及其源码基线，`gh-pages` 保存静态网站。每次从对应分支创建工作分支；同一个分支的变更先完成验证，再推送或评审。[GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow) 是这一流程的参考。
+`main` 保存算法档案，`docs/project-guide` 保存文档站源码及其源码基线，`gh-pages` 保存题库网站与 `docs/` 文档构建产物。文档发布不需要把文档分支合并到 `main`。每次从对应分支创建工作分支；同一个分支的变更先完成验证，再推送或评审。[GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow) 是这一流程的参考。
 
-文档分支可持续合入新的 `main` 来更新来源，但不应把网站分支整体合入算法或文档分支。发布文档只更新文档分支；发布网站按[Pages 维护](pages.md)操作。
+文档分支可合入新的 `main` 来更新来源；这是更新源码清单的可选维护步骤，不是部署前提。文档变更直接推送文档分支后，由工作流更新 `gh-pages/docs/`。题库根网站仍按[Pages 维护](pages.md)操作。
+
+## 文档站预览与部署
+
+在线地址：[CompetitiveProgramming Docs](https://thelucius7.github.io/CompetitiveProgramming/docs/)。使用 VitePress，默认入口就是 API 与项目规范；全文搜索、导航、代码高亮和深色模式在站点内提供。
+
+从仓库根目录执行，需要 Node.js 22+：
+
+```sh
+npm --prefix site ci
+npm --prefix site run dev
+```
+
+开发服务器地址为 `http://127.0.0.1:4174/CompetitiveProgramming/docs/`。Markdown 的唯一维护源是 `docs/` 和根 README / CONTRIBUTING；运行中的内容重新生成命令为 `npm --prefix site run prepare:docs`，随后浏览器更新。结束服务器用 `Ctrl+C`。
+
+发布前执行：
+
+```sh
+python3 scripts/docs.py check
+npm --prefix site run check:api
+npm --prefix site run build
+git diff --check
+```
+
+将检查过的文档、配置和锁文件提交并 `git push origin docs/project-guide` 即开始发布，无需再向 `main` 推送。`site/.content/`、`site/.vitepress/dist/` 和 `node_modules` 是生成目录，不提交。已安装依赖中的 Vite 使用锁定的修复版本；更新依赖时保留 `package-lock.json` 并重新检查和构建。
+
+发布工作流先校验 Markdown、OpenAPI、JSON Schema 和真实快照，再构建静态网站。模型字段表直接来自 schema；源码链接会转换为 GitHub 链接，避免部署后指向不存在的本地目录。
+
+只有 `docs/project-guide` 的推送会发布。发布 job 下载已验证产物，只替换带管理标记的 `gh-pages/docs/`，检查暂存路径范围后普通推送；随后显式请求 Pages 构建，并核对公开的 `docs/build-info.json` 与页面响应。PR 和其他文档分支只做检查与构建。任一步失败时查看 [Actions](https://github.com/theLucius7/CompetitiveProgramming/actions)，不能将“已经 push”当成部署成功。
+
+需要回滚时，在文档源分支对造成问题的提交执行明确的 `git revert <提交SHA>`，验证后重新推送。不要手改生成的 `gh-pages/docs/`，否则下一次构建会覆盖手工内容。
 
 ## 更新文档与源码清单
 
@@ -50,7 +80,7 @@ git diff --check
 
 检查范围是根 `README.md`、`CONTRIBUTING.md` 和 `docs/` 中所有 Markdown，不强制重写历史笔记。脚本不访问网络、不运行算法、不检查每个外站链接或 OJ 评测结果，也不证明所有命令在所有系统可用。它支持本套文档使用的行内链接和 ATX 标题，不是通用 Markdown 渲染器。
 
-[文档工作流](../.github/workflows/docs.yml) 在 `docs/**` 分支推送和相关路径的 PR 中运行同一检查；使用完整检出保留源提交，权限为只读，不部署网站。工作流编写方式参考 [GitHub Actions 官方文档](https://docs.github.com/en/actions/get-started/quickstart)。
+[文档工作流](../.github/workflows/docs.yml) 在 `docs/**` 分支推送和相关路径的 PR 中运行校验与构建；校验 job 为只读，独立发布 job 使用 `contents: write` 与 `pages: write` 更新文档产物并请求 Pages 构建。工作流编写方式参考 [GitHub Actions 官方文档](https://docs.github.com/en/actions/get-started/quickstart)。
 
 失败时先看输出路径和原因：
 

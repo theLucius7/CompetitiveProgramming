@@ -11,6 +11,14 @@
 
 # Documentation quality workflow (the rest of the allowlist remains narrow).
 !.github/workflows/docs.yml
+!site/**
+
+# Generated documentation website and installed dependencies.
+site/node_modules/
+site/.content/
+site/.vitepress/cache/
+site/.vitepress/dist/
+site/.vitepress/.temp/
 
 # VS Code workspace configuration.
 !.vscode/

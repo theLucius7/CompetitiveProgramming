@@ -1,0 +1,20 @@
+{
+  "name": "competitive-programming-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:docs": "node prepare.mjs",
+    "dev": "npm run prepare:docs && vitepress dev --host 127.0.0.1 --port 4174",
+    "build": "npm run prepare:docs && vitepress build && node check-build.mjs",
+    "preview": "vitepress preview --host 127.0.0.1 --port 4174",
+    "check:api": "node check-api.mjs"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "13.0.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "vitepress": "1.6.4"
+  },
+  "overrides": { "vite": "6.4.3" },
+  "engines": { "node": ">=22" }
+}

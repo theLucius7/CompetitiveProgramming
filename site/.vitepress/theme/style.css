@@ -1,0 +1,29 @@
+:root {
+  --vp-c-brand-1: #147548;
+  --vp-c-brand-2: #108553;
+  --vp-c-brand-3: #0d9860;
+  --vp-c-brand-soft: rgba(20, 117, 72, 0.10);
+  --vp-font-family-base: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --vp-font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --vp-sidebar-width: 272px;
+}
+.dark {
+  --vp-c-brand-1: #61d7a0;
+  --vp-c-brand-2: #49c58c;
+  --vp-c-brand-3: #28b57a;
+  --vp-c-brand-soft: rgba(97, 215, 160, 0.13);
+}
+.VPNavBarTitle .title { font-family: var(--vp-font-family-mono); font-weight: 650; letter-spacing: -0.04em; }
+.vp-doc h1 { font-size: 30px; letter-spacing: -0.03em; }
+.vp-doc p, .vp-doc li { font-size: 16px; line-height: 1.85; }
+.vp-doc table { width: 100%; font-size: 14px; }
+.vp-doc th { white-space: nowrap; }
+.vp-doc td { min-width: 90px; }
+.vp-doc pre { font-size: 14px; }
+.vp-doc a { text-underline-offset: 4px; }
+.VPDoc .content-container { max-width: 800px !important; }
+.VPBadge { vertical-align: middle; }
+@media (max-width: 640px) {
+  .vp-doc h1 { font-size: 27px; }
+  .vp-doc table { display: block; overflow-x: auto; }
+}

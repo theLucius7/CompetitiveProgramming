@@ -39,7 +39,11 @@
 | [`.gitignore`](../.gitignore) | 默认忽略、按需放行源码/文档/工具；样例与编译产物不提交 |
 | [`docs/`](./) | 本套文档；`catalog.md` 为生成文件 |
 | [`scripts/docs.py`](../scripts/docs.py) | 文档校验和源码清单生成，仅依赖 Python 标准库与 Git |
-| [`.github/workflows/docs.yml`](../.github/workflows/docs.yml) | 文档分支推送和相关 PR 的校验 |
+| [`site/package.json`](../site/package.json)、[`site/package-lock.json`](../site/package-lock.json) | 文档站构建、API 校验依赖与固定版本 |
+| [`site/.vitepress/config.mts`](../site/.vitepress/config.mts) | 文档导航、搜索、部署路径与主题配置 |
+| [`site/public/api/`](../site/public/api/) | OpenAPI 与 JSON Schema，机器可读的规范源 |
+| [`site/publish.mjs`](../site/publish.mjs) | 只更新 `gh-pages/docs/` 并验证公开发布 |
+| [`.github/workflows/docs.yml`](../.github/workflows/docs.yml) | 文档检查、构建与自动部署；不依赖合入 main |
 
 源分支还跟踪了少量历史 `.DS_Store`，详见清单。忽略规则不会自动移除已跟踪文件；后续清理应使用独立变更，不计入算法文件。
 
