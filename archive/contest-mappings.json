@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "contests": [
+    {
+      "id": "qoj:2603",
+      "name": "The 2025 ICPC Benelux Algorithm Programming Contest (BAPC 2025)",
+      "mappingKind": "official_contest_problem_table",
+      "sourceUrl": "https://qoj.ac/contest/2603",
+      "verifiedAt": "2026-09-08T05:29:24Z",
+      "evidenceUrls": [
+        "https://qoj.ac/problem/14856",
+        "https://qoj.ac/problem/14863"
+      ],
+      "problemIndices": {
+        "qoj:14855": "A",
+        "qoj:14856": "B",
+        "qoj:14857": "C",
+        "qoj:14858": "D",
+        "qoj:14859": "E",
+        "qoj:14860": "F",
+        "qoj:14861": "G",
+        "qoj:14862": "H",
+        "qoj:14863": "I",
+        "qoj:14864": "J",
+        "qoj:14865": "K",
+        "qoj:14866": "L"
+      }
+    }
+  ]
+}
