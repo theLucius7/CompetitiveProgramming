@@ -2,7 +2,7 @@
 
 Lucius7 的算法竞赛源码、模板与练习归档。以 C++ 为主，按 Online Judge（OJ）和比赛组织，配套静态网站提供源码检索与阅读。
 
-[访问网站](https://codeflare.lucius7.dev) · [算法模板](Templates/templates) · [归档工具](scripts/README.md) · [问题反馈](https://github.com/xw7qwq/codeflare/issues) · [OJFlare](https://ojflare.lucius7.dev)
+[访问网站](https://codeflare.lucius7.dev) · [在线文档](https://codeflare.lucius7.dev/docs/) · [API 参考](https://codeflare.lucius7.dev/docs/api/) · [算法模板](Templates/templates) · [归档工具](scripts/README.md) · [问题反馈](https://github.com/xw7qwq/codeflare/issues) · [OJFlare](https://ojflare.lucius7.dev)
 
 ## 项目内容
 
