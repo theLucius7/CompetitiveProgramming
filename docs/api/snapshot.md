@@ -1,11 +1,11 @@
 # GET 数据快照
 
 ```http
-GET /CompetitiveProgramming/data/site-data.json
-Host: thelucius7.github.io
+GET /data/site-data.json
+Host: codeflare.lucius7.dev
 ```
 
-完整请求地址是 `https://thelucius7.github.io/CompetitiveProgramming/data/site-data.json`；OpenAPI 中使用相对于基地址的 `/data/site-data.json`。
+完整请求地址是 `https://codeflare.lucius7.dev/data/site-data.json`；OpenAPI 中使用相对于基地址的 `/data/site-data.json`。
 
 ## 请求约定
 
@@ -23,8 +23,8 @@ Host: thelucius7.github.io
 ```json
 {
   "repository": {
-    "owner": "theLucius7",
-    "name": "CompetitiveProgramming",
+    "owner": "xw7qwq",
+    "name": "codeflare",
     "branch": "main"
   },
   "generatedAt": "2026-09-04T05:48:48.809Z",
@@ -38,8 +38,8 @@ Host: thelucius7.github.io
       "language": "C++",
       "title": "ABC 231 · Problem A",
       "problemUrl": "https://atcoder.jp/contests/abc231/tasks/abc231_a",
-      "githubUrl": "https://github.com/theLucius7/CompetitiveProgramming/blob/main/AtCoder/abc231/a.cpp",
-      "rawUrl": "https://raw.githubusercontent.com/theLucius7/CompetitiveProgramming/main/AtCoder/abc231/a.cpp",
+      "githubUrl": "https://github.com/xw7qwq/codeflare/blob/main/AtCoder/abc231/a.cpp",
+      "rawUrl": "https://raw.githubusercontent.com/xw7qwq/codeflare/main/AtCoder/abc231/a.cpp",
       "submittedAt": "2026-09-02T15:48:58+08:00"
     }
   ],

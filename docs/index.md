@@ -1,13 +1,13 @@
 # 题库 API 与项目规范
 
-[题目与代码](https://thelucius7.github.io/CompetitiveProgramming/) · [API 接入](api/index.md) · [代码规范](conventions.md)
+[题目与代码](https://codeflare.lucius7.dev/) · [API 接入](api/index.md) · [代码规范](conventions.md)
 
 ## API 参考
 
 题库提供公开、只读的 JSON 数据快照，包含题目路径、原题链接、源码地址、Git 提交日期；另有最近六次仓库提交快照。日历与 Rating 仅作为旧快照兼容字段保留，首页不再展示。
 
 ```http
-GET https://thelucius7.github.io/CompetitiveProgramming/data/site-data.json
+GET https://codeflare.lucius7.dev/data/site-data.json
 ```
 
 | 文档 | 内容 |

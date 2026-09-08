@@ -8,7 +8,7 @@
 
 ## 文档站预览与部署
 
-在线地址：[CompetitiveProgramming Docs](https://thelucius7.github.io/CompetitiveProgramming/docs/)。使用 VitePress，默认入口就是 API 与项目规范；全文搜索、导航、代码高亮和深色模式在站点内提供。
+在线地址：[CodeFlare Docs](https://codeflare.lucius7.dev/docs/)。使用 VitePress，默认入口就是 API 与项目规范；全文搜索、导航、代码高亮和深色模式在站点内提供。
 
 从仓库根目录执行，需要 Node.js 22+：
 
@@ -17,7 +17,7 @@ npm --prefix site ci
 npm --prefix site run dev
 ```
 
-开发服务器地址为 `http://127.0.0.1:4174/CompetitiveProgramming/docs/`。Markdown 的唯一维护源是 `docs/` 和根 README / CONTRIBUTING；运行中的内容重新生成命令为 `npm --prefix site run prepare:docs`，随后浏览器更新。结束服务器用 `Ctrl+C`。
+开发服务器地址为 `http://127.0.0.1:4174/docs/`。Markdown 的唯一维护源是 `docs/` 和根 README / CONTRIBUTING；运行中的内容重新生成命令为 `npm --prefix site run prepare:docs`，随后浏览器更新。结束服务器用 `Ctrl+C`。
 
 发布前执行：
 
@@ -32,7 +32,9 @@ git diff --check
 
 发布工作流先校验 Markdown、OpenAPI、JSON Schema 和真实快照，再构建静态网站。模型字段表直接来自 schema；源码链接会转换为 GitHub 链接，避免部署后指向不存在的本地目录。
 
-只有 `docs/project-guide` 的推送会发布。发布 job 下载已验证产物，确认仍对应文档分支最新提交，再只替换带管理标记的 `gh-pages/docs/`；过期运行安全跳过。检查暂存路径范围后普通推送，随后显式请求 Pages 构建，并核对公开的 `docs/build-info.json` 与页面响应。PR 和其他文档分支只做检查与构建。任一步失败时查看 [Actions](https://github.com/theLucius7/CompetitiveProgramming/actions)，不能将“已经 push”当成部署成功。
+只有 `docs/project-guide` 的推送会发布。发布 job 下载已验证产物，确认仍对应文档分支最新提交，核验仓库为 `xw7qwq/codeflare`、Pages 来源为 `gh-pages` 根目录且域名为 `codeflare.lucius7.dev`，再只替换带管理标记的 `gh-pages/docs/`；过期运行安全跳过。检查暂存路径范围后普通推送，随后显式请求 Pages 构建，并核对公开的 `docs/build-info.json` 与页面响应。PR 和其他文档分支只做检查与构建。任一步失败时查看 [Actions](https://github.com/xw7qwq/codeflare/actions)，不能将“已经 push”当成部署成功。
+
+构建产物使用 `codeflare-docs` 管理标记；首次迁移也接受原有 `competitive-programming-docs` 标记，以更新既有文档目录。该兼容仅作用于经过仓库、分支与域名核验的目标，其他未知目录仍会拒绝覆盖。API 仓库标识迁移需要先发布 `gh-pages` 的新快照，再发布依赖这些快照的文档分支。
 
 需要回滚时，在文档源分支对造成问题的提交执行明确的 `git revert <提交SHA>`，验证后重新推送。不要手改生成的 `gh-pages/docs/`，否则下一次构建会覆盖手工内容。
 

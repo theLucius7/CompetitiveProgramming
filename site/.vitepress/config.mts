@@ -1,17 +1,17 @@
 import { defineConfig } from 'vitepress';
-const api = 'https://thelucius7.github.io/CompetitiveProgramming/';
+const api = 'https://codeflare.lucius7.dev/';
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: 'Lucius7 Docs',
-  description: 'CompetitiveProgramming 题库 API 参考、数据契约与项目规范。',
-  base: '/CompetitiveProgramming/docs/',
+  title: 'CodeFlare Docs',
+  description: 'CodeFlare 题库 API 参考、数据契约与项目规范。',
+  base: '/docs/',
   srcDir: '.content',
   cleanUrls: false,
-  head: [['link', { rel: 'icon', href: '/CompetitiveProgramming/favicon.svg' }]],
+  head: [['link', { rel: 'icon', href: '/favicon.svg' }]],
   sitemap: { hostname: `${api}docs/` },
   themeConfig: {
-    siteTitle: 'Lucius7 / Docs',
+    siteTitle: 'CodeFlare / Docs',
     nav: [
       { text: 'API 参考', link: '/api/' },
       { text: '项目规范', link: '/conventions' },
@@ -51,12 +51,12 @@ export default defineConfig({
     sidebarMenuLabel: '目录',
     returnToTopLabel: '回到顶部',
     darkModeSwitchLabel: '切换深色模式',
-    socialLinks: [{ icon: 'github', link: 'https://github.com/theLucius7/CompetitiveProgramming/tree/docs/project-guide' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/xw7qwq/codeflare/tree/docs/project-guide' }],
     editLink: { text: '编辑本页', pattern: ({ relativePath }) => {
       const source = relativePath === 'repository.md' ? 'README.md'
         : relativePath === 'contributing.md' ? 'CONTRIBUTING.md'
         : relativePath === 'handbook.md' ? 'docs/README.md' : `docs/${relativePath}`;
-      return `https://github.com/theLucius7/CompetitiveProgramming/edit/docs/project-guide/${source}`;
+      return `https://github.com/xw7qwq/codeflare/edit/docs/project-guide/${source}`;
     } },
   },
 });

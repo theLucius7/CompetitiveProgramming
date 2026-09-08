@@ -57,7 +57,7 @@ jobs:
       contents: write
       pages: write
     concurrency:
-      group: competitive-programming-docs-pages
+      group: codeflare-docs-pages
       cancel-in-progress: false
     steps:
       - name: Check out publication script

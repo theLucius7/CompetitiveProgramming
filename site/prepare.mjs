@@ -7,7 +7,7 @@ const siteRoot = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.dirname(siteRoot);
 const output = path.join(siteRoot, '.content');
 const sourceBranch = 'docs/project-guide';
-const github = 'https://github.com/theLucius7/CompetitiveProgramming';
+const github = 'https://github.com/xw7qwq/codeflare';
 const routes = new Map([
   ['README.md', 'repository.md'],
   ['CONTRIBUTING.md', 'contributing.md'],
@@ -92,7 +92,7 @@ for (const [source, route] of routes) {
 }
 await cp(path.join(siteRoot, 'public'), path.join(output, 'public'), { recursive: true });
 await writeFile(path.join(output, 'public/build-info.json'), JSON.stringify({
-  managedBy: 'competitive-programming-docs',
+  managedBy: 'codeflare-docs',
   sourceBranch,
   sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).trim(),
   contractVersion: api.info.version,

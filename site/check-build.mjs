@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const siteRoot = path.dirname(fileURLToPath(import.meta.url));
 const output = path.join(siteRoot, '.vitepress/dist');
-const base = new URL('https://thelucius7.github.io/CompetitiveProgramming/docs/');
+const base = new URL('https://codeflare.lucius7.dev/docs/');
 const documents = [];
 async function collect(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -20,6 +20,8 @@ for (const route of Object.keys(routeMap)) await stat(path.join(output, route.re
 const checked = new Set();
 for (const document of documents) {
   const html = await readFile(document, 'utf8');
+  assert(!/https:\/\/thelucius7\.github\.io\/CompetitiveProgramming|\/theLucius7\/CompetitiveProgramming\/|\/CompetitiveProgramming\/docs\//.test(html),
+    `legacy repository URL or docs base in ${path.relative(output, document)}`);
   for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     const url = new URL(match[1].replaceAll('&amp;', '&'), new URL(path.relative(output, document), base));
     if (url.origin !== base.origin || !url.pathname.startsWith(base.pathname)) continue;
@@ -45,4 +47,10 @@ for (const name of ['SiteSnapshot', 'Repository', 'Problem', 'Ratings', 'AtCoder
 await stat(path.join(output, 'api/openapi.json'));
 await stat(path.join(output, 'api/site-data.schema.json'));
 await stat(path.join(output, 'api/recent-commits.schema.json'));
+const metadata = JSON.parse(await readFile(path.join(output, 'build-info.json'), 'utf8'));
+assert.equal(metadata.managedBy, 'codeflare-docs');
+assert.equal(metadata.contractVersion, '2.0.0');
+const sitemap = await readFile(path.join(output, 'sitemap.xml'), 'utf8');
+assert(sitemap.includes('https://codeflare.lucius7.dev/docs/'), 'sitemap must use the custom domain');
+assert(!sitemap.includes('thelucius7.github.io'), 'legacy sitemap origin');
 console.log(`Build OK: ${documents.length} HTML pages, ${checked.size} local targets, all schema model tables.`);

@@ -1,13 +1,13 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "CompetitiveProgramming Read-only API",
-    "version": "1.1.0",
-    "description": "公开只读的题库和最近提交部署快照。无认证、写操作或服务端查询参数；版本属于 API 集合，不是响应字段。旧题库响应结构保持兼容。"
+    "title": "CodeFlare Read-only API",
+    "version": "2.0.0",
+    "description": "公开只读的题库和最近提交部署快照。无认证、写操作或服务端查询参数；版本属于 API 集合，不是响应字段。2.0.0 将域名与仓库标识迁移至 CodeFlare，响应字段结构不变，旧仓库固定值校验器需更新。"
   },
   "servers": [
     {
-      "url": "https://thelucius7.github.io/CompetitiveProgramming"
+      "url": "https://codeflare.lucius7.dev"
     }
   ],
   "security": [],

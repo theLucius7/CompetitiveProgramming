@@ -3,8 +3,8 @@
 ## 获取代码和文档
 
 ```sh
-git clone --branch docs/project-guide https://github.com/theLucius7/CompetitiveProgramming.git
-cd CompetitiveProgramming
+git clone --branch docs/project-guide https://github.com/xw7qwq/codeflare.git
+cd codeflare
 python3 scripts/docs.py check
 ```
 

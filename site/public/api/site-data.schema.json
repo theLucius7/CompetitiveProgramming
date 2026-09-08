@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://thelucius7.github.io/CompetitiveProgramming/docs/api/site-data.schema.json",
+  "$id": "https://codeflare.lucius7.dev/docs/api/site-data.schema.json",
   "title": "SiteSnapshot",
-  "description": "题库部署快照契约 1.0.0。字段类型校验不代表源码完整性或算法正确性。",
+  "description": "CodeFlare 题库部署快照，API 集合 2.0.0。字段类型校验不代表源码完整性或算法正确性。",
   "type": "object",
   "additionalProperties": false,
   "required": ["repository", "generatedAt", "sourceRef", "commitCount", "contributions", "problems", "ratings"],
@@ -25,8 +25,8 @@
       "type": "object", "additionalProperties": false,
       "required": ["owner", "name", "branch"],
       "properties": {
-        "owner": { "type": "string", "const": "theLucius7", "description": "仓库所有者。" },
-        "name": { "type": "string", "const": "CompetitiveProgramming", "description": "仓库名。" },
+        "owner": { "type": "string", "const": "xw7qwq", "description": "仓库所有者。" },
+        "name": { "type": "string", "const": "codeflare", "description": "仓库名。" },
         "branch": { "type": "string", "const": "main", "description": "源码链接和在线树使用的分支。" }
       }
     },

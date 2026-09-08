@@ -9,11 +9,11 @@ assert(checkoutArg && artifactArg, 'usage: node publish.mjs <gh-pages-checkout> 
 const checkout = path.resolve(checkoutArg);
 const artifact = path.resolve(artifactArg);
 const destination = path.join(checkout, 'docs');
-const repository = 'theLucius7/CompetitiveProgramming';
+const repository = 'xw7qwq/codeflare';
 const git = (...args) => execFileSync('git', args, { cwd: checkout, encoding: 'utf8' }).trim();
 const api = (endpoint, ...args) => JSON.parse(execFileSync('gh', ['api', endpoint, ...args], { encoding: 'utf8' }));
 const metadata = JSON.parse(await readFile(path.join(artifact, 'build-info.json'), 'utf8'));
-assert.equal(metadata.managedBy, 'competitive-programming-docs');
+assert.equal(metadata.managedBy, 'codeflare-docs');
 assert.equal(metadata.sourceBranch, 'docs/project-guide');
 assert.equal(metadata.sourceCommit, process.env.GITHUB_SHA, 'artifact does not match workflow commit');
 function requireCurrentSource() {
@@ -27,17 +27,20 @@ requireCurrentSource();
 assert.equal(git('branch', '--show-current'), 'gh-pages');
 assert.equal(git('status', '--porcelain'), '', 'Pages checkout must be clean');
 const remote = git('remote', 'get-url', 'origin');
-assert(/(?:github\.com[:/])theLucius7\/CompetitiveProgramming(?:\.git)?$/.test(remote), 'unexpected remote');
+assert(/(?:github\.com[:/])xw7qwq\/codeflare(?:\.git)?$/.test(remote), 'unexpected remote');
 const settings = api(`repos/${repository}/pages`);
 assert.equal(settings.source.branch, 'gh-pages');
 assert.equal(settings.source.path, '/');
+assert.equal(settings.cname, 'codeflare.lucius7.dev', 'unexpected Pages domain');
 await access(path.join(artifact, 'index.html'));
 await access(path.join(artifact, 'api/openapi.json'));
 
 try {
   await access(destination);
   const previous = JSON.parse(await readFile(path.join(destination, 'build-info.json'), 'utf8'));
-  assert.equal(previous.managedBy, metadata.managedBy, 'refusing to replace an unmanaged docs directory');
+  // Accept the previous marker for the first publication after the repository migration.
+  assert([metadata.managedBy, 'competitive-programming-docs'].includes(previous.managedBy),
+    'refusing to replace an unmanaged docs directory');
 } catch (error) {
   // A missing destination is expected on first publication; any existing unmanaged folder fails.
   if (error.code !== 'ENOENT') throw error;
@@ -88,7 +91,7 @@ for (let attempt = 0; attempt < 48; attempt += 1) {
 }
 assert(built, 'Pages did not complete a build of the published docs tree');
 
-const base = 'https://thelucius7.github.io/CompetitiveProgramming/docs/';
+const base = 'https://codeflare.lucius7.dev/docs/';
 let fresh = false;
 for (let attempt = 0; attempt < 18; attempt += 1) {
   const response = await fetch(`${base}build-info.json?ref=${deployed}`, { signal: AbortSignal.timeout(15000) });

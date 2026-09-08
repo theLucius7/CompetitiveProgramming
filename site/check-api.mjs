@@ -10,7 +10,10 @@ import SwaggerParser from '@apidevtools/swagger-parser';
 const siteRoot = path.dirname(fileURLToPath(import.meta.url));
 const schema = JSON.parse(await readFile(path.join(siteRoot, 'public/api/site-data.schema.json'), 'utf8'));
 const specification = path.join(siteRoot, 'public/api/openapi.json');
-await SwaggerParser.validate(specification);
+const api = await SwaggerParser.validate(specification);
+assert.equal(api.info.version, '2.0.0');
+assert.deepEqual(api.servers, [{ url: 'https://codeflare.lucius7.dev' }]);
+assert.equal(schema.$id, 'https://codeflare.lucius7.dev/docs/api/site-data.schema.json');
 const ajv = new Ajv({ strict: true, allErrors: true });
 addFormats(ajv);
 const validate = ajv.compile(schema);
@@ -48,6 +51,7 @@ const invalid = [
   ['undeclared field', (s) => { s.schemaVersion = 'invented'; }],
   ['invalid calendar date', (s) => { s.contributions['2026-02-30'] = 1; s.commitCount += 1; }],
   ['invalid count', (s) => { s.commitCount = -1; }],
+  ['legacy repository identity', (s) => { s.repository.owner = 'theLucius7'; s.repository.name = 'CompetitiveProgramming'; }],
 ];
 if (snapshot.problems.length) invalid.push(
   ['duplicate path', (s) => { s.problems.push(structuredClone(s.problems[0])); }],
@@ -66,6 +70,7 @@ check(nullable);
 console.log(`API contract OK: OpenAPI 3.1, JSON Schema 2020-12, ${snapshot.problems.length} records, ${invalid.length} invalid-data cases rejected.`);
 
 const recentSchema = JSON.parse(await readFile(path.join(siteRoot, 'public/api/recent-commits.schema.json'), 'utf8'));
+assert.equal(recentSchema.$id, 'https://codeflare.lucius7.dev/docs/api/recent-commits.schema.json');
 const validateRecent = ajv.compile(recentSchema);
 const recentSource = process.argv[3];
 const recent = JSON.parse(recentSource
@@ -85,13 +90,14 @@ checkRecent(recent);
 const badRecent = [
   ['missing field', (s) => { delete s.generatedAt; }],
   ['unknown field', (s) => { s.total = 6; }],
+  ['legacy repository identity', (s) => { s.repository.owner = 'theLucius7'; s.repository.name = 'CompetitiveProgramming'; }],
 ];
 if (recent.commits.length) badRecent.push(
   ['more than six commits', (s) => { while (s.commits.length <= 6) s.commits.push(structuredClone(recent.commits[0])); }],
   ['duplicate SHA', (s) => { s.commits = [s.commits[0], structuredClone(s.commits[0])]; }],
   ['short SHA', (s) => { s.commits[0].sha = 'abc1234'; }],
   ['invalid date', (s) => { s.commits[0].committedAt = 'yesterday'; }],
-  ['wrong commit URL', (s) => { s.commits[0].url = 'https://github.com/theLucius7/CompetitiveProgramming/commit/' + (s.commits[0].sha[0] === '0' ? '1' : '0').repeat(40); }],
+  ['wrong commit URL', (s) => { s.commits[0].url = 'https://github.com/xw7qwq/codeflare/commit/' + (s.commits[0].sha[0] === '0' ? '1' : '0').repeat(40); }],
   ['unknown commit field', (s) => { s.commits[0].rating = 1; }],
   ['multiline subject', (s) => { s.commits[0].subject = 'one\ntwo'; }],
 );

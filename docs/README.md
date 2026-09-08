@@ -1,6 +1,6 @@
 # 文档导航
 
-[在线文档](https://thelucius7.github.io/CompetitiveProgramming/docs/)按“API 接入、项目规范、维护”组织。路径与统计来自 Git，行为说明来自当前源码；新增规则适用于后续变更，不表示所有历史代码已经符合。
+[在线文档](https://codeflare.lucius7.dev/docs/)按“API 接入、项目规范、维护”组织。路径与统计来自 Git，行为说明来自当前源码；新增规则适用于后续变更，不表示所有历史代码已经符合。
 
 | 文档 | 回答的问题 |
 | --- | --- |

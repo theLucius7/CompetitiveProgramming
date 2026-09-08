@@ -1,6 +1,6 @@
 # GitHub Pages 维护
 
-[根题库](https://thelucius7.github.io/CompetitiveProgramming/)展示 main 最近六次提交、题目检索与源码阅读。首页不再展示 Rating 或贡献日历，也不再请求其在线接口。根题库是纯静态网站，不在浏览器中执行题解。[文档站](https://thelucius7.github.io/CompetitiveProgramming/docs/)使用 VitePress，独立流程见[文档部署](maintenance.md)。
+[根题库](https://codeflare.lucius7.dev/)展示 main 最近六次提交、题目检索与源码阅读。首页不再展示 Rating 或贡献日历，也不再请求其在线接口。根题库是纯静态网站，不在浏览器中执行题解。[文档站](https://codeflare.lucius7.dev/docs/)使用 VitePress，独立流程见[文档部署](maintenance.md)。
 
 ## 分支与发布边界
 
@@ -42,8 +42,8 @@ docs/                         自动发布的文档网站，勿手工修改
 
 ```bash
 git fetch origin main gh-pages
-git worktree add --detach ../CompetitiveProgramming-pages origin/gh-pages
-cd ../CompetitiveProgramming-pages
+git worktree add --detach ../codeflare-pages origin/gh-pages
+cd ../codeflare-pages
 git switch -c pages/update-snapshot
 node scripts/generate-data.mjs origin/main
 python3 -m http.server 4173 --bind 127.0.0.1
@@ -120,9 +120,9 @@ curl --fail --head http://127.0.0.1:4173/data/recent-commits.json
 两份 JSON 均应通过[API 校验](api/standards.md)。审阅网站变更后推送 gh-pages，保留 docs 目录。修改文档及契约则推送 docs/project-guide；若增加数据端点，先发布数据文件，再运行依赖真实远端快照的文档校验。
 
 ```bash
-gh api repos/theLucius7/CompetitiveProgramming/pages --jq '{status,source,https_enforced,html_url}'
-gh api repos/theLucius7/CompetitiveProgramming/pages/builds/latest --jq '{status,commit,error}'
-curl --fail --head https://thelucius7.github.io/CompetitiveProgramming/
+gh api repos/xw7qwq/codeflare/pages --jq '{status,source,https_enforced,html_url}'
+gh api repos/xw7qwq/codeflare/pages/builds/latest --jq '{status,commit,error}'
+curl --fail --head https://codeflare.lucius7.dev/
 ```
 
 构建成功后核对公共资源与预期版本，不能把本地语法检查当作已上线。

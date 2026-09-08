@@ -1,8 +1,8 @@
 # GET 最近提交
 
 ```http
-GET /CompetitiveProgramming/data/recent-commits.json
-Host: thelucius7.github.io
+GET /data/recent-commits.json
+Host: codeflare.lucius7.dev
 ```
 
 ## 请求约定
@@ -14,15 +14,15 @@ Host: thelucius7.github.io
 | 成功响应 | `200`，`application/json` |
 | 数据范围 | 生成时所选 main 历史中的最近六次提交，包含合并提交 |
 
-[读取线上快照](https://thelucius7.github.io/CompetitiveProgramming/data/recent-commits.json) · [下载 JSON Schema](../../site/public/api/recent-commits.schema.json)
+[读取线上快照](https://codeflare.lucius7.dev/data/recent-commits.json) · [下载 JSON Schema](../../site/public/api/recent-commits.schema.json)
 
 ## 响应示例
 
 ```json
 {
   "repository": {
-    "owner": "theLucius7",
-    "name": "CompetitiveProgramming",
+    "owner": "xw7qwq",
+    "name": "codeflare",
     "branch": "main"
   },
   "generatedAt": "2026-09-08T01:00:00Z",
@@ -32,7 +32,7 @@ Host: thelucius7.github.io
       "sha": "7cca2a682247670b87af2c8bb9755acda9e434e5",
       "subject": "example",
       "committedAt": "2026-09-04T02:54:39Z",
-      "url": "https://github.com/theLucius7/CompetitiveProgramming/commit/7cca2a682247670b87af2c8bb9755acda9e434e5"
+      "url": "https://github.com/xw7qwq/codeflare/commit/7cca2a682247670b87af2c8bb9755acda9e434e5"
     }
   ]
 }

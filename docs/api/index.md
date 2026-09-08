@@ -3,7 +3,7 @@
 ## 服务地址
 
 ```text
-https://thelucius7.github.io/CompetitiveProgramming
+https://codeflare.lucius7.dev
 ```
 
 | 方法 | 路径 | 说明 |
@@ -17,7 +17,7 @@ https://thelucius7.github.io/CompetitiveProgramming
 
 [OpenAPI 3.1 规范](../../site/public/api/openapi.json) · [题库 Schema](../../site/public/api/site-data.schema.json) · [最近提交 Schema](../../site/public/api/recent-commits.schema.json)
 
-API 集合契约版本为 `1.1.0`（新增独立最近提交端点，旧题库结构保持 1.0.0 兼容），记录于上述规范文件。响应本身当前没有 `schemaVersion` 字段，也没有 `/v1` 路径。机器可读规范描述现有数据，而非承诺不存在的后端功能。
+API 集合契约版本为 `2.0.0`，记录于上述规范文件。本版使用 CodeFlare 独立域名和新仓库标识，字段结构不变，旧固定值校验器需要更新；详见[迁移与兼容说明](standards.md#兼容与变更)。响应本身当前没有 `schemaVersion` 字段，也没有 `/v1` 路径。机器可读规范描述现有数据，而非承诺不存在的后端功能。
 
 所有模型明确区分必填和可空；对象不允许未声明字段，除贡献日历的动态日期键。发布文档前，自动检查会用该契约验证真实部署快照，防止文档与数据结构分离。
 
@@ -25,12 +25,12 @@ API 集合契约版本为 `1.1.0`（新增独立最近提交端点，旧题库�
 
 ```sh
 curl --fail --location \
-  'https://thelucius7.github.io/CompetitiveProgramming/data/site-data.json'
+  'https://codeflare.lucius7.dev/data/site-data.json'
 ```
 
 ```js
 const response = await fetch(
-  'https://thelucius7.github.io/CompetitiveProgramming/data/site-data.json',
+  'https://codeflare.lucius7.dev/data/site-data.json',
   { signal: AbortSignal.timeout(10000) },
 );
 if (!response.ok) throw new Error(`HTTP ${response.status}`);
