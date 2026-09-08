@@ -1,22 +1,22 @@
-# 贡献指南
+# Contributing
 
-先阅读[组织贡献规范](https://github.com/xw7qwq/.github/blob/main/CONTRIBUTING.md)，再按本仓库的分支职责和验证要求提交改动。详细的[代码与归档规范](https://github.com/xw7qwq/codeflare/blob/docs/project-guide/docs/conventions.md)与[维护流程](https://github.com/xw7qwq/codeflare/blob/docs/project-guide/docs/maintenance.md)位于文档源分支。
+Read the [organization contribution guide](https://github.com/xw7qwq/.github/blob/main/CONTRIBUTING.md), then follow this repository's branch responsibilities and validation requirements. Detailed [code and archive conventions](https://github.com/xw7qwq/codeflare/blob/docs/project-guide/docs/conventions.md) and the [maintenance workflow](https://github.com/xw7qwq/codeflare/blob/docs/project-guide/docs/maintenance.md) live on the documentation source branch.
 
-## 分支和 Pull Request
+## Branches and pull requests
 
-| 目标分支 | 内容 |
+| Target branch | Contents |
 | --- | --- |
-| `main` | 算法源码、模板、来源收据与归档工具 |
-| `docs/project-guide` | 项目文档、API 契约与文档站源码 |
-| `gh-pages` | 题库网站源码、数据快照和生成的 `docs/` 网站 |
+| `main` | Algorithm source code, templates, provenance receipts, and archive tools |
+| `docs/project-guide` | Project documentation, API contracts, and documentation site source |
+| `gh-pages` | Problem browser source, data snapshots, and the generated `docs/` website |
 
-从对应目标创建短期工作分支，例如 `fix/archive-import`、`docs/update-tooling` 或 `sync/contest-submissions`。完成验证后向该目标发起 PR，说明改动原因和实际检查结果；检查通过后合并，确认来源提交已被目标包含再删除工作分支。保留三个长期分支，不把网站分支整体合入算法分支。
+Create a temporary branch from the relevant target, such as `fix/archive-import`, `docs/update-tooling`, or `sync/contest-submissions`. After validation, open a PR against that target and describe the reason for the change and actual check results. Merge after checks pass, then confirm the target contains the changes before deleting the working branch. Keep all three permanent branches; do not merge the entire website branch into the algorithm branch.
 
-归档脚本只处理本地文件，不提交或推送 Git；新增提交来源与源码也应通过工作分支和 PR 合入 `main`。文档发布工作流会直接更新 `gh-pages/docs/`，该目录是生成结果，不能手工修改。文档和网站的人工变更同样通过 PR。
+Archive scripts operate only on local files and do not commit or push Git changes. New provenance records and source files also enter `main` through a working branch and PR. The documentation publishing workflow updates `gh-pages/docs/` directly. That directory is generated output and must not be edited manually. Manual documentation and website changes also require PRs.
 
-## 提交前验证
+## Validation before submission
 
-在仓库根目录运行：
+Run these commands from the repository root:
 
 ```sh
 python3 -m unittest discover -s scripts/tests -p 'test_archive_*.py'
@@ -24,10 +24,10 @@ python3 scripts/archive_verify.py
 git diff --check
 ```
 
-`Archive` 工作流在 `main`、`docs/project-guide` 的每次 PR 和推送执行离线测试与只读完整性审计，稳定检查名为 `archive`。审计核对已导入源码的来源收据、哈希、字节数与编码，不执行算法，也不证明算法 AC。
+The `Archive` workflow runs offline tests and a read-only integrity audit on every PR and push to `main` or `docs/project-guide`. Its stable check name is `archive`. The audit checks provenance receipts, hashes, byte counts, and encodings of imported source files. It does not run algorithms or establish an AC verdict.
 
-单题修改需要单独编译并提供原题链接、复现输入和预期输出；模板修改应提供最小调用与边界验证。文档和网站的附加检查见各自分支 README。保留源码原有路径和已核实的来源，不把编译成功或文件存在写成评测通过。
+Compile individual problem changes separately and provide the original problem link, reproduction input, and expected output. Include a minimal invocation and boundary checks for template changes. Each branch's README describes additional documentation and website checks. Preserve source paths and verified provenance; successful compilation or file existence is not evidence of an accepted submission.
 
-## 提交规范
+## Commit conventions
 
-采用 `类型(范围): 具体动作`，例如 `fix(archive): validate submission identity` 或 `docs(tooling): explain local setup`。按路径暂存并审阅差异；不提交编译产物、本地样例、临时缓存或登录凭据，不做无关的批量重命名和格式化。引用第三方材料时保留来源和许可；仓库没有统一许可证，不能自动为历史内容补写授权。
+Use `type(scope): specific action`, such as `fix(archive): validate submission identity` or `docs(tooling): explain local setup`. Stage files by path and review the diff. Exclude build output, local samples, temporary caches, and credentials, and avoid unrelated bulk renaming or formatting. Retain attribution and licenses when citing third-party material. This repository has no single license, so do not invent permissions for historical content.
