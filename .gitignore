@@ -11,6 +11,7 @@
 
 # Verified source-import provenance (temporary plans remain ignored).
 !archive/submissions.json
+!archive/contest-mappings.json
 
 # VS Code workspace configuration.
 !.vscode/

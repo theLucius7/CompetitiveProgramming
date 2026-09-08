@@ -25,6 +25,7 @@ from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
 
 from archive_plan import build_plan, language_extension, validate_segment
+from archive_catalog import apply_contest_mappings
 
 ROOT = Path(__file__).resolve().parents[1]
 DASHBOARD_URL = 'https://thelucius7.github.io/qwq/data/dashboard.json'
@@ -299,7 +300,10 @@ def current_plan():
     dashboard = read_json(STATE / 'dashboard.json')
     if dashboard is None:
         raise ValueError('Run the plan command first')
-    plan = build_plan(dashboard, ROOT, histories() or None)
+    history = histories()
+    catalog = read_json(ROOT / 'archive' / 'contest-mappings.json')
+    mapped_dashboard = apply_contest_mappings(dashboard, history, catalog)
+    plan = build_plan(mapped_dashboard, ROOT, history or None)
     plan['metadataErrors'] = read_json(STATE / 'metadata-errors.json', {})
     plan['plannedAt'] = now()
     atomic_json(STATE / 'plan.json', plan)
@@ -456,7 +460,9 @@ def import_qoj_history(envelope):
         raise ValueError('QOJ export would discard previously captured history')
     other_platforms = [row for row in previous if row.get('platform') != 'qoj']
     # Full replacement: old QOJ verdicts/metadata must not conflict with new rows.
-    build_plan(dashboard, ROOT, [*other_platforms, *records])
+    history = [*other_platforms, *records]
+    catalog = read_json(ROOT / 'archive' / 'contest-mappings.json')
+    build_plan(apply_contest_mappings(dashboard, history, catalog), ROOT, history)
     atomic_json(STATE / 'qoj-history.json', envelope)
     return {'qojHistory': count, 'counts': current_plan()['counts']}
 

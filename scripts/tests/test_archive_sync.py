@@ -114,6 +114,36 @@ class ArchiveSyncTests(unittest.TestCase):
         self.assertFalse(self.target.exists())
         self.assertEqual(sync.import_sources([self.record])[0]['status'], 'imported')
 
+    def test_official_catalog_enables_unscoped_qoj_import_without_rewriting_history(self):
+        catalog = {'schemaVersion': 1, 'contests': [{
+            'id': 'qoj:2603', 'name': 'BAPC 2025',
+            'mappingKind': 'official_contest_problem_table',
+            'sourceUrl': 'https://qoj.ac/contest/2603',
+            'verifiedAt': '2026-09-08T05:29:24Z',
+            'evidenceUrls': ['https://qoj.ac/problem/14856'],
+            'problemIndices': {'qoj:14855': 'A', 'qoj:14856': 'B', 'qoj:14863': 'I'},
+        }]}
+        sync.atomic_json(self.root / 'archive/contest-mappings.json', catalog)
+        self.dashboard['sources']['qoj']['submissionCount'] = 1
+        sync.atomic_json(self.state / 'dashboard.json', self.dashboard)
+        dashboard_before = (self.state / 'dashboard.json').read_bytes()
+        history_record = {'platform': 'qoj', 'id': 2356370, 'problemId': 'qoj:14856',
+                          'contestId': None, 'handle': 'Lucius7', 'epoch': 1778551752,
+                          'url': 'https://qoj.ac/submission/2356370',
+                          'verdict': 'AC', 'language': 'C++23'}
+        envelope = {'records': [history_record], 'pages': [1], 'complete': True, 'expectedCount': 1}
+        self.assertEqual(sync.import_qoj_history(envelope)['counts']['missing'], 2)
+        entry = next(row for row in sync.current_plan()['entries'] if row['platform'] == 'qoj')
+        self.assertEqual(entry['targetStem'], 'QOJ/2603/b')
+        self.assertIsNone(entry['candidates'][0]['contestId'])
+        record = dict(history_record, key=entry['key'], contestId=entry['contestId'],
+                      code='int main() {}\n', captureFormat='plaintext_pre', sourceLines=2)
+        self.assertEqual(sync.import_sources([record])[0]['status'], 'imported')
+        self.assertEqual((self.root / 'QOJ/2603/b.cpp').read_text(), record['code'])
+        self.assertEqual(sync.read_json(self.state / 'qoj-history.json'), envelope)
+        self.assertEqual((self.state / 'dashboard.json').read_bytes(), dashboard_before)
+        self.assertEqual(sync.current_plan()['counts']['total'], 2)
+
     def test_import_is_idempotent_and_preserves_existing_aliases(self):
         self.assertEqual(sync.import_sources([self.record])[0]['status'], 'imported')
         self.assertEqual(self.target.read_bytes(), self.record['code'].encode())
