@@ -1,38 +1,38 @@
-# CodeFlare · 项目文档
+# CodeFlare · Project documentation
 
-CodeFlare 是以 C++ 为主的算法竞赛源码、模板与练习归档，按 OJ 和比赛组织。本分支 `docs/project-guide` 维护项目指南、静态题库的 API 契约与 VitePress 文档站。
+CodeFlare is a competitive programming archive of C++ solutions, templates, and practice, organized by online judge and contest. This branch, `docs/project-guide`, maintains project guides, the static problem browser's API contracts, and the VitePress documentation site.
 
-[项目网站](https://codeflare.lucius7.dev) · [在线文档](https://codeflare.lucius7.dev/docs/) · [源码仓库](https://github.com/xw7qwq/codeflare) · [目录清单](docs/catalog.md) · [贡献指南](CONTRIBUTING.md)
+[Website](https://codeflare.lucius7.dev) · [Online documentation](https://codeflare.lucius7.dev/docs/) · [Source repository](https://github.com/xw7qwq/codeflare) · [Source catalog](docs/catalog.md) · [Contributing](CONTRIBUTING.md)
 
-## 文档导航
+## Documentation
 
-| 需要做什么 | 入口 |
+| Goal | Guide |
 | --- | --- |
-| 接入题库数据、查阅字段与错误规范 | [API 参考](docs/api/index.md) |
-| 了解所有平台、模板和工具的位置 | [项目结构](docs/structure.md)、[自动生成的目录清单](docs/catalog.md) |
-| 在本地编译一道题 | [快速开始](docs/quick-start.md) |
-| 添加题解、记录验证结果 | [代码与归档规范](docs/conventions.md)、[贡献指南](CONTRIBUTING.md) |
-| 配置编辑器和题目导入 | [开发工具](docs/tooling.md) |
-| 更新文档或维护网站 | [维护流程](docs/maintenance.md)、[GitHub Pages 维护](docs/pages.md) |
-| 浏览全部文档主题 | [文档导航](docs/README.md) |
+| Integrate problem data and look up fields or error conventions | [API reference](docs/api/index.md) |
+| Find platforms, templates, and tools | [Project structure](docs/structure.md), [generated source catalog](docs/catalog.md) |
+| Compile a problem locally | [Quick start](docs/quick-start.md) |
+| Add a solution and record validation | [Code and archive conventions](docs/conventions.md), [Contributing](CONTRIBUTING.md) |
+| Configure an editor and problem imports | [Development tools](docs/tooling.md) |
+| Update documentation or maintain the website | [Maintenance](docs/maintenance.md), [GitHub Pages maintenance](docs/pages.md) |
+| Browse all documentation topics | [Documentation index](docs/README.md) |
 
-API 文档描述静态 JSON 快照及网站依赖的外部接口，不是在线评测服务。OpenAPI 和 JSON Schema 的下载入口位于 [API 参考](docs/api/index.md)。
+The API documentation describes static JSON snapshots and external interfaces used by the website, not an online judging service. Download OpenAPI and JSON Schema contracts from the [API reference](docs/api/index.md).
 
-## 分支职责
+## Branch responsibilities
 
-| 分支 | 内容 |
+| Branch | Contents |
 | --- | --- |
-| [`main`](https://github.com/xw7qwq/codeflare/tree/main) | 算法源码、模板和已有开发工具 |
-| [`docs/project-guide`](https://github.com/xw7qwq/codeflare/tree/docs/project-guide) | 本分支：文档源、API 契约、项目规范和构建检查 |
-| [`gh-pages`](https://github.com/xw7qwq/codeflare/tree/gh-pages) | 题库网站、数据快照和生成的 `docs/` 文档网站 |
+| [`main`](https://github.com/xw7qwq/codeflare/tree/main) | Algorithm source code, templates, and existing development tools |
+| [`docs/project-guide`](https://github.com/xw7qwq/codeflare/tree/docs/project-guide) | This branch: documentation source, API contracts, project conventions, and build checks |
+| [`gh-pages`](https://github.com/xw7qwq/codeflare/tree/gh-pages) | Problem browser, data snapshots, and generated documentation in `docs/` |
 
-文档无需合并到 `main`。文档 PR 合入本分支后，工作流构建文档并仅更新 `gh-pages/docs/`。源码清单记录所依据的主分支提交，刷新方法见[维护流程](docs/maintenance.md)。
+Documentation does not need to be merged into `main`. After a documentation PR merges into this branch, the workflow builds the site and updates only `gh-pages/docs/`. The source catalog records the default-branch commit it describes; see [Maintenance](docs/maintenance.md) for refresh instructions.
 
-## 快速开始
+## Quick start
 
-### 阅读与检查 Markdown
+### Read and check Markdown
 
-直接在 GitHub 或 Markdown 阅读器中浏览文档，无需运行网站。检查脚本需要 Git 和 Python 3.10+，不依赖第三方 Python 包。
+Read the documentation directly on GitHub or in a Markdown reader. The checker requires Git and Python 3.10+, with no third-party Python packages.
 
 ```sh
 git clone --branch docs/project-guide https://github.com/xw7qwq/codeflare.git codeflare-docs
@@ -40,42 +40,42 @@ cd codeflare-docs
 python3 scripts/docs.py check
 ```
 
-请保留完整 Git 历史与远程分支引用，清单校验和 API 检查会读取指定提交及 `origin/gh-pages`。单题编译需要对应语言的工具链，见[快速开始](docs/quick-start.md)。
+Keep complete Git history and remote branch references. Catalog and API checks read a recorded commit and `origin/gh-pages`. Compiling an individual solution requires its language toolchain; see [Quick start](docs/quick-start.md).
 
-### 预览文档网站
+### Preview the documentation site
 
-在仓库根目录执行，需要 Node.js 22+ 和 npm：
+Run from the repository root with Node.js 22+ and npm:
 
 ```sh
 npm --prefix site ci
 npm --prefix site run dev
 ```
 
-打开 <http://127.0.0.1:4174/docs/>，按 `Ctrl+C` 停止服务。
+Open <http://127.0.0.1:4174/docs/>. Stop the server with `Ctrl+C`.
 
-开发服务器启动时会将 Markdown 转换到 `site/.content/`。编辑源文档后，可在另一个终端运行 `npm --prefix site run prepare:docs` 重新生成页面内容。
+The development server converts Markdown into `site/.content/` at startup. After editing source documents, run `npm --prefix site run prepare:docs` in another terminal to regenerate page content.
 
-## 项目结构
+## Repository layout
 
-| 路径 | 用途 |
+| Path | Purpose |
 | --- | --- |
-| [README.md](README.md)、[CONTRIBUTING.md](CONTRIBUTING.md) | 项目入口与贡献约定 |
-| [docs/](docs/) | 指南、API 说明与源码目录清单 |
-| [scripts/docs.py](scripts/docs.py) | Markdown、相对链接、标题锚点和源码清单检查 |
-| [scripts/README.md](scripts/README.md)、[archive/submissions.json](archive/submissions.json) | 源码归档工具、离线测试与已验证提交的来源收据 |
-| [site/package.json](site/package.json) | 文档站依赖、开发与构建命令 |
-| [site/.vitepress/](site/.vitepress/) | 站点配置和主题 |
-| [site/public/api/](site/public/api/) | OpenAPI 与 JSON Schema 契约 |
-| [site/prepare.mjs](site/prepare.mjs)、[site/check-build.mjs](site/check-build.mjs) | 内容转换与构建产物检查 |
-| [site/publish.mjs](site/publish.mjs) | 文档产物发布与上线验证 |
-| [.github/workflows/docs.yml](.github/workflows/docs.yml) | 文档校验、构建与发布工作流 |
-| [.github/workflows/archive.yml](.github/workflows/archive.yml) | 离线归档测试与源码完整性审计 |
+| [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md) | Project entry point and contribution guidelines |
+| [docs/](docs/) | Guides, API documentation, and source catalog |
+| [scripts/docs.py](scripts/docs.py) | Markdown, relative link, heading anchor, and source catalog checks |
+| [scripts/README.md](scripts/README.md), [archive/submissions.json](archive/submissions.json) | Archive tools, offline tests, and verified submission receipts |
+| [site/package.json](site/package.json) | Site dependencies and development and build commands |
+| [site/.vitepress/](site/.vitepress/) | Site configuration and theme |
+| [site/public/api/](site/public/api/) | OpenAPI and JSON Schema contracts |
+| [site/prepare.mjs](site/prepare.mjs), [site/check-build.mjs](site/check-build.mjs) | Content conversion and build output checks |
+| [site/publish.mjs](site/publish.mjs) | Documentation publishing and live verification |
+| [.github/workflows/docs.yml](.github/workflows/docs.yml) | Documentation validation, build, and publishing workflow |
+| [.github/workflows/archive.yml](.github/workflows/archive.yml) | Offline archive tests and source integrity audit |
 
-`site/.content/`、`site/.vitepress/dist/` 和 `site/node_modules/` 是生成目录；修改 Markdown 源文件与配置，不提交生成目录。算法源码的分类与数量以[项目结构](docs/structure.md)和[目录清单](docs/catalog.md)为准。
+`site/.content/`, `site/.vitepress/dist/`, and `site/node_modules/` are generated directories. Edit Markdown sources and configuration, and keep generated directories out of commits. [Project structure](docs/structure.md) and the [source catalog](docs/catalog.md) define source categories and counts.
 
-## 验证与贡献
+## Validation and contributions
 
-安装文档站依赖后，在仓库根目录运行：
+After installing site dependencies, run from the repository root:
 
 ```sh
 python3 scripts/docs.py check
@@ -84,26 +84,26 @@ npm --prefix site run build
 git diff --check
 ```
 
-上述命令分别校验文档与清单、API 契约及快照、静态站点构建和空白格式。API 检查默认读取本地 `origin/gh-pages` 中的两份数据快照；这些检查不评测算法，也不证明远端网站已经部署成功。
+These commands validate documentation and the catalog, API contracts and snapshots, the static site build, and whitespace. By default, API checks read two snapshots from local `origin/gh-pages`. They do not judge algorithms or establish that the remote site was deployed successfully.
 
-从 `docs/project-guide` 创建文档工作分支，按路径提交修改，并在 Pull Request 中说明原因、变更与验证结果。新增 Markdown 或链接目标需先纳入 Git 跟踪。完整要求见[贡献指南](CONTRIBUTING.md)。
+Create a working branch from `docs/project-guide`, stage changes by path, and describe the reason, changes, and validation in a pull request. Track new Markdown files and local link targets in Git first. See [Contributing](CONTRIBUTING.md) for the full process.
 
-## 域名与部署
+## Domain and deployment
 
-CodeFlare 使用独立域名 **[codeflare.lucius7.dev](https://codeflare.lucius7.dev)**，文档站发布到 [/docs/](https://codeflare.lucius7.dev/docs/)，静态 API 位于 `/data/`。
+CodeFlare uses **[codeflare.lucius7.dev](https://codeflare.lucius7.dev)**. Documentation is published under [/docs/](https://codeflare.lucius7.dev/docs/), and the static API lives under `/data/`.
 
-GitHub Pages 的发布来源应为 `gh-pages` 分支根目录，自定义域名设置为 `codeflare.lucius7.dev`。文档发布脚本会核验目标仓库、来源分支与域名，只更新受管理的 `docs/` 目录，保留题库和域名配置。
+GitHub Pages should publish from the root of `gh-pages`, with `codeflare.lucius7.dev` as its custom domain. The publishing script validates the repository, source branch, and domain, then updates only the managed `docs/` directory, preserving the problem browser and domain configuration.
 
-API 集合 `2.0.0` 使用新域名与 `xw7qwq/codeflare` 仓库标识，响应字段结构保持不变。迁移和兼容范围见[错误与兼容规范](docs/api/standards.md)。源码清单仍保留原提交 SHA、时间与统计口径。
+API collection `2.0.0` uses the new domain and the `xw7qwq/codeflare` repository identity while retaining response field structures. See [Errors and compatibility](docs/api/standards.md) for migration details. The source catalog retains its original commit SHA, timestamp, and counting rules.
 
-工作流在目标为 `docs/project-guide` 的每次 PR 和该分支推送中运行检查；发布作业仅针对 `docs/project-guide` 的推送。以 [Actions](https://github.com/xw7qwq/codeflare/actions)、公开页面和 `docs/build-info.json` 核对发布结果，详细流程见[维护文档](docs/maintenance.md)。
+The workflow checks every PR targeting `docs/project-guide` and every push to that branch. Only pushes publish. Verify releases through [Actions](https://github.com/xw7qwq/codeflare/actions), public pages, and `docs/build-info.json`; see [Maintenance](docs/maintenance.md) for details.
 
-## 内容与许可
+## Content and licensing
 
-每份算法源码独立使用，没有全仓统一可执行程序。归档包含未完成草稿和不带 `main` 的模板片段；文件存在、提交到 Git 或网页可见，都不代表已通过 OJ。原题以对应 OJ 页面为准。
+Each algorithm source file is used independently; there is no single executable for the entire repository. The archive includes unfinished drafts and template fragments without `main`. A file's presence in Git or on a website does not mean it passed an online judge. Consult the original judge for the problem statement.
 
-仓库目前未声明统一的开源许可证。引用题面、第三方代码或依赖时，保留其来源并遵守各自许可；本文档不新增授权条款。
+The repository has no single declared open-source license. Retain attribution and follow the applicable licenses when using problem statements, third-party code, or dependencies. This documentation grants no additional permissions.
 
-## 相关项目
+## Related projects
 
-[OJFlare](https://github.com/xw7qwq/ojflare) 使用独立域名 [ojflare.lucius7.dev](https://ojflare.lucius7.dev)，与 CodeFlare 分别维护和部署。
+[OJFlare](https://github.com/xw7qwq/ojflare) uses [ojflare.lucius7.dev](https://ojflare.lucius7.dev) and is maintained and deployed separately.
