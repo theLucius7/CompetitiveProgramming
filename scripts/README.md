@@ -1,6 +1,6 @@
 # 比赛提交源码归档
 
-`archive_sync.py` 将 Lucius7 在 AtCoder、Codeforces、QOJ 的本人提交整理到现有比赛目录。比赛与题目映射来自 [qwq dashboard](https://thelucius7.github.io/qwq/data/dashboard.json)，要求 `schemaVersion: 2`、`handle: Lucius7`。`archive_plan.py` 是独立的离线规划模块，不获取网络数据、不写源码。
+`archive_sync.py` 将 Lucius7 在 AtCoder、Codeforces、QOJ 的本人提交整理到现有比赛目录。比赛与题目映射来自 [OJFlare dashboard](https://ojflare.lucius7.dev/data/dashboard.json)，要求 `schemaVersion: 2`、`handle: Lucius7`。`archive_plan.py` 是独立的离线规划模块，不获取网络数据、不写源码。
 
 ## 范围和选择规则
 
@@ -113,7 +113,7 @@ QOJ 完整历史通过同一页面的“QOJ 提交历史”类型导入。顶层
 
 ## 已核对的比赛目录归属补充
 
-`archive/contest-mappings.json` 保存经官方页面核对、但 qwq 暂时缺失的完整比赛题目表。每项必须包含比赛 ID、名称、`mappingKind: "official_contest_problem_table"`、精确官方比赛 `sourceUrl`、UTC `verifiedAt`、题目证据 `evidenceUrls` 和完整 `problemIndices`。该文件单独纳入版本管理，可追溯目录归属的依据和核对时间。
+`archive/contest-mappings.json` 保存经官方页面核对、但 OJFlare 暂时缺失的完整比赛题目表。每项必须包含比赛 ID、名称、`mappingKind: "official_contest_problem_table"`、精确官方比赛 `sourceUrl`、UTC `verifiedAt`、题目证据 `evidenceUrls` 和完整 `problemIndices`。该文件单独纳入版本管理，可追溯目录归属的依据和核对时间。
 
 目前的补充项是 [QOJ 2603：BAPC 2025](https://qoj.ac/contest/2603) 的 A–L 完整题目表。其中 [14856：Boggle Sort](https://qoj.ac/problem/14856) 对应 B，[14863：Intermill Logistics](https://qoj.ac/problem/14863) 对应 I。两条提交详情中的题目链接均指向全局题目页，未显示比赛面包屑；这里采用官方比赛题目表确定 `QOJ/2603/b`、`QOJ/2603/i` 的**目录归属**，并不声称提交是在该比赛场次内完成的。
 
@@ -121,7 +121,7 @@ QOJ 完整历史通过同一页面的“QOJ 提交历史”类型导入。顶层
 
 catalog 与规划器采用相同的按平台回退规则：显式历史中没有任何 QOJ 记录时，使用已验证 dashboard 账号下的 `accepted` QOJ 记录作为提交证据，缺少结果字段时按 AC 处理，并继续校验官方 URL 和提交身份。因此仅刷新 AtCoder／Codeforces 的新副本仍能计划 B、I；一旦存在显式 QOJ 历史，就只使用该历史，不混入 dashboard 的旧 AC 记录。
 
-补充模块追加缺失比赛，已有完全一致的题目表保持原样。若后续 qwq 已有该完整表但 `hasSubmissions` 为假，可依据本人真实历史仅在返回副本中把该标志提升为真，以保留已经证实的归档目录关联；不会把原有真值降级，也不表示赛内提交。它拒绝未知字段、非官方或不匹配的 URL、非法 ID／题号、重复题号，以及和现有 qwq 表或其他补充比赛产生的归属冲突。它不会覆盖既有映射，也不会为多场复用题猜测目录。新增内存比赛项的 `catalogSource` 保留来源文件、证据链接、核对时间和映射类型。
+补充模块追加缺失比赛，已有完全一致的题目表保持原样。若后续 OJFlare 已有该完整表但 `hasSubmissions` 为假，可依据本人真实历史仅在返回副本中把该标志提升为真，以保留已经证实的归档目录关联；不会把原有真值降级，也不表示赛内提交。它拒绝未知字段、非官方或不匹配的 URL、非法 ID／题号、重复题号，以及和现有 OJFlare 表或其他补充比赛产生的归属冲突。它不会覆盖既有映射，也不会为多场复用题猜测目录。新增内存比赛项的 `catalogSource` 保留来源文件、证据链接、核对时间和映射类型。
 
 ## 锁与中断恢复
 

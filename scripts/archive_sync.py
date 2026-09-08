@@ -28,7 +28,7 @@ from archive_plan import build_plan, language_extension, validate_segment
 from archive_catalog import apply_contest_mappings
 
 ROOT = Path(__file__).resolve().parents[1]
-DASHBOARD_URL = 'https://thelucius7.github.io/qwq/data/dashboard.json'
+DASHBOARD_URL = 'https://ojflare.lucius7.dev/data/dashboard.json'
 HANDLE = 'Lucius7'
 STATE = ROOT / '.archive'
 MANIFEST = ROOT / 'archive' / 'submissions.json'
@@ -220,7 +220,7 @@ class Client:
         interval = 2.2 if host == 'codeforces.com' else 1.1
         time.sleep(max(0, interval - (time.monotonic() - self.last.get(host, 0))))
         self.last[host] = time.monotonic()
-        request = Request(url, headers={'Accept': 'application/json', 'User-Agent': 'Lucius7-Archive/1.0 (+https://github.com/theLucius7/CompetitiveProgramming)'})
+        request = Request(url, headers={'Accept': 'application/json', 'User-Agent': 'Lucius7-Archive/1.0 (+https://github.com/xw7qwq/codeflare)'})
         try:
             with urlopen(request, timeout=30) as response:
                 if urlparse(response.url).hostname != host:
@@ -550,7 +550,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     prepare_parser = commands.add_parser('plan')
-    prepare_parser.add_argument('--dashboard', help='Path to a qwq schemaVersion 2 snapshot (default: public API)')
+    prepare_parser.add_argument('--dashboard', help='Path to an OJFlare schemaVersion 2 snapshot (default: public API)')
     prepare_parser.add_argument('--refresh-history', action='store_true')
     server_parser = commands.add_parser('serve')
     server_parser.add_argument('--port', type=int, default=4181)
