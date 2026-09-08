@@ -90,7 +90,7 @@ python3 -m unittest discover -s scripts/tests -p 'test_archive_*.py'
 3. 归档来源记录由工具生成，不能把未核实的结果标记为 AC。使用导入流程时遵循[归档工具说明](scripts/README.md)。
 4. 提交前检查差异；不提交编译产物、本地样例、临时缓存或登录凭据。工具变更应运行上方离线测试。
 
-更详细的[代码与归档规范](https://github.com/xw7qwq/codeflare/blob/docs/project-guide/docs/conventions.md)和[贡献指南](https://github.com/xw7qwq/codeflare/blob/docs/project-guide/CONTRIBUTING.md)位于文档分支。
+提交前阅读本分支的[贡献指南](CONTRIBUTING.md)；更详细的[代码与归档规范](https://github.com/xw7qwq/codeflare/blob/docs/project-guide/docs/conventions.md)位于文档分支。所有人工变更通过对应分支的 Pull Request，`Archive` 工作流自动运行离线归档测试与完整性审计。
 
 ## 相关项目
 
