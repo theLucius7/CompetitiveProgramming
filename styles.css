@@ -12,9 +12,6 @@
   --accent-soft: #dff3e4;
   --focus: #19783d;
   --shadow: 0 18px 60px rgba(23, 49, 32, 0.08);
-  --calendar-cell: 12px;
-  --calendar-gap: 4px;
-  --calendar-width: calc(53 * var(--calendar-cell) + 52 * var(--calendar-gap));
   font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
 }
@@ -233,103 +230,7 @@ footer {
   50% { opacity: 0.35; }
 }
 
-.profile-metrics {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 270px));
-  gap: 12px;
-  margin-top: 26px;
-}
-
-.rating-card {
-  min-height: 104px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.82);
-  padding: 17px 18px;
-}
-
-.rating-card {
-  position: relative;
-  overflow: hidden;
-  color: var(--ink);
-  text-decoration: none;
-  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
-}
-
-.rating-card::before {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 4px;
-  content: "";
-}
-
-.rating-card:hover {
-  transform: translateY(-2px);
-  border-color: #b8c5ba;
-  box-shadow: 0 12px 30px rgba(23, 49, 32, 0.08);
-}
-
-.rating-atcoder::before {
-  background: #00a6a6;
-}
-
-.rating-codeforces::before {
-  background: #335dcc;
-}
-
-.rating-heading {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #59655d;
-  font-size: 0.76rem;
-  font-weight: 700;
-}
-
-.rating-image {
-  width: 52px;
-  height: 52px;
-  flex: 0 0 auto;
-  border: 1px solid #e3e9e4;
-  border-radius: 13px;
-  background: white;
-  object-fit: cover;
-}
-
-.rating-content {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
-}
-
-.rating-heading b {
-  margin-left: auto;
-  color: #a0aaa3;
-  font-size: 0.75rem;
-}
-
-.rating-card strong {
-  margin-top: 7px;
-  font-size: 1.75rem;
-  line-height: 1;
-  letter-spacing: -0.055em;
-}
-
-.rating-meta {
-  margin-top: 7px;
-  overflow: hidden;
-  color: #87918a;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.66rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.activity-card,
+.updates-card,
 .library {
   border: 1px solid var(--line);
   border-radius: 22px;
@@ -337,7 +238,7 @@ footer {
   box-shadow: var(--shadow);
 }
 
-.activity-card {
+.updates-card {
   padding: 28px 30px 24px;
 }
 
@@ -360,101 +261,35 @@ footer {
   font-size: 0.78rem;
 }
 
-.calendar-scroll {
-  overflow-x: auto;
-  margin-top: 27px;
-  padding: 0 0 10px;
-  scrollbar-color: #c7d2c8 transparent;
-  scrollbar-width: thin;
-}
-
-.calendar-layout {
-  display: grid;
-  width: calc(var(--calendar-width) + 34px);
-  min-width: calc(var(--calendar-width) + 34px);
-  grid-template-columns: 25px var(--calendar-width);
-  grid-template-rows: 18px auto;
-  column-gap: 9px;
-  row-gap: 8px;
-}
-
-.calendar-months {
-  position: relative;
-  width: var(--calendar-width);
-  color: #77827b;
-  font-size: 0.67rem;
-}
-
-.calendar-months span {
-  position: absolute;
-  white-space: nowrap;
-}
-
-.weekday-labels {
-  display: grid;
-  grid-template-rows: repeat(7, var(--calendar-cell));
-  gap: var(--calendar-gap);
-  color: #8a948d;
-  font-size: 0.62rem;
-  line-height: var(--calendar-cell);
-}
-
-.calendar-grid {
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(7, var(--calendar-cell));
-  grid-auto-columns: var(--calendar-cell);
-  gap: var(--calendar-gap);
-}
-
-.calendar-cell,
-.legend i {
-  border: 1px solid #dfe6df;
-  border-radius: 3px;
-  background: #fff;
-}
-
-.calendar-cell {
-  width: var(--calendar-cell);
-  height: var(--calendar-cell);
-}
-
-.calendar-cell.outside {
-  opacity: 0.35;
-}
-
-.level-1 { background: #9be9a8 !important; border-color: #8dde9b !important; }
-.level-2 { background: #40c463 !important; border-color: #38b859 !important; }
-.level-3 { background: #30a14e !important; border-color: #2b9847 !important; }
-.level-4 { background: #216e39 !important; border-color: #1b6331 !important; }
-
-.calendar-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  margin-top: 11px;
-  padding-top: 17px;
-  border-top: 1px solid #edf1ed;
+.branch-label {
+  margin-left: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 2px 7px;
   color: var(--muted);
-  font-size: 0.72rem;
+  font: 0.875rem ui-monospace, SFMono-Regular, Menlo, monospace;
+  vertical-align: middle;
 }
 
-.calendar-footer p {
-  margin: 0;
+.commits-link { white-space: nowrap; text-underline-offset: 4px; }
+.commit-list { margin: 18px 0 0; padding: 0; list-style: none; }
+.commit-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 65px auto;
+  align-items: baseline;
+  gap: 16px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line);
 }
-
-.legend {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.commit-title { overflow-wrap: anywhere; text-decoration: none; }
+.commit-title:hover { color: var(--accent); text-decoration: underline; }
+.commit-sha, .commit-row time {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
 }
-
-.legend i {
-  display: inline-block;
-  width: 11px;
-  height: 11px;
-}
+.commit-row time { white-space: nowrap; }
+.updates-status { margin: 12px 0 0; color: var(--muted); font-size: 0.875rem; }
 
 .library {
   margin-top: 28px;
@@ -965,10 +800,6 @@ body.drawer-open {
 }
 
 @media (max-width: 900px) {
-  .profile-metrics {
-    grid-template-columns: repeat(2, minmax(0, 270px));
-  }
-
   .table-header,
   .problem-row {
     grid-template-columns: minmax(240px, 1.45fr) 100px 138px 72px 30px;
@@ -977,11 +808,6 @@ body.drawer-open {
 }
 
 @media (max-width: 680px) {
-  :root {
-    --calendar-cell: 11px;
-    --calendar-gap: 3px;
-  }
-
   .topbar,
   main,
   footer {
@@ -1019,13 +845,7 @@ body.drawer-open {
     font-size: 2.45rem;
   }
 
-  .profile-metrics {
-    grid-template-columns: 1fr;
-    gap: 9px;
-    margin-top: 21px;
-  }
-
-  .activity-card {
+  .updates-card {
     padding: 23px 20px 19px;
   }
 
@@ -1033,11 +853,9 @@ body.drawer-open {
     align-items: flex-start;
   }
 
-  .calendar-footer {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-  }
+  .commit-row { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; }
+  .commit-title { grid-column: 1 / -1; }
+  .commit-row time { grid-column: 2; }
 
   .library-heading {
     padding: 24px 20px 18px;

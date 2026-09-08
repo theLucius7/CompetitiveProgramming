@@ -82,66 +82,15 @@
           </div>
         </header>
 
-        <div class="profile-metrics">
-          <a
-            class="rating-card rating-atcoder"
-            href="https://atcoder.jp/users/Lucius7"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="查看 Lucius7 的 AtCoder 主页"
-          >
-            <img class="rating-image" src="./assets/atcoder.png" alt="" width="52" height="52" />
-            <span class="rating-content">
-              <span class="rating-heading">AtCoder <b aria-hidden="true">↗</b></span>
-              <strong id="atcoder-rating">—</strong>
-              <span id="atcoder-rating-meta" class="rating-meta">Rating</span>
-            </span>
-          </a>
-          <a
-            class="rating-card rating-codeforces"
-            href="https://codeforces.com/profile/Lucius7"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="查看 Lucius7 的 Codeforces 主页"
-          >
-            <img class="rating-image" src="./assets/codeforces.png" alt="" width="52" height="52" />
-            <span class="rating-content">
-              <span class="rating-heading">Codeforces <b aria-hidden="true">↗</b></span>
-              <strong id="codeforces-rating">—</strong>
-              <span id="codeforces-rating-meta" class="rating-meta">Rating</span>
-            </span>
-          </a>
-        </div>
       </section>
 
-      <section class="activity-card" aria-labelledby="activity-title">
+      <section class="updates-card" aria-labelledby="updates-title">
         <div class="section-heading">
-          <div>
-            <p class="section-kicker">COMMIT ACTIVITY</p>
-            <h2 id="activity-title">贡献日历</h2>
-          </div>
-          <p id="activity-range" class="section-meta">最近 53 周</p>
+          <h2 id="updates-title">仓库更新 <span class="branch-label">main</span></h2>
+          <a class="section-meta commits-link" href="https://github.com/theLucius7/CompetitiveProgramming/commits/main/" target="_blank" rel="noreferrer">全部提交 ↗</a>
         </div>
-
-        <div class="calendar-scroll" tabindex="0" aria-label="贡献日历，可横向滚动">
-          <div class="calendar-layout">
-            <div aria-hidden="true" class="calendar-spacer"></div>
-            <div id="calendar-months" class="calendar-months"></div>
-            <div class="weekday-labels" aria-hidden="true">
-              <span></span><span>一</span><span></span><span>三</span><span></span><span>五</span><span></span>
-            </div>
-            <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="每日提交次数"></div>
-          </div>
-        </div>
-
-        <div class="calendar-footer">
-          <p id="activity-summary">正在统计提交记录…</p>
-          <div class="legend" aria-label="颜色图例">
-            <span>少</span>
-            <i class="level-0"></i><i class="level-1"></i><i class="level-2"></i><i class="level-3"></i><i class="level-4"></i>
-            <span>多</span>
-          </div>
-        </div>
+        <ol id="commit-list" class="commit-list" aria-label="main 分支最近提交"></ol>
+        <p id="updates-status" class="updates-status" role="status">正在载入提交记录…</p>
       </section>
 
       <section id="problem-library" class="library" aria-labelledby="library-title">
@@ -187,9 +136,7 @@
       </section>
     </main>
 
-    <footer>
-      <p>Built from commits, one problem at a time.</p>
-    </footer>
+    <footer></footer>
 
     <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
     <aside id="code-drawer" class="code-drawer" aria-labelledby="drawer-title" aria-hidden="true">
@@ -217,7 +164,7 @@
     </aside>
 
     <noscript>
-      <div class="noscript">需要启用 JavaScript 才能载入题库与贡献记录。</div>
+      <div class="noscript">需要启用 JavaScript 才能载入题库与仓库更新。</div>
     </noscript>
   </body>
 </html>

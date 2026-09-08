@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,39 +16,14 @@ const repository = {
   branch: "main",
 };
 
-async function fetchRatings() {
-  const fallback = { atcoder: null, codeforces: null };
-  const [atcoderResult, codeforcesResult] = await Promise.allSettled([
-    fetch("https://kenkoooo.com/atcoder/proxy/users/Lucius7/history/json").then((response) => {
-      if (!response.ok) throw new Error(`AtCoder rating API ${response.status}`);
-      return response.json();
-    }),
-    fetch("https://codeforces.com/api/user.info?handles=Lucius7").then((response) => {
-      if (!response.ok) throw new Error(`Codeforces rating API ${response.status}`);
-      return response.json();
-    }),
-  ]);
-
-  if (atcoderResult.status === "fulfilled") {
-    const ratedContests = atcoderResult.value.filter((contest) => contest.IsRated && Number.isFinite(contest.NewRating));
-    const latest = ratedContests.at(-1);
-    fallback.atcoder = {
-      rating: latest?.NewRating ?? null,
-      maxRating: Math.max(0, ...ratedContests.map((contest) => contest.NewRating)),
-      contests: ratedContests.length,
-    };
+// Retained only for compatibility with the published v1 snapshot contract.
+function legacyRatings() {
+  try {
+    return JSON.parse(readFileSync(resolve(siteRoot, "data/site-data.json"), "utf8")).ratings
+      || { atcoder: null, codeforces: null };
+  } catch {
+    return { atcoder: null, codeforces: null };
   }
-  if (codeforcesResult.status === "fulfilled" && codeforcesResult.value.status === "OK") {
-    const user = codeforcesResult.value.result?.[0];
-    if (user) {
-      fallback.codeforces = {
-        rating: user.rating ?? null,
-        maxRating: user.maxRating ?? user.rating ?? null,
-        rank: user.rank ?? "unrated",
-      };
-    }
-  }
-  return fallback;
 }
 
 function git(args) {
@@ -56,7 +31,7 @@ function git(args) {
     cwd: repositoryRoot,
     encoding: "utf8",
     env: { ...process.env, TZ: "Asia/Taipei" },
-  }).trim();
+  });
 }
 
 function encodePath(path) {
@@ -187,7 +162,7 @@ function problemFromPath(path) {
   return item;
 }
 
-const paths = git(["ls-tree", "-r", "--name-only", sourceRef]).split("\n").filter(Boolean);
+const paths = git(["ls-tree", "-r", "-z", "--name-only", sourceRef]).split("\0").filter(Boolean);
 const latestCommitByPath = new Map();
 let currentCommitTime = null;
 for (const line of git([
@@ -222,9 +197,30 @@ const payload = {
   commitCount: Number(git(["rev-list", "--count", sourceRef])),
   contributions,
   problems,
-  ratings: await fetchRatings(),
+  ratings: legacyRatings(),
 };
 
 mkdirSync(resolve(siteRoot, "data"), { recursive: true });
 writeFileSync(resolve(siteRoot, "data/site-data.json"), `${JSON.stringify(payload)}\n`);
 console.log(`Generated ${problems.length} problems and ${Object.keys(contributions).length} active days from ${sourceRef}.`);
+
+const fields = git(["log", sourceRef, "-6", "-z", "--format=%H%x00%B%x00%cI"]).split("\0");
+if (fields.at(-1) === "") fields.pop();
+if (fields.length % 3) throw new Error("Unexpected Git commit output");
+const commits = [];
+for (let index = 0; index < fields.length; index += 3) {
+  const [sha, message, committedAt] = fields.slice(index, index + 3);
+  commits.push({
+    sha,
+    subject: message.split("\n")[0],
+    committedAt: new Date(committedAt).toISOString(),
+    url: `https://github.com/${repository.owner}/${repository.name}/commit/${sha}`,
+  });
+}
+writeFileSync(resolve(siteRoot, "data/recent-commits.json"), `${JSON.stringify({
+  repository,
+  generatedAt: payload.generatedAt,
+  sourceRef,
+  commits,
+})}\n`);
+console.log(`Generated ${commits.length} recent main commits.`);

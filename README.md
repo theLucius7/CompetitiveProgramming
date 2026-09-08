@@ -4,7 +4,11 @@ This orphan branch contains the static GitHub Pages site for
 [`theLucius7/CompetitiveProgramming`](https://github.com/theLucius7/CompetitiveProgramming).
 
 The page ships with a generated snapshot and refreshes the `main` branch tree and
-commit activity from GitHub's public API when opened.
+six latest main commits from GitHub's public API when opened. Each list loads
+independently with bounded request timeouts and a deployment snapshot fallback.
+The homepage no longer displays or fetches Rating and contribution-calendar data.
+Legacy statistics remain in `data/site-data.json` for API compatibility;
+`data/recent-commits.json` provides commit messages, timestamps and links.
 
 [Solution archive](https://thelucius7.github.io/CompetitiveProgramming/) ·
 [API documentation](https://thelucius7.github.io/CompetitiveProgramming/docs/)

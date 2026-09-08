@@ -7,7 +7,6 @@ const REPOSITORY = {
 const PAGE_SIZE = 60;
 const SUPPORTED_EXTENSIONS = new Set(["cpp", "cc", "cxx", "c", "py", "java", "rs", "go", "kt"]);
 const IGNORED_ROOTS = new Set(["Templates", ".cph", ".vscode", ".github", "assets", "data", "scripts"]);
-const MONTHS_ZH = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 const HIGHLIGHT_LANGUAGES = {
   "C++": "cpp",
   C: "c",
@@ -20,12 +19,7 @@ const HIGHLIGHT_LANGUAGES = {
 
 const state = {
   problems: [],
-  contributions: {},
-  commitCount: 0,
-  ratings: {
-    atcoder: null,
-    codeforces: null,
-  },
+  commits: [],
   submissionDates: new Map(),
   selectedPlatform: "全部",
   query: "",
@@ -40,14 +34,8 @@ const state = {
 const elements = {
   syncIndicator: document.querySelector("#sync-indicator"),
   syncStatus: document.querySelector("#sync-status"),
-  atcoderRating: document.querySelector("#atcoder-rating"),
-  atcoderRatingMeta: document.querySelector("#atcoder-rating-meta"),
-  codeforcesRating: document.querySelector("#codeforces-rating"),
-  codeforcesRatingMeta: document.querySelector("#codeforces-rating-meta"),
-  calendarMonths: document.querySelector("#calendar-months"),
-  calendarGrid: document.querySelector("#calendar-grid"),
-  activityRange: document.querySelector("#activity-range"),
-  activitySummary: document.querySelector("#activity-summary"),
+  commitList: document.querySelector("#commit-list"),
+  updatesStatus: document.querySelector("#updates-status"),
   resultCount: document.querySelector("#result-count"),
   search: document.querySelector("#problem-search"),
   sort: document.querySelector("#problem-sort"),
@@ -234,86 +222,28 @@ function formatSubmissionTime(value, long = false) {
   }).format(date);
 }
 
-function localDateKey(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function addDays(date, amount) {
-  const copy = new Date(date);
-  copy.setDate(copy.getDate() + amount);
-  return copy;
-}
-
-function levelForCount(count, max) {
-  if (!count) return 0;
-  if (max <= 4) return Math.min(count, 4);
-  const ratio = count / max;
-  if (ratio <= 0.25) return 1;
-  if (ratio <= 0.5) return 2;
-  if (ratio <= 0.75) return 3;
-  return 4;
-}
-
-function renderRatings() {
-  const atcoder = state.ratings.atcoder;
-  const codeforces = state.ratings.codeforces;
-  elements.atcoderRating.textContent = atcoder?.rating == null ? "—" : formatNumber(atcoder.rating);
-  elements.atcoderRatingMeta.textContent = atcoder
-    ? `MAX ${formatNumber(atcoder.maxRating)} · ${formatNumber(atcoder.contests)} CONTESTS`
-    : "RATING 暂不可用";
-  elements.codeforcesRating.textContent = codeforces?.rating == null ? "—" : formatNumber(codeforces.rating);
-  elements.codeforcesRatingMeta.textContent = codeforces
-    ? `${String(codeforces.rank || "UNRATED").toUpperCase()} · MAX ${formatNumber(codeforces.maxRating)}`
-    : "RATING 暂不可用";
-}
-
-function renderCalendar() {
-  const today = new Date();
-  today.setHours(12, 0, 0, 0);
-  const end = addDays(today, 6 - today.getDay());
-  const start = addDays(end, -(53 * 7 - 1));
-  const counts = Object.values(state.contributions);
-  const max = Math.max(1, ...counts);
+function renderCommits() {
   const fragment = document.createDocumentFragment();
-
-  elements.calendarGrid.replaceChildren();
-  elements.calendarMonths.replaceChildren();
-
-  let previousMonth = -1;
-  for (let index = 0; index < 53 * 7; index += 1) {
-    const date = addDays(start, index);
-    const dateKey = localDateKey(date);
-    const count = state.contributions[dateKey] || 0;
-    const cell = document.createElement("span");
-    const level = levelForCount(count, max);
-    cell.className = `calendar-cell level-${level}${date > today ? " outside" : ""}`;
-    cell.setAttribute("role", "gridcell");
-    cell.setAttribute("aria-label", `${dateKey}：${count} 次提交`);
-    cell.title = `${dateKey} · ${count} 次提交`;
-    fragment.append(cell);
-
-    if (date.getDay() === 0 && date.getMonth() !== previousMonth) {
-      const month = document.createElement("span");
-      month.textContent = MONTHS_ZH[date.getMonth()];
-      month.style.left = `${(Math.floor(index / 7) / 53) * 100}%`;
-      elements.calendarMonths.append(month);
-      previousMonth = date.getMonth();
-    }
+  for (const commit of state.commits) {
+    const row = document.createElement("li");
+    row.className = "commit-row";
+    const link = document.createElement("a");
+    link.className = "commit-title";
+    link.href = commit.url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = commit.subject || "无提交说明";
+    const sha = document.createElement("code");
+    sha.className = "commit-sha";
+    sha.textContent = commit.sha.slice(0, 7);
+    const time = document.createElement("time");
+    time.dateTime = commit.committedAt;
+    time.title = formatSubmissionTime(commit.committedAt, true);
+    time.textContent = formatSubmissionTime(commit.committedAt);
+    row.append(link, sha, time);
+    fragment.append(row);
   }
-  elements.calendarGrid.append(fragment);
-
-  const startKey = localDateKey(start);
-  const endKey = localDateKey(today);
-  const rangeCommitCount = Object.entries(state.contributions)
-    .filter(([date]) => date >= startKey && date <= endKey)
-    .reduce((sum, [, count]) => sum + count, 0);
-  const rangeActiveDays = Object.entries(state.contributions)
-    .filter(([date, count]) => date >= startKey && date <= endKey && count > 0).length;
-  elements.activityRange.textContent = `${startKey} — ${endKey}`;
-  elements.activitySummary.textContent = `最近一年 ${formatNumber(rangeCommitCount)} 次提交 · ${formatNumber(rangeActiveDays)} 个活跃日`;
+  elements.commitList.replaceChildren(fragment);
 }
 
 function platformCounts() {
@@ -422,8 +352,6 @@ function renderProblems() {
 }
 
 function updateAllViews() {
-  renderRatings();
-  renderCalendar();
   renderFilters();
   renderProblems();
 }
@@ -553,133 +481,94 @@ async function copyCurrentCode() {
   }
 }
 
-async function loadSnapshot() {
-  const response = await fetch("./data/site-data.json");
-  if (!response.ok) throw new Error("Snapshot unavailable");
-  const snapshot = await response.json();
-  state.problems = snapshot.problems.map((problem) => ({
-    ...problem,
-    searchText: `${problem.title} ${problem.platform} ${problem.path}`.toLocaleLowerCase(),
-  }));
-  state.submissionDates = new Map(state.problems.map((problem) => [problem.path, problem.submittedAt || null]));
-  state.contributions = snapshot.contributions;
-  state.commitCount = snapshot.commitCount;
-  state.ratings = snapshot.ratings || state.ratings;
-  updateAllViews();
-  const generatedDate = new Date(snapshot.generatedAt).toLocaleString("zh-CN", {
-    year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
-  });
-  setSyncStatus(`已载入部署快照 · ${generatedDate}`);
+async function fetchJson(url, options = {}) {
+  return JSON.parse(await fetchTextWithTimeout(url, { cache: "no-cache", ...options }));
 }
 
-async function fetchLiveProblems() {
-  const endpoint = `https://api.github.com/repos/${REPOSITORY.owner}/${REPOSITORY.name}/git/trees/${REPOSITORY.branch}?recursive=1`;
-  const response = await fetch(endpoint, { headers: { Accept: "application/vnd.github+json" } });
-  if (!response.ok) throw new Error(`Tree API ${response.status}`);
-  const payload = await response.json();
-  const problems = payload.tree
-    .filter((item) => item.type === "blob")
-    .map((item) => problemFromPath(item.path))
-    .filter(Boolean);
-  if (!problems.length) throw new Error("No problems in live tree");
-  return problems;
-}
+const githubHeaders = {
+  Accept: "application/vnd.github+json",
+  "X-GitHub-Api-Version": "2022-11-28",
+};
 
-async function fetchLiveActivity() {
-  const endpoint = `https://api.github.com/repos/${REPOSITORY.owner}/${REPOSITORY.name}/stats/commit_activity`;
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    const response = await fetch(endpoint, { headers: { Accept: "application/vnd.github+json" } });
-    if (response.status === 202) {
-      await new Promise((resolve) => window.setTimeout(resolve, 1300 * (attempt + 1)));
-      continue;
-    }
-    if (!response.ok) throw new Error(`Activity API ${response.status}`);
-    const weeks = await response.json();
-    const contributions = {};
-    let commitCount = 0;
-    for (const week of weeks) {
-      week.days.forEach((count, dayIndex) => {
-        const date = new Date((week.week + dayIndex * 86400) * 1000).toISOString().slice(0, 10);
-        contributions[date] = count;
-        commitCount += count;
-      });
-    }
-    return { contributions, commitCount };
+async function initProblems() {
+  let hasSnapshot = false;
+  try {
+    const snapshot = await fetchJson("./data/site-data.json");
+    if (!Array.isArray(snapshot.problems) || !snapshot.problems.length) throw new Error("Empty snapshot");
+    state.problems = snapshot.problems.map((problem) => ({
+      ...problem,
+      searchText: `${problem.title} ${problem.platform} ${problem.path}`.toLocaleLowerCase(),
+    }));
+    state.submissionDates = new Map(state.problems.map((problem) => [problem.path, problem.submittedAt || null]));
+    hasSnapshot = true;
+    updateAllViews();
+    elements.syncStatus.title = `文件提交时间来自 ${formatSubmissionTime(snapshot.generatedAt, true)} 生成的快照。`;
+  } catch {
+    // The live tree can still recover the problem list when the snapshot is unavailable.
   }
-  throw new Error("Activity is still being generated");
-}
 
-async function fetchLiveRatings() {
-  const atcoderUrl = "https://kenkoooo.com/atcoder/proxy/users/Lucius7/history/json";
-  const codeforcesUrl = "https://codeforces.com/api/user.info?handles=Lucius7";
-  const [atcoderResult, codeforcesResult] = await Promise.allSettled([
-    fetch(atcoderUrl).then((response) => {
-      if (!response.ok) throw new Error(`AtCoder rating API ${response.status}`);
-      return response.json();
-    }),
-    fetch(codeforcesUrl).then((response) => {
-      if (!response.ok) throw new Error(`Codeforces rating API ${response.status}`);
-      return response.json();
-    }),
-  ]);
-
-  const ratings = {};
-  if (atcoderResult.status === "fulfilled" && atcoderResult.value.length) {
-    const ratedContests = atcoderResult.value.filter((contest) => contest.IsRated && Number.isFinite(contest.NewRating));
-    const latest = ratedContests.at(-1);
-    ratings.atcoder = {
-      rating: latest?.NewRating ?? null,
-      maxRating: Math.max(0, ...ratedContests.map((contest) => contest.NewRating)),
-      contests: ratedContests.length,
-    };
-  }
-  if (codeforcesResult.status === "fulfilled" && codeforcesResult.value.status === "OK") {
-    const user = codeforcesResult.value.result?.[0];
-    if (user) {
-      ratings.codeforces = {
-        rating: user.rating ?? null,
-        maxRating: user.maxRating ?? user.rating ?? null,
-        rank: user.rank ?? "unrated",
-      };
-    }
-  }
-  if (!ratings.atcoder && !ratings.codeforces) throw new Error("Rating APIs unavailable");
-  return ratings;
-}
-
-async function syncLiveData() {
-  setSyncStatus("正在同步 main 分支…", "syncing");
-  const [problemResult, activityResult, ratingResult] = await Promise.allSettled([
-    fetchLiveProblems(),
-    fetchLiveActivity(),
-    fetchLiveRatings(),
-  ]);
-
-  let updated = false;
-  if (problemResult.status === "fulfilled") {
-    state.problems = problemResult.value;
-    if (state.selectedPlatform !== "全部" && !state.problems.some((problem) => problem.platform === state.selectedPlatform)) {
+  setSyncStatus("正在检查 main 代码列表…", "syncing");
+  try {
+    const endpoint = `https://api.github.com/repos/${REPOSITORY.owner}/${REPOSITORY.name}/git/trees/${REPOSITORY.branch}?recursive=1`;
+    const payload = await fetchJson(endpoint, { headers: githubHeaders });
+    if (payload.truncated || !Array.isArray(payload.tree)) throw new Error("Incomplete tree");
+    const problems = payload.tree
+      .filter((item) => item.type === "blob")
+      .map((item) => problemFromPath(item.path))
+      .filter(Boolean);
+    if (!problems.length) throw new Error("No problems in live tree");
+    state.problems = problems;
+    if (state.selectedPlatform !== "全部" && !problems.some((problem) => problem.platform === state.selectedPlatform)) {
       state.selectedPlatform = "全部";
     }
-    updated = true;
+    updateAllViews();
+    setSyncStatus("main · 代码列表已检查", "live");
+    if (!hasSnapshot) elements.syncStatus.title = "文件提交时间暂不可用；GitHub 目录接口不包含逐文件提交时间。";
+  } catch {
+    setSyncStatus(hasSnapshot ? "main · 部署快照（在线检查暂不可用）" : "代码列表载入失败，请刷新重试");
+    if (!hasSnapshot) elements.resultCount.textContent = "暂不可用";
   }
-  if (activityResult.status === "fulfilled") {
-    state.contributions = activityResult.value.contributions;
-    state.commitCount = activityResult.value.commitCount;
-    updated = true;
-  }
-  if (ratingResult.status === "fulfilled") {
-    state.ratings = { ...state.ratings, ...ratingResult.value };
-    updated = true;
-  }
-  updateAllViews();
+}
 
-  if (problemResult.status === "fulfilled" && activityResult.status === "fulfilled" && ratingResult.status === "fulfilled") {
-    setSyncStatus("已与 main 分支实时同步", "live");
-  } else if (updated) {
-    setSyncStatus("已同步仓库；部分统计使用部署快照", "live");
-  } else {
-    setSyncStatus("实时同步暂不可用，当前显示部署快照");
+function normalizeCommits(items, fromGithub = false) {
+  if (!Array.isArray(items)) throw new Error("Invalid commits response");
+  return items.slice(0, 6).map((item) => {
+    const committedAt = fromGithub ? item.commit?.committer?.date : item.committedAt;
+    const subject = fromGithub ? item.commit?.message?.split("\n")[0] : item.subject;
+    if (!/^[0-9a-f]{40}$/.test(item.sha) || typeof subject !== "string" || !committedAt || !Number.isFinite(Date.parse(committedAt))) {
+      throw new Error("Invalid commit");
+    }
+    return {
+      sha: item.sha,
+      subject,
+      committedAt: new Date(committedAt).toISOString(),
+      url: `https://github.com/${REPOSITORY.owner}/${REPOSITORY.name}/commit/${item.sha}`,
+    };
+  });
+}
+
+async function initUpdates() {
+  let hasSnapshot = false;
+  try {
+    const snapshot = await fetchJson("./data/recent-commits.json");
+    state.commits = normalizeCommits(snapshot.commits);
+    renderCommits();
+    hasSnapshot = true;
+    elements.updatesStatus.textContent = "部署快照 · 正在检查最新提交…";
+  } catch {
+    // Repository updates load independently of the solution list.
+  }
+  try {
+    const endpoint = `https://api.github.com/repos/${REPOSITORY.owner}/${REPOSITORY.name}/commits?sha=${REPOSITORY.branch}&per_page=6`;
+    state.commits = normalizeCommits(await fetchJson(endpoint, { headers: githubHeaders }), true);
+    renderCommits();
+    elements.updatesStatus.textContent = state.commits.length
+      ? `最近 ${state.commits.length} 次提交 · 已检查`
+      : "main 暂无提交";
+  } catch {
+    elements.updatesStatus.textContent = hasSnapshot
+      ? "部署快照 · 最新提交检查暂不可用"
+      : "提交记录暂不可用，可通过“全部提交”查看";
   }
 }
 
@@ -737,11 +626,4 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-(async function init() {
-  try {
-    await loadSnapshot();
-  } catch {
-    setSyncStatus("部署快照载入失败，正在尝试实时同步…", "syncing");
-  }
-  await syncLiveData();
-})();
+Promise.allSettled([initProblems(), initUpdates()]);
