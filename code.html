@@ -5,30 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="theLucius7 · 算法竞赛源码阅读" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1512" media="(prefers-color-scheme: dark)" />
     <title>源码 · theLucius7</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./vendor/github-light.css" />
     <link rel="stylesheet" href="./vendor/github-dark.min.css" media="(prefers-color-scheme: dark)" />
-    <link rel="stylesheet" href="./reader.css?v=20260908-reader" />
-    <script src="./archive.js?v=20260908-reader" defer></script>
+    <link rel="stylesheet" href="./theme.css?v=20260908-unified" />
+    <link rel="stylesheet" href="./reader.css?v=20260908-unified" />
+    <script src="./archive.js?v=20260908-unified" defer></script>
     <script src="./vendor/highlight.min.js" defer></script>
-    <script src="./reader.js?v=20260908-reader" defer></script>
+    <script src="./reader.js?v=20260908-unified" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#code-scroller">跳到代码</a>
     <header class="reader-header">
-      <div class="reader-topline">
-        <a class="reader-back" href="./#problem-library">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12" /></svg>
-          题库
+      <div class="reader-topline site-topbar">
+        <a class="brand" href="./#problem-library" aria-label="返回题库" title="返回题库">
+          <span class="brand-mark" aria-hidden="true">L7</span>
+          <span class="brand-name">Competitive Programming</span>
         </a>
         <nav class="reader-actions" aria-label="代码操作">
-          <a id="reader-problem-link" class="reader-button" target="_blank" rel="noopener noreferrer" hidden>原题 ↗</a>
-          <a id="reader-github-link" class="reader-button" target="_blank" rel="noopener noreferrer" hidden>GitHub ↗</a>
-          <button id="copy-code" class="reader-button primary" type="button" disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></svg>
+          <a id="reader-problem-link" class="ui-button" target="_blank" rel="noopener noreferrer" hidden>原题 ↗</a>
+          <a id="reader-github-link" class="ui-button" target="_blank" rel="noopener noreferrer" hidden>GitHub ↗</a>
+          <button id="copy-code" class="ui-button ui-button--primary" type="button" disabled>
+            <svg class="stroke-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></svg>
             <span id="copy-label">复制代码</span>
           </button>
         </nav>
@@ -44,7 +45,7 @@
       <div id="reader-state" class="reader-state" role="status" aria-busy="true">
         <span class="state-mark" aria-hidden="true">{ }</span>
         <p id="reader-message">正在载入代码…</p>
-        <button id="retry-code" class="reader-button" type="button" hidden>重新载入</button>
+        <button id="retry-code" class="ui-button" type="button" hidden>重新载入</button>
       </div>
       <div id="code-scroller" class="code-scroller" tabindex="0" role="region" aria-label="源码，可横向和纵向滚动" hidden>
         <div class="code-grid">

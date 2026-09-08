@@ -65,7 +65,7 @@ function renderFilters() {
     const button = document.createElement("button");
     const number = document.createElement("span");
     button.type = "button";
-    button.className = `filter-chip${state.selectedPlatform === name ? " active" : ""}`;
+    button.className = "ui-button filter-chip";
     button.textContent = name;
     button.dataset.platform = name;
     button.setAttribute("aria-pressed", String(state.selectedPlatform === name));

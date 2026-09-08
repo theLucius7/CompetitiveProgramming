@@ -8,30 +8,31 @@
       content="theLucius7 的算法竞赛题解归档：浏览各大 Online Judge 题目、源码与 Git 提交记录。"
     />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#f4f7f2" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0d1410" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1512" media="(prefers-color-scheme: dark)" />
     <title>Competitive Programming · theLucius7</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260908-reader" />
-    <script src="./archive.js?v=20260908-reader" defer></script>
-    <script src="./app.js?v=20260908-reader" defer></script>
+    <link rel="stylesheet" href="./theme.css?v=20260908-unified" />
+    <link rel="stylesheet" href="./styles.css?v=20260908-unified" />
+    <script src="./archive.js?v=20260908-unified" defer></script>
+    <script src="./app.js?v=20260908-unified" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#problem-library">跳到题库</a>
 
-    <header class="topbar">
+    <header class="topbar site-topbar">
       <a class="brand" href="./" aria-label="Competitive Programming 首页">
         <span class="brand-mark" aria-hidden="true">L7</span>
-        <span>Competitive Programming</span>
+        <span class="brand-name">Competitive Programming</span>
       </a>
       <nav class="social-links" aria-label="文档与个人链接">
-        <a class="social-link" href="./docs/" aria-label="API 文档" title="API 文档">
+        <a class="social-link ui-button ui-icon-button" href="./docs/" aria-label="API 文档" title="API 文档">
           <svg class="stroke-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 6v15M12 6C9 3.5 5.5 3 2 4v15c3.5-1 7-.5 10 2M12 6c3-2.5 6.5-3 10-2v15c-3.5-1-7-.5-10 2" />
           </svg>
         </a>
         <a
-          class="social-link"
+          class="social-link ui-button ui-icon-button"
           href="https://x.com/theLucius7"
           target="_blank"
           rel="noreferrer"
@@ -43,7 +44,7 @@
           </svg>
         </a>
         <a
-          class="social-link"
+          class="social-link ui-button ui-icon-button"
           href="https://blog.lucius7.cn"
           target="_blank"
           rel="noreferrer"
@@ -56,7 +57,7 @@
           </svg>
         </a>
         <a
-          class="social-link"
+          class="social-link ui-button ui-icon-button"
           href="https://github.com/theLucius7"
           target="_blank"
           rel="noreferrer"
@@ -70,7 +71,7 @@
       </nav>
     </header>
 
-    <main>
+    <main class="archive-main">
       <section class="overview" aria-labelledby="page-title">
         <header class="profile-header">
           <div class="profile-identity">
@@ -85,7 +86,7 @@
 
       </section>
 
-      <section class="updates-card" aria-labelledby="updates-title">
+      <section class="updates-card surface" aria-labelledby="updates-title">
         <div class="section-heading">
           <h2 id="updates-title">仓库更新 <span class="branch-label">main</span></h2>
           <a class="section-meta commits-link" href="https://github.com/theLucius7/CompetitiveProgramming/commits/main/" target="_blank" rel="noreferrer">全部提交 ↗</a>
@@ -94,7 +95,7 @@
         <p id="updates-status" class="updates-status" role="status">正在载入提交记录…</p>
       </section>
 
-      <section id="problem-library" class="library" aria-labelledby="library-title">
+      <section id="problem-library" class="library surface" aria-labelledby="library-title">
         <div class="section-heading library-heading">
           <div>
             <p class="section-kicker">SOLUTION LIBRARY</p>
@@ -133,11 +134,9 @@
             <p>换一个题号、平台名称或文件路径试试。</p>
           </div>
         </div>
-        <button id="load-more" class="load-more" type="button" hidden>显示更多</button>
+        <button id="load-more" class="load-more ui-button" type="button" hidden>显示更多</button>
       </section>
     </main>
-
-    <footer></footer>
 
     <noscript>
       <div class="noscript">需要启用 JavaScript 才能载入题库与仓库更新。</div>

@@ -16,6 +16,12 @@ theme and loads source independently from optional submission metadata. It
 supports syntax highlighting, line numbers, source links and copying the exact
 original text. Run `node scripts/check-reader.mjs` for non-browser regressions.
 
+Both pages share `theme.css`: palette, system appearance, type, spacing, brand,
+buttons and keyboard focus. `styles.css` and `reader.css` contain layout rules,
+not separate themes. Run `node scripts/check-theme.mjs` to prevent style drift
+and check light/dark text contrast. The separately published docs theme maps
+these colors and fonts to VitePress tokens without importing the root CSS reset.
+
 [Solution archive](https://thelucius7.github.io/CompetitiveProgramming/) ·
 [API documentation](https://thelucius7.github.io/CompetitiveProgramming/docs/)
 
