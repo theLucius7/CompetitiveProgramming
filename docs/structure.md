@@ -48,6 +48,6 @@
 | [`.github/workflows/docs.yml`](../.github/workflows/docs.yml) | 文档检查、构建与自动部署；不依赖合入 main |
 | [`.github/workflows/archive.yml`](../.github/workflows/archive.yml) | 每次 PR 和推送的离线归档测试与来源完整性审计 |
 
-源分支还跟踪了少量历史 `.DS_Store`，详见清单。忽略规则不会自动移除已跟踪文件；后续清理应使用独立变更，不计入算法文件。
+历史跟踪的 `.DS_Store` 已通过独立清理移除；忽略规则继续排除本机缓存和编译产物。新增非源码文件时，先核对是否应纳入版本管理。
 
 网站文件仅在 `gh-pages`，见[网站维护文档](pages.md)。网站收录规则与这里的全仓统计不同。

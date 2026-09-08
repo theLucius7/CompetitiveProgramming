@@ -1,10 +1,10 @@
 # 源码目录清单
 
-<!-- source-commit: 455d1e745bb2bf2fa39569b71b40946767fc228e -->
+<!-- source-commit: 615fbe91bf3f90cb35e0c07c9db0b9c762768f60 -->
 
 > 自动生成：`python3 scripts/docs.py generate --ref origin/main`。不要手工修改本文件。
 
-来源：[`455d1e7`](https://github.com/xw7qwq/codeflare/commit/455d1e745bb2bf2fa39569b71b40946767fc228e)；提交时间：`2026-09-08T23:40:27+08:00`。
+来源：[`615fbe9`](https://github.com/xw7qwq/codeflare/commit/615fbe91bf3f90cb35e0c07c9db0b9c762768f60)；提交时间：`2026-09-08T23:45:30+08:00`。
 
 这里统计该提交的 Git 跟踪文件，支持 C/C++、Python、Java、Rust、Go、Kotlin。隐藏工具目录、docs/scripts/vendor/assets/data 不计入算法源码；Templates 和根目录单列。
 源码文件数不等于独立题目数、AC 数或网站收录数；没有自动推断题目完成状态。
@@ -13,7 +13,7 @@
 
 | 范围 | 数量 |
 | --- | ---: |
-| 源提交的全部跟踪文件 | 1,820 |
+| 源提交的全部跟踪文件 | 1,817 |
 | 算法相关源码文件 | 1,797 |
 | 平台目录中的源码 | 1,764 |
 | 模板源码 | 30 |
@@ -90,7 +90,6 @@
 
 | 文件 |
 | --- |
-| [.DS_Store](../.DS_Store) |
 | [.cph/scripts/com.l7.competitive-companion-relay.plist](../.cph/scripts/com.l7.competitive-companion-relay.plist) |
 | [.cph/scripts/competitive-companion-relay.mjs](../.cph/scripts/competitive-companion-relay.mjs) |
 | [.github/workflows/archive.yml](../.github/workflows/archive.yml) |
@@ -98,9 +97,7 @@
 | [.vscode/settings.json](../.vscode/settings.json) |
 | [.vscode/tasks.json](../.vscode/tasks.json) |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) |
-| [ProjectEuler/.DS_Store](../ProjectEuler/.DS_Store) |
 | [README.md](../README.md) |
-| [Templates/.DS_Store](../Templates/.DS_Store) |
 | [Templates/templates all/whoami.md](../Templates/templates%20all/whoami.md) |
 | [archive/contest-mappings.json](../archive/contest-mappings.json) |
 | [archive/submissions.json](../archive/submissions.json) |
