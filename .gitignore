@@ -9,6 +9,9 @@
 !*.py
 !*.md
 
+# Documentation quality workflow (the rest of the allowlist remains narrow).
+!.github/workflows/docs.yml
+
 # VS Code workspace configuration.
 !.vscode/
 !.vscode/**
