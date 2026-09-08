@@ -39,9 +39,10 @@ for (const document of documents) {
   }
 }
 const models = await readFile(path.join(output, 'api/models.html'), 'utf8');
-for (const name of ['SiteSnapshot', 'Repository', 'Problem', 'Ratings', 'AtCoderRating', 'CodeforcesRating']) {
+for (const name of ['SiteSnapshot', 'Repository', 'Problem', 'Ratings', 'AtCoderRating', 'CodeforcesRating', 'RecentCommitsSnapshot', 'Commit']) {
   assert(models.includes(`id="${name.toLowerCase()}"`), `missing generated model: ${name}`);
 }
 await stat(path.join(output, 'api/openapi.json'));
 await stat(path.join(output, 'api/site-data.schema.json'));
+await stat(path.join(output, 'api/recent-commits.schema.json'));
 console.log(`Build OK: ${documents.length} HTML pages, ${checked.size} local targets, all schema model tables.`);

@@ -22,6 +22,7 @@ export default defineConfig({
       { text: 'API REFERENCE', items: [
         { text: '接入与契约', link: '/api/' },
         { text: 'GET 数据快照', link: '/api/snapshot' },
+        { text: 'GET 最近提交', link: '/api/updates' },
         { text: '数据模型', link: '/api/models' },
         { text: '源码与外部接口', link: '/api/dependencies' },
         { text: '错误与兼容规范', link: '/api/standards' },

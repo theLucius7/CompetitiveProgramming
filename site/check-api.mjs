@@ -64,3 +64,41 @@ nullable.ratings = { atcoder: null, codeforces: null };
 if (nullable.problems.length) nullable.problems[0].submittedAt = null;
 check(nullable);
 console.log(`API contract OK: OpenAPI 3.1, JSON Schema 2020-12, ${snapshot.problems.length} records, ${invalid.length} invalid-data cases rejected.`);
+
+const recentSchema = JSON.parse(await readFile(path.join(siteRoot, 'public/api/recent-commits.schema.json'), 'utf8'));
+const validateRecent = ajv.compile(recentSchema);
+const recentSource = process.argv[3];
+const recent = JSON.parse(recentSource
+  ? await readFile(path.resolve(recentSource), 'utf8')
+  : execFileSync('git', ['show', 'origin/gh-pages:data/recent-commits.json'], { cwd: siteRoot, encoding: 'utf8' }));
+
+function checkRecent(value) {
+  assert(validateRecent(value), JSON.stringify(validateRecent.errors, null, 2));
+  const seen = new Set();
+  for (const commit of value.commits) {
+    assert(!seen.has(commit.sha), 'duplicate commit SHA');
+    seen.add(commit.sha);
+    assert.equal(commit.url, `https://github.com/${value.repository.owner}/${value.repository.name}/commit/${commit.sha}`, 'commit URL mismatch');
+  }
+}
+checkRecent(recent);
+const badRecent = [
+  ['missing field', (s) => { delete s.generatedAt; }],
+  ['unknown field', (s) => { s.total = 6; }],
+];
+if (recent.commits.length) badRecent.push(
+  ['more than six commits', (s) => { while (s.commits.length <= 6) s.commits.push(structuredClone(recent.commits[0])); }],
+  ['duplicate SHA', (s) => { s.commits = [s.commits[0], structuredClone(s.commits[0])]; }],
+  ['short SHA', (s) => { s.commits[0].sha = 'abc1234'; }],
+  ['invalid date', (s) => { s.commits[0].committedAt = 'yesterday'; }],
+  ['wrong commit URL', (s) => { s.commits[0].url = 'https://github.com/theLucius7/CompetitiveProgramming/commit/' + (s.commits[0].sha[0] === '0' ? '1' : '0').repeat(40); }],
+  ['unknown commit field', (s) => { s.commits[0].rating = 1; }],
+  ['multiline subject', (s) => { s.commits[0].subject = 'one\ntwo'; }],
+);
+for (const [name, mutate] of badRecent) {
+  const broken = structuredClone(recent);
+  mutate(broken);
+  assert.throws(() => checkRecent(broken), name);
+}
+checkRecent({ ...recent, commits: [] });
+console.log(`Recent commits contract OK: ${recent.commits.length} commits, ${badRecent.length} invalid-data cases rejected.`);

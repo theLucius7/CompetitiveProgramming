@@ -22,7 +22,7 @@ REQUIRED = (
     "docs/catalog.md", "docs/quick-start.md", "docs/conventions.md",
     "docs/tooling.md", "docs/maintenance.md", "docs/pages.md",
     "docs/index.md", "docs/api/index.md", "docs/api/snapshot.md",
-    "docs/api/models.md", "docs/api/dependencies.md", "docs/api/standards.md",
+    "docs/api/updates.md", "docs/api/models.md", "docs/api/dependencies.md", "docs/api/standards.md",
 )
 LANGUAGES = {
     ".cpp": "C++", ".cc": "C++", ".cxx": "C++", ".c": "C",

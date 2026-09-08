@@ -99,7 +99,7 @@ for (let attempt = 0; attempt < 18; attempt += 1) {
   await delay(5000);
 }
 assert(fresh, 'published documentation has not reached the public URL');
-for (const route of ['', 'api/', 'api/models.html', 'api/openapi.json', 'api/site-data.schema.json']) {
+for (const route of ['', 'api/', 'api/models.html', 'api/updates.html', 'api/openapi.json', 'api/site-data.schema.json', 'api/recent-commits.schema.json']) {
   const response = await fetch(`${base}${route}?ref=${deployed}`, { signal: AbortSignal.timeout(15000) });
   assert(response.ok, `deployed route failed: ${route} HTTP ${response.status}`);
 }

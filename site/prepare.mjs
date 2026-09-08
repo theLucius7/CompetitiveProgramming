@@ -32,10 +32,15 @@ function describeType(definition) {
   return Array.isArray(definition.type) ? definition.type.join(' / ') : definition.type;
 }
 
-function modelTables() {
-  return Object.entries({ SiteSnapshot: schema, ...schema.$defs }).map(([name, model]) => {
+const recentSchema = JSON.parse(await readFile(path.join(siteRoot, 'public/api/recent-commits.schema.json'), 'utf8'));
+const api = JSON.parse(await readFile(path.join(siteRoot, 'public/api/openapi.json'), 'utf8'));
+
+function modelTables(models = { SiteSnapshot: schema, ...schema.$defs }) {
+  return Object.entries(models).map(([name, model]) => {
     const rows = Object.entries(model.properties).map(([field, definition]) => {
       const limits = [definition.format, definition.minimum !== undefined ? `最小值 ${definition.minimum}` : null,
+        definition.maxItems !== undefined ? `最多 ${definition.maxItems} 项` : null,
+        definition.pattern ? `格式 ${definition.pattern}` : null,
         definition.const !== undefined ? `固定值 ${definition.const}` : null,
         definition.enum ? `枚举：${definition.enum.join('、')}` : null].filter(Boolean).join('；');
       const description = [definition.description || '', limits].filter(Boolean).join(' ');
@@ -79,7 +84,8 @@ function rewrite(markdown, source, route) {
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 for (const [source, route] of routes) {
-  const content = (await readFile(path.join(repoRoot, source), 'utf8')).replace('<!-- API_MODELS -->', modelTables());
+  const content = (await readFile(path.join(repoRoot, source), 'utf8')).replace('<!-- API_MODELS -->', modelTables())
+    .replace('<!-- UPDATES_MODELS -->', modelTables({ RecentCommitsSnapshot: recentSchema, Commit: recentSchema.$defs.Commit }));
   const target = path.join(output, route);
   await mkdir(path.dirname(target), { recursive: true });
   await writeFile(target, `---\neditLink: true\n---\n\n${rewrite(content, source, route)}\n`);
@@ -89,7 +95,7 @@ await writeFile(path.join(output, 'public/build-info.json'), JSON.stringify({
   managedBy: 'competitive-programming-docs',
   sourceBranch,
   sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).trim(),
-  contractVersion: '1.0.0',
+  contractVersion: api.info.version,
 }, null, 2) + '\n');
 await writeFile(path.join(output, 'routes.json'), JSON.stringify(Object.fromEntries([...routes].map(([source, route]) => [route, source]))));
 console.log(`Prepared ${routes.size} documentation pages.`);

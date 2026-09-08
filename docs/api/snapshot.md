@@ -71,3 +71,5 @@ const atcoder = snapshot.problems
 遵循响应实际提供的 `Cache-Control`、`ETag` 等托管平台头部，不假设固定刷新间隔。带条件请求收到 `304` 时复用已有缓存；没有缓存时重新取完整响应。
 
 `generatedAt` 描述快照构建时间，`submittedAt` 描述该条目的 Git 时间。即使源码已经在 `main` 更新，快照仍需重新生成和发布；字段通过校验也不代表题库收录完整。
+
+`commitCount`、`contributions`、`ratings` 作为兼容字段保留，当前首页不再展示。Rating 不再主动刷新，其更新时间不能从 `generatedAt` 推断。仓库最近提交应读取[独立接口](updates.md)。

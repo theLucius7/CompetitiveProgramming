@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thelucius7.github.io/CompetitiveProgramming/docs/api/recent-commits.schema.json",
+  "title": "RecentCommitsSnapshot",
+  "description": "最近提交快照，API 集合 1.1.0。保留 Git / GitHub 返回顺序。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "repository",
+    "generatedAt",
+    "sourceRef",
+    "commits"
+  ],
+  "properties": {
+    "repository": {
+      "$ref": "#/$defs/Repository"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "快照生成时间，不是仓库最近提交时间。"
+    },
+    "sourceRef": {
+      "type": "string",
+      "minLength": 1,
+      "description": "生成时读取的 Git ref；生产快照使用 main 或对应远端 ref。"
+    },
+    "commits": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/Commit"
+      },
+      "description": "最多六条提交；保留 Git / GitHub 返回顺序，包含合并提交。"
+    }
+  },
+  "$defs": {
+    "Repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "name",
+        "branch"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "const": "theLucius7",
+          "description": "仓库所有者。"
+        },
+        "name": {
+          "type": "string",
+          "const": "CompetitiveProgramming",
+          "description": "仓库名。"
+        },
+        "branch": {
+          "type": "string",
+          "const": "main",
+          "description": "源码链接和在线树使用的分支。"
+        }
+      }
+    },
+    "Commit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha",
+        "subject",
+        "committedAt",
+        "url"
+      ],
+      "properties": {
+        "sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "完整的小写 Git SHA；列表中必须唯一。"
+        },
+        "subject": {
+          "type": "string",
+          "pattern": "^[^\\r\\n]*$",
+          "description": "原始 commit message 第一行，允许为空；按纯文本展示。"
+        },
+        "committedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "提交者时间（%cI / commit.committer.date），不是作者日期或 OJ 提交时间。"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://github\\.com/theLucius7/CompetitiveProgramming/commit/[0-9a-f]{40}$",
+          "description": "该仓库对应完整 SHA 的 GitHub 提交详情地址。"
+        }
+      }
+    }
+  }
+}

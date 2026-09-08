@@ -1,6 +1,6 @@
 # 源码与外部接口
 
-这些接口属于 GitHub、Codeforces 或第三方服务，不属于本站 API。访问限制和返回约定以对应服务为准。
+当前在线接口属于 GitHub，不属于本站 API。访问限制和返回约定以对应服务为准。
 
 ## 源码文本
 
@@ -22,11 +22,13 @@ curl --fail --location \
 | 来源 | 请求 | 用途 |
 | --- | --- | --- |
 | GitHub 文件树 | `GET https://api.github.com/repos/theLucius7/CompetitiveProgramming/git/trees/main?recursive=1` | 在线题目路径；大仓库需检查 `truncated` |
-| GitHub 提交活动 | `GET https://api.github.com/repos/theLucius7/CompetitiveProgramming/stats/commit_activity` | 仓库统计日历；可能先返回 `202` |
-| AtCoder 历史代理 | `GET https://kenkoooo.com/atcoder/proxy/users/Lucius7/history/json` | 第三方代理的 rated 历史；不是本站或 AtCoder 官方 API |
-| Codeforces 用户 | `GET https://codeforces.com/api/user.info?handles=Lucius7` | 要求业务状态 `OK`；读取 `rating`、`maxRating`、`rank` |
+| GitHub 最近提交 | `GET https://api.github.com/repos/theLucius7/CompetitiveProgramming/commits?sha=main&per_page=6` | main 最近六次提交；读取 `sha`、`commit.message` 首行、`commit.committer.date` |
 
-AtCoder 使用有效 rated 记录中的最新值、最高值和场次数；Codeforces 使用用户对象。整个平台不可用与用户没有 Rating 记录不是同一状态，见[数据模型](models.md)。
+[GitHub 官方提交接口](https://docs.github.com/en/rest/commits/commits#list-commits)。两个列表独立加载，快照和在线 JSON 请求均设置 6 秒超时并重新验证缓存；题库拒绝 `truncated: true` 的文件树，防止部分数据覆盖完整快照。
+
+## 历史兼容字段
+
+`site-data.json` 仍包含 `commitCount`、`contributions` 和 `ratings`，避免破坏旧契约。首页不再渲染或请求提交日历、AtCoder、Codeforces Rating。生成器仅保留已有 Rating，未知时为 `null`，不再调用外部 Rating 服务；`generatedAt` 不代表这些历史 Rating 的更新时间。
 
 ## 请求限制
 

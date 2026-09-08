@@ -9,14 +9,15 @@ https://thelucius7.github.io/CompetitiveProgramming
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
 | `GET` | `/data/site-data.json` | 完整题库部署快照；[请求与响应](snapshot.md) |
+| `GET` | `/data/recent-commits.json` | main 最近六次提交；[请求与响应](updates.md) |
 
 接口公开只读，不需要登录或密钥。快照是静态文件，没有服务端分页、搜索参数、写入接口或统一错误 JSON；题库页面中的检索、排序和每次显示 60 条均在浏览器执行。
 
 ## 机器可读规范
 
-[OpenAPI 3.1 规范](../../site/public/api/openapi.json) · [JSON Schema 2020-12](../../site/public/api/site-data.schema.json)
+[OpenAPI 3.1 规范](../../site/public/api/openapi.json) · [题库 Schema](../../site/public/api/site-data.schema.json) · [最近提交 Schema](../../site/public/api/recent-commits.schema.json)
 
-契约版本为 `1.0.0`，记录于上述规范文件。响应本身当前没有 `schemaVersion` 字段，也没有 `/v1` 路径。机器可读规范描述现有数据，而非承诺不存在的后端功能。
+API 集合契约版本为 `1.1.0`（新增独立最近提交端点，旧题库结构保持 1.0.0 兼容），记录于上述规范文件。响应本身当前没有 `schemaVersion` 字段，也没有 `/v1` 路径。机器可读规范描述现有数据，而非承诺不存在的后端功能。
 
 所有模型明确区分必填和可空；对象不允许未声明字段，除贡献日历的动态日期键。发布文档前，自动检查会用该契约验证真实部署快照，防止文档与数据结构分离。
 
@@ -43,4 +44,6 @@ JavaScript 示例需要支持 `fetch` 和 `AbortSignal.timeout` 的运行时。�
 
 `generatedAt` 是 JSON 的生成时刻，不代表每道题最近修改时刻。`submittedAt` 是生成时从 Git 历史取得的时间，可能为 `null`，也不是 OJ 评测时间。源码正文需通过源码地址单独加载，不包含在快照中。
 
-当前快照存在部分非 ASCII 路径漏收，详情和影响见[题库维护文档](../pages.md)。接入者应区分快照、外部实时接口与 OJ 原站的更新时机。
+旧版非 ASCII 路径漏收已修复，历史说明见[题库维护文档](../pages.md)。
+
+题库快照中的 `commitCount`、`contributions`、`ratings` 为兼容旧接入而保留；首页不再展示这些统计。Rating 不再主动刷新，`generatedAt` 不能用于判断它的新鲜度。接入者应区分快照、外部实时接口与 OJ 原站的更新时机。
