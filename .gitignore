@@ -9,6 +9,9 @@
 !*.py
 !*.md
 
+# Verified source-import provenance (temporary plans remain ignored).
+!archive/submissions.json
+
 # VS Code workspace configuration.
 !.vscode/
 !.vscode/**
