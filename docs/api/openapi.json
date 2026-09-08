@@ -1,0 +1,30 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CompetitiveProgramming Snapshot API",
+    "version": "1.0.0",
+    "description": "公开只读的题库部署快照。无认证、写操作或服务端查询参数；版本号属于本契约，不是响应字段。"
+  },
+  "servers": [{ "url": "https://thelucius7.github.io/CompetitiveProgramming" }],
+  "security": [],
+  "tags": [{ "name": "Snapshot", "description": "题目、提交日历和 Rating 快照" }],
+  "paths": {
+    "/data/site-data.json": {
+      "get": {
+        "operationId": "getSiteSnapshot",
+        "summary": "获取完整题库部署快照",
+        "description": "数据新鲜度由 generatedAt 判断。源码正文通过返回的 rawUrl 等来源另行读取。",
+        "tags": ["Snapshot"],
+        "responses": {
+          "200": {
+            "description": "JSON 快照。",
+            "content": { "application/json": { "schema": { "$ref": "./site-data.schema.json" } } }
+          },
+          "304": { "description": "托管平台可能对条件请求返回 Not Modified；客户端需已有可用缓存。" },
+          "404": { "description": "文件不存在或发布尚未就绪；可能返回 GitHub Pages HTML 页面，不约定 JSON 错误体。" },
+          "default": { "description": "托管平台或网络异常；检查 HTTP 状态，响应体格式不作应用层约定。" }
+        }
+      }
+    }
+  }
+}

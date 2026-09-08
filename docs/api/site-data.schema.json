@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thelucius7.github.io/CompetitiveProgramming/docs/api/site-data.schema.json",
+  "title": "SiteSnapshot",
+  "description": "题库部署快照契约 1.0.0。字段类型校验不代表源码完整性或算法正确性。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["repository", "generatedAt", "sourceRef", "commitCount", "contributions", "problems", "ratings"],
+  "properties": {
+    "repository": { "$ref": "#/$defs/Repository" },
+    "generatedAt": { "type": "string", "format": "date-time", "description": "快照生成时间，包含时区。" },
+    "sourceRef": { "type": "string", "minLength": 1, "description": "用于读取 Git 的 ref，不要求等于 repository.branch。" },
+    "commitCount": { "type": "integer", "minimum": 0, "description": "所选 Git ref 的提交数量。" },
+    "contributions": {
+      "type": "object",
+      "description": "稀疏日期字典；不存在的日期表示当天无记录。",
+      "propertyNames": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+      "additionalProperties": { "type": "integer", "minimum": 1 }
+    },
+    "problems": { "type": "array", "items": { "$ref": "#/$defs/Problem" }, "description": "题目条目；数组本身不保证按时间排序。" },
+    "ratings": { "$ref": "#/$defs/Ratings" }
+  },
+  "$defs": {
+    "Repository": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner", "name", "branch"],
+      "properties": {
+        "owner": { "type": "string", "const": "theLucius7", "description": "仓库所有者。" },
+        "name": { "type": "string", "const": "CompetitiveProgramming", "description": "仓库名。" },
+        "branch": { "type": "string", "const": "main", "description": "源码链接和在线树使用的分支。" }
+      }
+    },
+    "Problem": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "platform", "language", "title", "problemUrl", "githubUrl", "rawUrl", "submittedAt"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "description": "仓库内相对路径，保留大小写和 Unicode；必须唯一。" },
+        "platform": { "type": "string", "minLength": 1, "description": "来源平台，对应 path 第一段；不固定平台列表。" },
+        "language": { "type": "string", "enum": ["C++", "C", "Python", "Java", "Rust", "Go", "Kotlin"], "description": "由源码扩展名识别的语言。" },
+        "title": { "type": "string", "minLength": 1, "description": "路径推导的显示名称，不保证是 OJ 原题标题。" },
+        "problemUrl": { "type": "string", "format": "uri", "pattern": "^https://", "description": "原题、比赛或平台入口，并非必定为精确题目页。" },
+        "githubUrl": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/", "description": "源码的 GitHub blob 地址。" },
+        "rawUrl": { "type": "string", "format": "uri", "pattern": "^https://raw\\.githubusercontent\\.com/", "description": "原始源码文本地址。" },
+        "submittedAt": { "type": ["string", "null"], "format": "date-time", "description": "快照中该路径的 Git 提交者时间；未知为 null，不是 OJ 评测时间。" }
+      }
+    },
+    "Ratings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["atcoder", "codeforces"],
+      "properties": {
+        "atcoder": { "anyOf": [{ "$ref": "#/$defs/AtCoderRating" }, { "type": "null" }], "description": "AtCoder 数据；整个平台不可用时为 null。" },
+        "codeforces": { "anyOf": [{ "$ref": "#/$defs/CodeforcesRating" }, { "type": "null" }], "description": "Codeforces 数据；整个平台不可用时为 null。" }
+      }
+    },
+    "AtCoderRating": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rating", "maxRating", "contests"],
+      "properties": {
+        "rating": { "type": ["integer", "null"], "minimum": 0, "description": "最新有效 Rating；无 rated 记录时为 null。" },
+        "maxRating": { "type": "integer", "minimum": 0, "description": "有效历史场次最高值；无记录时为 0。" },
+        "contests": { "type": "integer", "minimum": 0, "description": "计入统计的 rated 场次数。" }
+      }
+    },
+    "CodeforcesRating": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rating", "maxRating", "rank"],
+      "properties": {
+        "rating": { "type": ["integer", "null"], "minimum": 0, "description": "当前 Rating；未提供时为 null。" },
+        "maxRating": { "type": ["integer", "null"], "minimum": 0, "description": "最高 Rating，允许未知。" },
+        "rank": { "type": "string", "minLength": 1, "description": "平台返回的级别，缺失时使用 unrated；不限定枚举。" }
+      }
+    }
+  }
+}
