@@ -16,6 +16,14 @@ const metadata = JSON.parse(await readFile(path.join(artifact, 'build-info.json'
 assert.equal(metadata.managedBy, 'competitive-programming-docs');
 assert.equal(metadata.sourceBranch, 'docs/project-guide');
 assert.equal(metadata.sourceCommit, process.env.GITHUB_SHA, 'artifact does not match workflow commit');
+function requireCurrentSource() {
+  const latest = api(`repos/${repository}/git/ref/heads/docs/project-guide`).object.sha;
+  if (latest !== metadata.sourceCommit) {
+    console.log(`Skipping superseded docs build ${metadata.sourceCommit}; source is now ${latest}.`);
+    process.exit(0);
+  }
+}
+requireCurrentSource();
 assert.equal(git('branch', '--show-current'), 'gh-pages');
 assert.equal(git('status', '--porcelain'), '', 'Pages checkout must be clean');
 const remote = git('remote', 'get-url', 'origin');
@@ -51,6 +59,7 @@ if (changed.length) {
   git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com');
   git('commit', '-m', `docs: publish ${metadata.sourceCommit.slice(0, 7)}`);
   for (let attempt = 0; ; attempt += 1) {
+    requireCurrentSource();
     try { git('push', 'origin', 'HEAD:gh-pages'); break; }
     catch (error) {
       if (attempt >= 2) throw error;

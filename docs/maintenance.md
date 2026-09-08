@@ -32,7 +32,7 @@ git diff --check
 
 发布工作流先校验 Markdown、OpenAPI、JSON Schema 和真实快照，再构建静态网站。模型字段表直接来自 schema；源码链接会转换为 GitHub 链接，避免部署后指向不存在的本地目录。
 
-只有 `docs/project-guide` 的推送会发布。发布 job 下载已验证产物，只替换带管理标记的 `gh-pages/docs/`，检查暂存路径范围后普通推送；随后显式请求 Pages 构建，并核对公开的 `docs/build-info.json` 与页面响应。PR 和其他文档分支只做检查与构建。任一步失败时查看 [Actions](https://github.com/theLucius7/CompetitiveProgramming/actions)，不能将“已经 push”当成部署成功。
+只有 `docs/project-guide` 的推送会发布。发布 job 下载已验证产物，确认仍对应文档分支最新提交，再只替换带管理标记的 `gh-pages/docs/`；过期运行安全跳过。检查暂存路径范围后普通推送，随后显式请求 Pages 构建，并核对公开的 `docs/build-info.json` 与页面响应。PR 和其他文档分支只做检查与构建。任一步失败时查看 [Actions](https://github.com/theLucius7/CompetitiveProgramming/actions)，不能将“已经 push”当成部署成功。
 
 需要回滚时，在文档源分支对造成问题的提交执行明确的 `git revert <提交SHA>`，验证后重新推送。不要手改生成的 `gh-pages/docs/`，否则下一次构建会覆盖手工内容。
 
