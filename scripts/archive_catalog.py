@@ -83,11 +83,25 @@ def _supplements(catalog: dict) -> list[dict]:
     return result
 
 
-def _history(submissions: list[dict], handle: str) -> dict[str, set[str | None]]:
+def _history(submissions: list[dict], handle: str, accepted: list[dict]) -> dict[str, set[str | None]]:
     if not isinstance(submissions, list) or any(not isinstance(row, dict) for row in submissions):
         raise ValueError("Submissions must be a list of standard record objects")
+    records = submissions
+    # Match build_plan's per-platform fallback: one explicit QOJ record makes
+    # that platform's supplied history authoritative, even for another owner.
+    if not any(record.get("platform") == "qoj" for record in submissions):
+        if not isinstance(accepted, list) or any(not isinstance(row, dict) for row in accepted):
+            raise ValueError("Dashboard accepted records must be an object list")
+        records = []
+        for record in accepted:
+            if record.get("platform") == "qoj":
+                fallback = dict(record)
+                fallback["handle"] = record.get("handle") or handle
+                fallback["verdict"] = record.get("verdict") or "AC"
+                fallback.setdefault("epoch", 0)
+                records.append(fallback)
     associations, seen = defaultdict(set), {}
-    for record in submissions:
+    for record in records:
         if record.get("platform") != "qoj":
             continue
         owner = validate_segment(record.get("handle"))
@@ -123,6 +137,11 @@ def apply_contest_mappings(dashboard: dict, submissions: list[dict], catalog: di
     but its original ``contestId`` stays null. Records explicitly associated with
     another contest do not activate this mapping.
 
+    As in build_plan, explicit QOJ history replaces that platform's dashboard AC
+    evidence. If no QOJ records were supplied, dashboard.accepted is used under
+    the validated dashboard owner; missing verdicts mean AC. These fallback
+    records still undergo the same QOJ identity and official-URL checks.
+
     Existing qwq memberships are never overwritten. Conflicting existing tables,
     another contest claiming a supplemented problem, duplicate supplement claims,
     unsafe URLs/IDs, or unknown catalog fields raise ValueError. An existing
@@ -139,7 +158,7 @@ def apply_contest_mappings(dashboard: dict, submissions: list[dict], catalog: di
         raise ValueError("Expected qwq dashboard schemaVersion 2")
     handle = validate_segment(dashboard.get("handle"))
     supplements = _supplements(catalog)
-    history = _history(submissions, handle)
+    history = _history(submissions, handle, dashboard.get("accepted", []))
     contests = dashboard.get("contests", [])
     problems = dashboard.get("problems", [])
     if (not isinstance(contests, list) or not isinstance(problems, list)

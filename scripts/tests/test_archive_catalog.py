@@ -37,6 +37,22 @@ def dashboard():
                           "index": str(pid)} for pid in (14856, 14863)]}
 
 
+def accepted_snapshot():
+    return [{key: record[key] for key in ("platform", "id", "problemId", "epoch", "url")}
+            for record in history()]
+
+
+def other_platform_history():
+    return [
+        {"platform": "atcoder", "id": 1, "problemId": "atcoder:abc001_a", "contestId": "atcoder:abc001",
+         "handle": "Lucius7", "verdict": "AC", "language": "C++23", "epoch": 1,
+         "url": "https://atcoder.jp/contests/abc001/submissions/1"},
+        {"platform": "codeforces", "id": 2, "problemId": "codeforces:1:A", "contestId": "codeforces:1",
+         "handle": "Lucius7", "verdict": "OK", "language": "GNU C++17", "epoch": 2,
+         "url": "https://codeforces.com/contest/1/submission/2"},
+    ]
+
+
 class ArchiveCatalogTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
@@ -76,6 +92,56 @@ class ArchiveCatalogTests(unittest.TestCase):
         result = apply_contest_mappings(dashboard(), [], catalog())
         self.assertFalse(result["contests"][0]["hasSubmissions"])
         self.assertEqual(build_plan(result, self.root, [])["entries"], [])
+
+    def test_other_platform_history_preserves_dashboard_qoj_ac_fallback(self):
+        data, records, supplement = dashboard(), other_platform_history(), catalog()
+        data["accepted"] = accepted_snapshot()
+        before = deepcopy((data, records, supplement))
+        result = apply_contest_mappings(data, records, supplement)
+        entries = [entry for entry in build_plan(result, self.root, records)["entries"]
+                   if entry["contestId"] == "qoj:2603"]
+        self.assertEqual([entry["targetStem"] for entry in entries], ["QOJ/2603/b", "QOJ/2603/i"])
+        self.assertEqual([entry["candidates"][0]["id"] for entry in entries], [2356370, 2348529])
+        self.assertTrue(all(entry["candidates"][0]["verdict"] == "AC" for entry in entries))
+        self.assertTrue(all(entry["candidates"][0]["contestId"] is None for entry in entries))
+        self.assertEqual((data, records, supplement), before)
+
+    def test_empty_history_fallback_also_promotes_matching_future_qwq_table(self):
+        data = apply_contest_mappings(dashboard(), history(), catalog())
+        data["contests"][0]["hasSubmissions"] = False
+        data["accepted"] = accepted_snapshot()
+        result = apply_contest_mappings(data, [], catalog())
+        self.assertFalse(data["contests"][0]["hasSubmissions"])
+        self.assertTrue(result["contests"][0]["hasSubmissions"])
+        self.assertEqual(build_plan(result, self.root, [])["counts"]["missing"], 2)
+
+    def test_explicit_qoj_history_never_mixes_old_dashboard_ac_evidence(self):
+        data = dashboard()
+        data["accepted"] = accepted_snapshot()
+        records = history()[:1]
+        records[0].update(id=3, verdict="WA", epoch=3, url="https://qoj.ac/submission/3")
+        result = apply_contest_mappings(data, records, catalog())
+        entries = build_plan(result, self.root, records)["entries"]
+        self.assertEqual([entry["status"] for entry in entries], ["missing", "needs_submission"])
+        self.assertEqual([record["id"] for record in entries[0]["candidates"]], [3])
+        self.assertEqual(entries[0]["candidates"][0]["verdict"], "WA")
+        self.assertEqual(entries[1]["candidates"], [])
+        records[0].update(problemId="qoj:99999", contestId="qoj:9999")
+        self.assertFalse(apply_contest_mappings(data, records, catalog())["contests"][0]["hasSubmissions"])
+
+    def test_fallback_owner_and_official_submission_url_are_still_validated(self):
+        data = dashboard()
+        data["accepted"] = accepted_snapshot()
+        for record in data["accepted"]:
+            record["handle"] = "OtherUser"
+        self.assertFalse(apply_contest_mappings(data, [], catalog())["contests"][0]["hasSubmissions"])
+        data["accepted"] = accepted_snapshot()
+        data["accepted"][0]["url"] = "https://qoj.ac.evil/submission/2356370"
+        before = deepcopy(data)
+        with self.assertRaisesRegex(ValueError, "official QOJ URL"):
+            apply_contest_mappings(data, other_platform_history(), catalog())
+        self.assertEqual(data, before)
+        self.assertTrue(apply_contest_mappings(data, history(), catalog())["contests"][0]["hasSubmissions"])
 
     def test_only_real_owner_and_matching_or_unknown_contest_activate(self):
         for change in [{"handle": "OtherUser"}, {"contestId": "qoj:9999"}]:
