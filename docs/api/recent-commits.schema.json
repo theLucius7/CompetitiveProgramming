@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://thelucius7.github.io/CompetitiveProgramming/docs/api/recent-commits.schema.json",
+  "$id": "https://codeflare.lucius7.dev/docs/api/recent-commits.schema.json",
   "title": "RecentCommitsSnapshot",
-  "description": "最近提交快照，API 集合 1.1.0。保留 Git / GitHub 返回顺序。",
+  "description": "CodeFlare 最近提交快照，API 集合 2.0.0。保留 Git / GitHub 返回顺序。",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -46,12 +46,12 @@
       "properties": {
         "owner": {
           "type": "string",
-          "const": "theLucius7",
+          "const": "xw7qwq",
           "description": "仓库所有者。"
         },
         "name": {
           "type": "string",
-          "const": "CompetitiveProgramming",
+          "const": "codeflare",
           "description": "仓库名。"
         },
         "branch": {
@@ -89,7 +89,7 @@
         "url": {
           "type": "string",
           "format": "uri",
-          "pattern": "^https://github\\.com/theLucius7/CompetitiveProgramming/commit/[0-9a-f]{40}$",
+          "pattern": "^https://github\\.com/xw7qwq/codeflare/commit/[0-9a-f]{40}$",
           "description": "该仓库对应完整 SHA 的 GitHub 提交详情地址。"
         }
       }
