@@ -1,39 +1,39 @@
-# 贡献指南
+# Contributing
 
-先阅读[组织贡献规范](https://github.com/xw7qwq/.github/blob/main/CONTRIBUTING.md)。修改前先确定目标分支：算法代码以 `main` 为基线，文档以 `docs/project-guide` 为基线，网站以 `gh-pages` 为基线。分支职责和同步见[维护流程](docs/maintenance.md)。
+Read the [organization contribution guide](https://github.com/xw7qwq/.github/blob/main/CONTRIBUTING.md). Choose the target branch before editing: `main` for algorithms, `docs/project-guide` for documentation, or `gh-pages` for the website. See [Maintenance](docs/maintenance.md) for branch responsibilities and synchronization.
 
-## 一次变更
+## Make a change
 
-1. 检查 `git status --short --branch`，保留已有未提交工作。
-2. 从对应基线建立描述清楚的工作分支，例如 `fix/cf-1000-e` 或 `docs/update-tooling`。
-3. 按[代码与归档规范](docs/conventions.md)修改，尽量让一次提交只承担一个目的。
-4. 新文件按路径纳入 Git 跟踪，完成下表中与修改相关的检查，再查看暂存差异。
-5. 明确说明改动原因和验证范围，推送工作分支后向对应目标发起 PR，检查通过后合并。
-6. 确认来源提交已包含于目标分支后删除短期工作分支；保留 `main`、`docs/project-guide`、`gh-pages` 三个长期分支。
+1. Check `git status --short --branch` and preserve existing uncommitted work.
+2. Create a clearly named branch from the relevant baseline, such as `fix/cf-1000-e` or `docs/update-tooling`.
+3. Follow the [code and archive conventions](docs/conventions.md), keeping each commit focused on one purpose.
+4. Track new files by path, complete the applicable checks below, and review the staged diff.
+5. Explain the reason and validation scope, push the working branch, and open a PR against its target. Merge after checks pass.
+6. Confirm the target contains the changes before deleting the temporary branch. Keep the three permanent branches: `main`, `docs/project-guide`, and `gh-pages`.
 
-| 修改类型 | 提交前证据 |
+| Change | Evidence before submission |
 | --- | --- |
-| 单题算法 | 单独编译，列出样例/边界/反例结果；AC 需要 OJ 记录 |
-| 模板 | 最小调用程序和边界验证，说明接口是否变化 |
-| 重命名或移动 | 来源映射可追踪，CPH 路径规则与 Pages 收录规则核对 |
-| 归档工具或导入源码 | 离线归档测试与只读来源审计，见下方命令 |
-| 文档 | 文档检查、API 契约检查与构建，见[维护流程](docs/maintenance.md) |
-| 网站 | 按[网站维护](docs/pages.md)验证资源、快照和相关交互 |
+| Individual algorithm | Compile independently and record sample, boundary, and counterexample results; an AC claim requires an online judge record |
+| Template | Provide a minimal caller and boundary checks; explain interface changes |
+| Rename or move | Preserve traceable source mappings and check CPH path rules and Pages inclusion rules |
+| Archive tools or imported source | Run offline archive tests and the read-only provenance audit below |
+| Documentation | Run documentation checks, API contract checks, and a build; see [Maintenance](docs/maintenance.md) |
+| Website | Validate assets, snapshots, and affected interactions using [website maintenance](docs/pages.md) |
 
-代码分支暂未包含文档检查脚本时，只运行该分支可用的相关检查；需要更新文档时在文档分支进行同步。归档测试和完整性审计在仓库根目录执行：
+If the source branch does not yet include documentation checks, run the relevant checks available on that branch and update documentation separately on its branch. Run archive tests and the integrity audit from the repository root:
 
 ```sh
 python3 -m unittest discover -s scripts/tests -p 'test_archive_*.py'
 python3 scripts/archive_verify.py
 ```
 
-`archive` 检查核对工具行为与有来源收据的源码完整性，不执行算法，也不证明算法 AC。归档工具只读写本地文件，不自动提交或推送 Git；新增源码通过 `sync/` 等短期分支的 PR 合入 `main`，不覆盖既有源码。操作与来源收据格式见[归档工具说明](scripts/README.md)。
+The `archive` check verifies tool behavior and source integrity where provenance receipts exist. It does not execute algorithms or establish an AC verdict. Archive tools read and write local files without committing or pushing Git. New sources enter `main` through a temporary branch such as `sync/` and a PR, preserving existing source files. See the [archive tool guide](scripts/README.md) for operations and receipt formats.
 
-人工修改都通过 PR；文档发布工作流仍直接更新 `gh-pages/docs/`。这是生成目录，不能手工修改，也不把 `gh-pages` 整体合入其他分支。
+All manual changes require PRs. The documentation publishing workflow writes directly to `gh-pages/docs/`, a generated directory that must not be edited manually. Keep the full `gh-pages` branch separate from other branches.
 
-## 提交信息
+## Commit messages
 
-采用 `类型(范围): 具体动作`，例如：
+Use English and the format `type(scope): specific action`, for example:
 
 ```text
 fix(codeforces): handle disconnected graph in 1000E
@@ -42,9 +42,9 @@ docs(tooling): explain local relay configuration
 refactor(layout): move verified source paths
 ```
 
-常用类型为 `feat`、`fix`、`refactor`、`docs`、`chore`。正文补充必要的动机、来源和测试结果，不把“编译成功”写成“全部通过”。
+Common types are `feat`, `fix`, `refactor`, `docs`, and `chore`. Include necessary motivation, provenance, and test results in the body. Successful compilation alone does not mean all tests passed.
 
-按文件暂存并审阅，以下是仅修改 README 的例子：
+Stage and review files individually. For a README-only change:
 
 ```sh
 git add README.md
@@ -53,15 +53,15 @@ git diff --cached
 git commit -m "docs(readme): clarify repository navigation"
 ```
 
-## 评审说明
+## Review notes
 
-使用下面的信息即可，不必为简单修改填写长篇报告：
+Provide the following information, keeping simple changes brief:
 
 ```text
-原因：原有行为或缺失信息。
-变更：修改的文件与结果。
-验证：实际运行的命令、样例及其结果。
-限制：尚未验证的范围；若无则省略。
+Reason: The previous behavior or missing information.
+Change: The files changed and resulting behavior.
+Validation: Commands or examples actually run, and their results.
+Limitations: Any scope not yet verified; omit when unnecessary.
 ```
 
-讨论算法时提供题目链接、最小反例和预期输出。涉及第三方代码时保留来源及适用许可；本仓库目前未声明统一许可证，不自动为已有代码添加授权。
+For algorithm discussions, provide the problem link, a minimal counterexample, and expected output. Retain attribution and applicable licenses for third-party code. The repository has no single declared license; do not invent permissions for existing code.
