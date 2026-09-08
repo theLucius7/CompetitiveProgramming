@@ -18,16 +18,18 @@
 
 ```text
 index.html                    题库页面与最近提交列表
-styles.css                    题库布局与系统深浅色
+theme.css                     共享主题、字体、间距与基础组件
+styles.css                    题库布局
 app.js                        检索、排序和独立在线检查
 archive.js                    共享路径校验、题目解析与请求工具
 code.html                     独立全屏源码阅读页
 reader.js                     源码、提交时间、复制与高亮
-reader.css                    全视口阅读布局与系统深浅色
+reader.css                    全视口阅读布局与高亮适配
 data/site-data.json            题库快照，保留旧统计字段
 data/recent-commits.json       最近六次提交快照
 scripts/generate-data.mjs      从 Git 文件树和历史生成两份快照
 scripts/check-reader.mjs       非浏览器阅读页与题库回归测试
+scripts/check-theme.mjs        样式共享、资源引用与深浅色对比度校验
 vendor/                       本地 Highlight.js、主题及许可证
 favicon.svg                   网站图标
 .nojekyll                     直接提供静态资源
@@ -80,13 +82,26 @@ python3 -m http.server 4173 --bind 127.0.0.1
 
 ## 源码与高亮
 
-题目行使用原生链接，在新标签页打开 `code.html?path=...`；原题库的筛选和滚动位置不变。阅读页占据完整视口，源码区域独立横纵滚动，无半屏抽屉、遮罩或关闭按钮。可直接复制阅读页地址访问；“题库”是正常导航链接，不依赖上一页历史或原标签页对象。
+题目行使用原生链接，在新标签页打开 `code.html?path=...`；原题库的筛选和滚动位置不变。阅读页占据完整视口，源码区域独立横纵滚动，无半屏抽屉、遮罩或关闭按钮。可直接复制阅读页地址访问；左上 L7 品牌链接返回题库，不依赖上一页历史或原标签页对象。
 
 阅读页校验路径后立即请求 GitHub Contents API（5 秒超时），失败时并行尝试 jsDelivr 和 raw.githubusercontent.com（各 7 秒），取首个成功结果。均失败则结束加载状态，提供重试按钮及 GitHub 源码入口。提交时间从快照独立读取，失败或缺失时显示未知，不阻塞代码。
 
 仅接受合法的仓库相对源码路径；URL 参数解码一次，不允许空段、路径穿越、反斜杠或控制字符。仓库与 main 分支固定，不接受自定义源码服务器地址。
 
 本地 Highlight.js 11.12.0 与 GitHub 浅色／深色主题跟随系统外观，失败回退纯文本。渲染时统一换行，行号不将文件末尾的换行符计为额外一行；复制保留原始完整内容（包括 CRLF）。当前阅读页保留源码原文供复制，不再使用题库按路径索引的内存缓存。保留 `[hidden] { display: none !important; }`，避免成功后仍显示加载提示。
+
+## 视觉规范
+
+题库与阅读页必须先加载同一版本的 `theme.css`，再加载页面布局样式。配色、字体、字号级别、间距、圆角、按钮、焦点和系统外观仅在共享主题定义；`styles.css` 与 `reader.css` 不得重新定义主题或写入独立色值。CSS 变量按用途命名，不按某个页面命名。
+
+- 使用 L7 品牌、绿色强调色和低对比度边框；正文及辅助文字与所在背景的对比度至少 4.5:1。
+- 正文和代码为 16px，控件标签 14px、辅助信息 12px（均使用 rem）；代码与行号必须共用字体、行高和上下内边距。
+- 面板圆角 16px，控件 10px，标签 6px；按钮最小高度 44px。间距使用共享 4px 基准变量。
+- 选中、悬停、禁用、键盘焦点和隐藏状态必须保留；不能仅用颜色表达筛选状态，使用 `aria-pressed`。
+- 根站通过 `prefers-color-scheme` 跟随系统，不依赖 JS；尊重减少动态效果设置。移动端将路径与日期分行，代码区域保持独立滚动。
+- 文档分支的 `site/.vitepress/theme/style.css` 将同一配色与字体映射到 VitePress 变量；保留文档布局及其系统／手动主题能力，不加载根站 CSS reset。修改根站主题时须同步核对此适配。
+
+跨分支核对时，可向 `node scripts/check-theme.mjs` 传入文档源中 `site/.vitepress/theme/style.css` 的绝对路径；脚本会校验两套主题的颜色与字体映射一致。
 
 ## 校验与发布
 
@@ -96,6 +111,7 @@ node --check archive.js
 node --check reader.js
 node --check scripts/generate-data.mjs
 node scripts/check-reader.mjs
+node scripts/check-theme.mjs
 git diff --check
 curl --fail --head http://127.0.0.1:4173/
 curl --fail --head http://127.0.0.1:4173/data/recent-commits.json
@@ -118,6 +134,6 @@ curl --fail --head https://thelucius7.github.io/CompetitiveProgramming/
 | 新题目未出现 | 检查 main 路径、排除规则、树接口是否失败或截断 |
 | 文件日期未知或落后 | 从最新 origin/main 重生成两份快照并发布 |
 | 最近提交保持旧数据 | 在线接口可能超时或限流，页面会注明使用部署快照；通过“全部提交”核对 GitHub |
-| 代码已显示但仍有加载文字 | 核对 code.html、reader.js、reader.css 同次发布，以及 hidden 样式 |
+| 代码已显示但仍有加载文字 | 核对 code.html、reader.js、reader.css、theme.css 同次发布，以及 hidden 样式 |
 | 代码加载失败 | 检查 Contents、jsDelivr、raw 来源；打开 GitHub 源码链接 |
 | 部署后仍为旧页面 | 核对 Pages 构建提交、公共资源与缓存，不能只靠 URL 查询参数判断部署 |

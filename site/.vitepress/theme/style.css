@@ -1,19 +1,54 @@
 :root {
-  --vp-c-brand-1: #147548;
-  --vp-c-brand-2: #108553;
-  --vp-c-brand-3: #0d9860;
-  --vp-c-brand-soft: rgba(20, 117, 72, 0.10);
-  --vp-font-family-base: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --vp-font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  /* Adapter for gh-pages/theme.css; keep VitePress's own layout and theme switch. */
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-alt: #f5f7f5;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #eef2ef;
+  --vp-c-text-1: #18251d;
+  --vp-c-text-2: #5e6c63;
+  --vp-c-text-3: #5e6c63;
+  --vp-c-divider: #d9e2dc;
+  --vp-c-border: #b8c7bd;
+  --vp-c-gutter: #d9e2dc;
+  --vp-c-brand-1: #176a38;
+  --vp-c-brand-2: #0d572c;
+  --vp-c-brand-3: #176a38;
+  --vp-c-brand-soft: #e5f3e9;
+  --vp-c-default-1: var(--vp-c-border);
+  --vp-c-default-2: var(--vp-c-divider);
+  --vp-c-default-3: var(--vp-c-bg-soft);
+  --vp-c-default-soft: var(--vp-c-bg-soft);
+  --vp-button-brand-text: var(--vp-c-brand-1);
+  --vp-button-brand-bg: var(--vp-c-brand-soft);
+  --vp-button-brand-border: var(--vp-c-brand-1);
+  --vp-button-brand-hover-text: var(--vp-c-brand-2);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-soft);
+  --vp-button-brand-hover-border: var(--vp-c-brand-2);
+  --vp-button-brand-active-text: var(--vp-c-brand-2);
+  --vp-button-brand-active-bg: var(--vp-c-brand-soft);
+  --vp-button-brand-active-border: var(--vp-c-brand-2);
+  --vp-code-block-bg: var(--vp-c-bg-alt);
+  --vp-font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+  --vp-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --vp-sidebar-width: 272px;
 }
 .dark {
-  --vp-c-brand-1: #61d7a0;
-  --vp-c-brand-2: #49c58c;
-  --vp-c-brand-3: #28b57a;
-  --vp-c-brand-soft: rgba(97, 215, 160, 0.13);
+  --vp-c-bg: #151f19;
+  --vp-c-bg-alt: #0f1512;
+  --vp-c-bg-elv: #151f19;
+  --vp-c-bg-soft: #1f2c23;
+  --vp-c-text-1: #e4ede6;
+  --vp-c-text-2: #a4b3a8;
+  --vp-c-text-3: #a4b3a8;
+  --vp-c-divider: #304136;
+  --vp-c-border: #46604e;
+  --vp-c-gutter: #304136;
+  --vp-c-brand-1: #87dca4;
+  --vp-c-brand-2: #aaeabd;
+  --vp-c-brand-3: #87dca4;
+  --vp-c-brand-soft: #203e2a;
 }
-.VPNavBarTitle .title { font-family: var(--vp-font-family-mono); font-weight: 650; letter-spacing: -0.04em; }
+.VPNavBarTitle .title { font-family: var(--vp-font-family-base); font-weight: 650; letter-spacing: -0.02em; }
 .vp-doc h1 { font-size: 30px; letter-spacing: -0.03em; }
 .vp-doc p, .vp-doc li { font-size: 16px; line-height: 1.85; }
 .vp-doc table { width: 100%; font-size: 14px; }
