@@ -10,6 +10,12 @@ The homepage no longer displays or fetches Rating and contribution-calendar data
 Legacy statistics remain in `data/site-data.json` for API compatibility;
 `data/recent-commits.json` provides commit messages, timestamps and links.
 
+Solution links open `code.html?path=...` in a new tab, leaving the library's
+filters and scroll position in place. The full-page reader follows the system
+theme and loads source independently from optional submission metadata. It
+supports syntax highlighting, line numbers, source links and copying the exact
+original text. Run `node scripts/check-reader.mjs` for non-browser regressions.
+
 [Solution archive](https://thelucius7.github.io/CompetitiveProgramming/) ·
 [API documentation](https://thelucius7.github.io/CompetitiveProgramming/docs/)
 

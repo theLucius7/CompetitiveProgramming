@@ -448,6 +448,8 @@ footer {
 }
 
 .problem-row {
+  color: inherit;
+  text-decoration: none;
   min-height: 74px;
   border-top: 1px solid #edf1ed;
   cursor: pointer;
@@ -604,191 +606,6 @@ footer {
   font-size: 0.7rem;
 }
 
-.drawer-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: rgba(10, 18, 13, 0.38);
-  backdrop-filter: blur(3px);
-}
-
-.code-drawer {
-  color-scheme: dark;
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 50;
-  width: min(760px, 94vw);
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(102%);
-  background: #101814;
-  color: #edf4ef;
-  box-shadow: -28px 0 70px rgba(8, 15, 10, 0.2);
-  transition: transform 240ms cubic-bezier(0.2, 0.75, 0.25, 1);
-}
-
-.code-drawer.open {
-  transform: translateX(0);
-}
-
-.drawer-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  border-bottom: 1px solid #2b3730;
-  padding: 24px 26px 20px;
-}
-
-.drawer-header h2 {
-  margin: 5px 0 2px;
-  font-size: 1.32rem;
-  letter-spacing: -0.035em;
-}
-
-.code-drawer .section-kicker {
-  color: #7bd99a;
-}
-
-.drawer-path {
-  max-width: 600px;
-  overflow: hidden;
-  margin: 0;
-  color: #85958b;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.drawer-submission-time {
-  margin: 5px 0 0;
-  color: #a2b0a7;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.icon-button {
-  display: grid;
-  flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border: 1px solid #34423a;
-  border-radius: 50%;
-  background: transparent;
-  color: #b8c4bc;
-  cursor: pointer;
-}
-
-.icon-button:hover {
-  background: #1d2922;
-  color: white;
-}
-
-.icon-button svg {
-  width: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-}
-
-.drawer-actions {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  border-bottom: 1px solid #26322b;
-  padding: 12px 26px;
-}
-
-.action-button {
-  flex: 0 0 auto;
-  border: 1px solid #37453d;
-  border-radius: 8px;
-  background: #18221c;
-  padding: 7px 10px;
-  color: #b8c4bc;
-  font-size: 0.72rem;
-  font-weight: 650;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.action-button:hover {
-  border-color: #4a5d51;
-  color: white;
-}
-
-.action-primary {
-  border-color: #31844b;
-  background: #205e35;
-  color: white;
-}
-
-.code-state {
-  display: grid;
-  flex: 1;
-  place-items: center;
-  padding: 40px;
-  color: #84938a;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.76rem;
-  text-align: center;
-}
-
-.code-shell {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  display: grid;
-  grid-template-columns: auto minmax(max-content, 1fr);
-  scrollbar-color: #3d4d43 #101814;
-}
-
-.line-numbers,
-.code-shell pre {
-  margin: 0;
-  padding-block: 22px 40px;
-  font: 0.78rem/1.72 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.line-numbers {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-  min-width: 55px;
-  border-right: 1px solid #26322b;
-  background: #101814;
-  padding-inline: 14px 11px;
-  color: #84988a;
-  text-align: right;
-  user-select: none;
-  white-space: pre;
-}
-
-.code-shell pre {
-  min-width: 100%;
-  padding-inline: 20px 34px;
-  color: #d8e5dc;
-  tab-size: 4;
-}
-
-.code-shell code {
-  display: block;
-  white-space: pre;
-}
-
-.code-shell code.hljs {
-  overflow: visible;
-  background: transparent;
-  padding: 0;
-  color: #d8e5dc;
-}
-
 .noscript {
   position: fixed;
   right: 18px;
@@ -798,10 +615,6 @@ footer {
   background: #8b2e25;
   padding: 12px 15px;
   color: white;
-}
-
-body.drawer-open {
-  overflow: hidden;
 }
 
 @media (max-width: 900px) {
@@ -919,25 +732,6 @@ body.drawer-open {
   footer p {
     max-width: 190px;
   }
-
-  .code-drawer {
-    width: 100vw;
-  }
-
-  .drawer-header,
-  .drawer-actions {
-    padding-inline: 18px;
-  }
-
-  .line-numbers {
-    min-width: 47px;
-    padding-inline: 10px 8px;
-  }
-
-  .code-shell pre {
-    padding-inline: 15px 24px;
-    font-size: 0.74rem;
-  }
 }
 
 /* Follow OS changes live, including before JavaScript or repository data loads. */
@@ -1019,7 +813,6 @@ body.drawer-open {
   .problem-row:hover,
   .problem-row:focus-visible,
   .load-more:hover { background: var(--surface-soft); }
-  .drawer-backdrop { background: rgba(0, 0, 0, 0.6); }
 }
 
 @media (prefers-reduced-motion: reduce) {

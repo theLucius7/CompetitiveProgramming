@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="theLucius7 · 算法竞赛源码阅读" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
+    <title>源码 · theLucius7</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./vendor/github-light.css" />
+    <link rel="stylesheet" href="./vendor/github-dark.min.css" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="./reader.css?v=20260908-reader" />
+    <script src="./archive.js?v=20260908-reader" defer></script>
+    <script src="./vendor/highlight.min.js" defer></script>
+    <script src="./reader.js?v=20260908-reader" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#code-scroller">跳到代码</a>
+    <header class="reader-header">
+      <div class="reader-topline">
+        <a class="reader-back" href="./#problem-library">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12" /></svg>
+          题库
+        </a>
+        <nav class="reader-actions" aria-label="代码操作">
+          <a id="reader-problem-link" class="reader-button" target="_blank" rel="noopener noreferrer" hidden>原题 ↗</a>
+          <a id="reader-github-link" class="reader-button" target="_blank" rel="noopener noreferrer" hidden>GitHub ↗</a>
+          <button id="copy-code" class="reader-button primary" type="button" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></svg>
+            <span id="copy-label">复制代码</span>
+          </button>
+        </nav>
+      </div>
+      <h1 id="reader-title">源码</h1>
+      <div class="reader-file-meta">
+        <span id="reader-path" class="file-path">main</span>
+        <time id="reader-submitted-at">提交时间未知</time>
+      </div>
+    </header>
+
+    <main class="reader-workspace" aria-label="源码阅读">
+      <div id="reader-state" class="reader-state" role="status" aria-busy="true">
+        <span class="state-mark" aria-hidden="true">{ }</span>
+        <p id="reader-message">正在载入代码…</p>
+        <button id="retry-code" class="reader-button" type="button" hidden>重新载入</button>
+      </div>
+      <div id="code-scroller" class="code-scroller" tabindex="0" role="region" aria-label="源码，可横向和纵向滚动" hidden>
+        <div class="code-grid">
+          <div id="line-numbers" class="line-numbers" aria-hidden="true"></div>
+          <pre><code id="code-content"></code></pre>
+        </div>
+      </div>
+    </main>
+
+    <footer class="reader-statusbar">
+      <span class="file-status"><span class="branch-dot" aria-hidden="true"></span>main <span id="reader-language"></span><span id="reader-lines"></span></span>
+      <span id="copy-status" role="status" aria-live="polite"></span>
+    </footer>
+    <noscript><div class="noscript">需要启用 JavaScript 读取代码。<a href="./#problem-library">返回题库</a></div></noscript>
+  </body>
+</html>
