@@ -17,12 +17,17 @@
 路径相对于 gh-pages 根目录：
 
 ```text
-index.html                    页面、最近提交列表和代码抽屉
-styles.css                    布局和代码样式
-app.js                        检索、排序、独立在线检查和代码加载
+index.html                    题库页面与最近提交列表
+styles.css                    题库布局与系统深浅色
+app.js                        检索、排序和独立在线检查
+archive.js                    共享路径校验、题目解析与请求工具
+code.html                     独立全屏源码阅读页
+reader.js                     源码、提交时间、复制与高亮
+reader.css                    全视口阅读布局与系统深浅色
 data/site-data.json            题库快照，保留旧统计字段
 data/recent-commits.json       最近六次提交快照
 scripts/generate-data.mjs      从 Git 文件树和历史生成两份快照
+scripts/check-reader.mjs       非浏览器阅读页与题库回归测试
 vendor/                       本地 Highlight.js、主题及许可证
 favicon.svg                   网站图标
 .nojekyll                     直接提供静态资源
@@ -64,7 +69,7 @@ python3 -m http.server 4173 --bind 127.0.0.1
 
 ## 路径解析与完整性
 
-`app.js` 与生成器各有 `problemFromPath`，新增 OJ 或改路径时检查两份规则：
+`archive.js` 与生成器各有 `problemFromPath`；题库和阅读页共用前者，新增 OJ 或改路径时检查两份规则：
 
 - 子目录内支持 cpp、cc、cxx、c、py、java、rs、go、kt；第一段作为平台。
 - 排除 Templates、.cph、.vscode、.github、assets、data、scripts；根目录独立源码不收录。
@@ -75,15 +80,22 @@ python3 -m http.server 4173 --bind 127.0.0.1
 
 ## 源码与高亮
 
-打开代码先查当前页面的内存缓存，再请求 GitHub Contents API（5 秒超时）。失败时并行尝试 jsDelivr 和 raw.githubusercontent.com（各 7 秒），取首个成功结果。均失败则显示错误，并保留 GitHub 源码入口。同路径缓存只在本次页面会话有效，查看新代码可刷新页面。
+题目行使用原生链接，在新标签页打开 `code.html?path=...`；原题库的筛选和滚动位置不变。阅读页占据完整视口，源码区域独立横纵滚动，无半屏抽屉、遮罩或关闭按钮。可直接复制阅读页地址访问；“题库”是正常导航链接，不依赖上一页历史或原标签页对象。
 
-本地 Highlight.js 11.12.0 与 GitHub Dark 按识别语言高亮，失败回退纯文本；行号对应原文，复制按钮复制原始代码。保留 `[hidden] { display: none !important; }`，避免加载提示在代码出现后仍显示。
+阅读页校验路径后立即请求 GitHub Contents API（5 秒超时），失败时并行尝试 jsDelivr 和 raw.githubusercontent.com（各 7 秒），取首个成功结果。均失败则结束加载状态，提供重试按钮及 GitHub 源码入口。提交时间从快照独立读取，失败或缺失时显示未知，不阻塞代码。
+
+仅接受合法的仓库相对源码路径；URL 参数解码一次，不允许空段、路径穿越、反斜杠或控制字符。仓库与 main 分支固定，不接受自定义源码服务器地址。
+
+本地 Highlight.js 11.12.0 与 GitHub 浅色／深色主题跟随系统外观，失败回退纯文本。渲染时统一换行，行号不将文件末尾的换行符计为额外一行；复制保留原始完整内容（包括 CRLF）。当前阅读页保留源码原文供复制，不再使用题库按路径索引的内存缓存。保留 `[hidden] { display: none !important; }`，避免成功后仍显示加载提示。
 
 ## 校验与发布
 
 ```bash
 node --check app.js
+node --check archive.js
+node --check reader.js
 node --check scripts/generate-data.mjs
+node scripts/check-reader.mjs
 git diff --check
 curl --fail --head http://127.0.0.1:4173/
 curl --fail --head http://127.0.0.1:4173/data/recent-commits.json
@@ -106,6 +118,6 @@ curl --fail --head https://thelucius7.github.io/CompetitiveProgramming/
 | 新题目未出现 | 检查 main 路径、排除规则、树接口是否失败或截断 |
 | 文件日期未知或落后 | 从最新 origin/main 重生成两份快照并发布 |
 | 最近提交保持旧数据 | 在线接口可能超时或限流，页面会注明使用部署快照；通过“全部提交”核对 GitHub |
-| 代码已显示但仍有加载文字 | 核对 app.js/styles.css 同次发布以及 hidden 样式 |
+| 代码已显示但仍有加载文字 | 核对 code.html、reader.js、reader.css 同次发布，以及 hidden 样式 |
 | 代码加载失败 | 检查 Contents、jsDelivr、raw 来源；打开 GitHub 源码链接 |
 | 部署后仍为旧页面 | 核对 Pages 构建提交、公共资源与缓存，不能只靠 URL 查询参数判断部署 |
