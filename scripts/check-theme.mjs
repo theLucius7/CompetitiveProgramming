@@ -29,7 +29,12 @@ for (const [htmlFile, cssFile] of [['index.html', 'styles.css'], ['code.html', '
   if (themeAsset) assert.equal(shared[0], themeAsset, 'pages must use the same theme revision');
   themeAsset = shared[0];
   assert(links.indexOf(shared[0]) < links.findIndex((href) => href.startsWith('./' + cssFile)), 'theme before layout');
-  assert(html.includes('class="brand-mark"') && html.includes('class="brand-name"'));
+  const avatar = html.match(/<img class="brand-avatar"[^>]+>/)?.[0];
+  assert(avatar && html.includes('class="brand-name"'), `${htmlFile}: shared avatar branding`);
+  assert(avatar.includes('src="https://avatars.githubusercontent.com/u/59860644?v=4"'));
+  assert(avatar.includes('width="36"') && avatar.includes('height="36"'), 'reserve avatar dimensions');
+  assert(avatar.includes('alt="theLucius7 的 GitHub 头像"'));
+  assert(!html.includes('brand-mark'), 'do not restore the L7 text mark');
   assert(html.includes('ui-button'));
   assert(html.includes(`content="${light['--bg']}" media="(prefers-color-scheme: light)"`));
   assert(html.includes(`content="${dark['--bg']}" media="(prefers-color-scheme: dark)"`));
