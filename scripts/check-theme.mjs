@@ -31,9 +31,11 @@ for (const [htmlFile, cssFile] of [['index.html', 'styles.css'], ['code.html', '
   assert(links.indexOf(shared[0]) < links.findIndex((href) => href.startsWith('./' + cssFile)), 'theme before layout');
   const avatar = html.match(/<img class="brand-avatar"[^>]+>/)?.[0];
   assert(avatar && html.includes('class="brand-name"'), `${htmlFile}: shared avatar branding`);
-  assert(avatar.includes('src="https://avatars.githubusercontent.com/u/59860644?v=4"'));
+  const avatarUrl = new URL(avatar.match(/src="([^"]+)"/)[1].replaceAll('&amp;', '&'));
+  assert.equal(avatarUrl.href, 'https://q1.qlogo.cn/g?b=qq&nk=3012967200&s=100', 'use the direct HTTPS QQ avatar endpoint');
   assert(avatar.includes('width="36"') && avatar.includes('height="36"'), 'reserve avatar dimensions');
-  assert(avatar.includes('alt="theLucius7 的 GitHub 头像"'));
+  assert(avatar.includes('alt="theLucius7 的 QQ 头像"'));
+  assert(avatar.includes('referrerpolicy="no-referrer"'));
   assert(!html.includes('brand-mark'), 'do not restore the L7 text mark');
   assert(html.includes('ui-button'));
   assert(html.includes(`content="${light['--bg']}" media="(prefers-color-scheme: light)"`));
