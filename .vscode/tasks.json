@@ -1,19 +1,22 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: 竞赛快速编译 (GNU++23)",
-            "command": "/Users/l7/.local/bin/cph-g++-fast",
+            "type": "process",
+            "label": "C/C++: 最快编译 (GNU++23, O0)",
+            "command": "${workspaceFolder}/.cph/scripts/cph-g++-fast.py",
             "args": [
-                "-fdiagnostics-color=always",
-                "-std=gnu++23",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "-O2",
+                "-std=gnu++23",
+                "-O0",
                 "-pipe",
                 "-mcpu=native",
-                "-mtune=native"
+                "-mtune=native",
+                "-D",
+                "DEBUG",
+                "-D",
+                "CPH"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -25,7 +28,37 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "调试器生成的任务。"
+            "detail": "CPH 同款本地调试：完整万能头预编译、对象缓存、可执行文件缓存。O0 优先编译速度。"
+        },
+        {
+            "type": "process",
+            "label": "C/C++: 竞赛快速编译 (GNU++23)",
+            "command": "${workspaceFolder}/.cph/scripts/cph-g++-fast.py",
+            "args": [
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-std=gnu++23",
+                "-O2",
+                "-pipe",
+                "-mcpu=native",
+                "-mtune=native",
+                "-D",
+                "DEBUG",
+                "-D",
+                "CPH"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "detail": "O2 优先程序运行速度；保留 GNU++23、完整万能头和同样的编译缓存。"
         }
     ],
     "version": "2.0.0"

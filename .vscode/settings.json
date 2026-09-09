@@ -100,5 +100,7 @@
             "ojName": "牛客",
             "problemIdRegex": "problem\\/(\\d+)"
         }
-    }
+    },
+    "cph.language.cpp.Command": "/Users/l7/Developer/CompetitiveProgramming/.cph/scripts/cph-g++-fast.py",
+    "cph.language.cpp.Args": "-std=gnu++23 -O0 -pipe -mcpu=native -mtune=native"
 }
