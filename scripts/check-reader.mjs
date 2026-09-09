@@ -100,7 +100,22 @@ for (const item of snapshot.problems) {
   assert(problem, item.path);
   const url = normal.run(`Archive.readerUrl(${JSON.stringify(item.path)})`);
   assert.equal(new URL(url, 'https://codeflare.lucius7.dev/').searchParams.get('path'), item.path);
+  assert(!/%2f/i.test(url), `directory separators must remain readable: ${item.path}`);
   assert.equal(problem.githubUrl, item.githubUrl);
+}
+assert.equal(normal.run('Archive.readerUrl("AtCoder/abc231/a.cpp")'), './code.html?path=AtCoder/abc231/a.cpp');
+for (const sourcePath of ['AtCoder/abc231/a.cpp', 'Custom/100% ready.cpp', 'Custom/a#b&c?d+e=f.cpp', 'Custom/中文 题目.cpp', 'Custom/a%2Fb.cpp']) {
+  const readableUrl = normal.run(`Archive.readerUrl(${JSON.stringify(sourcePath)})`);
+  for (const href of [readableUrl, './code.html?path=' + encodeURIComponent(sourcePath)]) {
+    const url = new URL(href, 'https://codeflare.lucius7.dev/');
+    assert.equal(url.searchParams.get('path'), sourcePath);
+    assert.equal(url.searchParams.size, 1, 'filename characters must not create extra parameters');
+    assert.equal(url.hash, '', 'filename characters must not create a fragment');
+    const env = environment({ query: url.search });
+    await flush();
+    assert.equal(env.run('readerState.problem.path'), sourcePath);
+    assert.equal(env.elements.get('reader-state').hidden, true, href);
+  }
 }
 for (const invalid of ['', '../secret.cpp', '/AtCoder/a.cpp', 'AtCoder/../a.cpp', 'AtCoder//a.cpp', 'AtCoder/./a.cpp', 'AtCoder\\a.cpp', 'AtCoder/a.html', 'AtCoder/a\u0000.cpp', 'Templates/test.cpp']) {
   const env = environment({ query: '?path=' + encodeURIComponent(invalid) });
@@ -108,8 +123,6 @@ for (const invalid of ['', '../secret.cpp', '/AtCoder/a.cpp', 'AtCoder/../a.cpp'
   assert.equal(env.requests.length, 0, invalid);
   assert.equal(env.elements.get('reader-state').attributes['aria-busy'], 'false');
 }
-assert(normal.run('Archive.problemFromPath("Custom/100% ready.cpp")'));
-assert(normal.run('Archive.problemFromPath("Custom/a#b&c?.cpp")'));
 
 for (const mode of ['metadata-fail', 'metadata-hang', 'fallback', 'empty']) {
   const env = environment({ mode }); await flush();
@@ -169,4 +182,4 @@ assert(readerHtml.includes('github-dark.min.css" media="(prefers-color-scheme: d
 assert(read('reader.css').includes('grid-template-rows: auto minmax(0, 1fr) auto'));
 assert(read('reader.css').includes('height: 100dvh'));
 assert(!/760px|translateX|drawer/.test(read('reader.css')));
-console.log(`Reader checks passed: ${snapshot.problems.length} path roundtrips, native new-tab links, direct entry, independent loading, fallback/timeout/retry, safe text, line numbers, clipboard and theme assets.`);
+console.log(`Reader checks passed: ${snapshot.problems.length} readable path roundtrips, legacy links, special-character filenames, native new-tab links, direct entry, independent loading, fallback/timeout/retry, safe text, line numbers, clipboard and theme assets.`);
