@@ -198,7 +198,7 @@ async function fetchTextWithTimeout(url, options = {}, timeoutMs = 6000) {
 
 
 function readerUrl(path) {
-  return `./code.html?path=${encodeURIComponent(path)}`;
+  return `./code.html?path=${encodePath(path)}`;
 }
 return Object.freeze({ REPOSITORY, HIGHLIGHT_LANGUAGES, problemFromPath, encodePath, formatNumber, formatSubmissionTime, fetchTextWithTimeout, readerUrl });
 })();
