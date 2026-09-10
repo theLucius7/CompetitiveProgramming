@@ -4,11 +4,10 @@ import crypto from "node:crypto";
 import { spawn } from "node:child_process";
 import { promises as fs, readdirSync, statSync } from "node:fs";
 import http from "node:http";
-import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const homeDir = os.homedir();
-const repoRoot = process.env.CC_RELAY_REPO_ROOT || path.join(homeDir, "Developer", "CompetitiveProgramming");
+const repoRoot = process.env.CC_RELAY_REPO_ROOT || path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const cphDir = path.join(repoRoot, ".cph");
 const codeCli =
 	process.env.CC_RELAY_CODE_CLI ||

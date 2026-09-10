@@ -1,8 +1,8 @@
 {
     "cph.general.defaultLanguage": "cpp",
-    "cph.general.defaultLanguageTemplateFileLocation": "/Users/l7/Developer/CompetitiveProgramming/Templates/templates/cph.cpp",
+    "cph.general.defaultLanguageTemplateFileLocation": "/Users/l7/programs/codeflare/Templates/templates/cph.cpp",
     "cph.general.doTemplateFileVariableReplacement": false,
-    "cph.general.saveLocation": "/Users/l7/Developer/CompetitiveProgramming/.cph",
+    "cph.general.saveLocation": "/Users/l7/programs/codeflare/.cph",
     "cph.general.collectProblemsInRoot": true,
     "cph.general.fileNameTemplate": "{ojName}/{contestId}/{problemId}.{ext}",
     "cph.general.fileNameTemplateOverrides": {
@@ -101,6 +101,6 @@
             "problemIdRegex": "problem\\/(\\d+)"
         }
     },
-    "cph.language.cpp.Command": "/Users/l7/Developer/CompetitiveProgramming/.cph/scripts/cph-g++-fast.py",
+    "cph.language.cpp.Command": "/Users/l7/programs/codeflare/.cph/scripts/cph-g++-fast.py",
     "cph.language.cpp.Args": "-std=gnu++23 -O0 -pipe -mcpu=native -mtune=native"
 }
